@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://cmp3dqb0gaqip"]
+
+[ext_resource type="FontFile" uid="uid://gveo56yc8mbo" path="res://assets/font/PixelifySans-VariableFont_wght.ttf" id="1_ta2ay"]
+[ext_resource type="StyleBox" uid="uid://c6x1ji17pbyrv" path="res://assets/styles/line_edit-default.tres" id="2_yntt4"]
+
+[sub_resource type="FontVariation" id="FontVariation_8uxxo"]
+base_font = ExtResource("1_ta2ay")
+
+[node name="LineEdit" type="LineEdit" unique_id=1504955661]
+theme_override_fonts/font = SubResource("FontVariation_8uxxo")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = ExtResource("2_yntt4")
+placeholder_text = "Логін"
+max_length = 32

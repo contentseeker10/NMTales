@@ -1,0 +1,104 @@
+[gd_scene format=3 uid="uid://vtb0087566yo"]
+
+[ext_resource type="FontFile" uid="uid://gveo56yc8mbo" path="res://assets/font/PixelifySans-VariableFont_wght.ttf" id="1_66rt3"]
+
+[sub_resource type="FontVariation" id="FontVariation_ucljh"]
+base_font = ExtResource("1_66rt3")
+
+[node name="BackgroundPanel" type="Control" unique_id=971939153]
+layout_mode = 3
+anchor_right = 0.37239584
+anchor_bottom = 0.14444445
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+metadata/_edit_use_anchors_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1186838683]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackgroundBox" type="ColorRect" parent="MarginContainer" unique_id=2130326843]
+layout_mode = 2
+color = Color(0.99607843, 0.7019608, 0.34509805, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/BackgroundBox" unique_id=183983009]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="ColorRect" type="ColorRect" parent="MarginContainer/BackgroundBox/MarginContainer" unique_id=836530817]
+layout_mode = 2
+color = Color(0.74509805, 0.5058824, 0.20392157, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/BackgroundBox/MarginContainer/ColorRect" unique_id=1061076513]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="ColorRect" type="ColorRect" parent="MarginContainer/BackgroundBox/MarginContainer/ColorRect/MarginContainer" unique_id=838467561]
+layout_mode = 2
+color = Color(0.5019608, 0.25882354, 0.16470589, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/BackgroundBox/MarginContainer/ColorRect/MarginContainer/ColorRect" unique_id=1042730511]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="ColorRect" type="ColorRect" parent="MarginContainer/BackgroundBox/MarginContainer/ColorRect/MarginContainer/ColorRect/MarginContainer" unique_id=1313354944]
+layout_mode = 2
+color = Color(0.16470589, 0.1254902, 0.10980392, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer" unique_id=1544293815]
+layout_mode = 2
+theme_override_constants/margin_left = 44
+theme_override_constants/margin_right = 44
+theme_override_constants/margin_bottom = 44
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer" unique_id=1387726149]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer/VBoxContainer" unique_id=1557704762]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/margin_top = 32
+
+[node name="MenuLabel" type="Label" parent="MarginContainer/MarginContainer/VBoxContainer/MarginContainer" unique_id=947707067]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8745098, 0.8745098, 0.8745098, 1)
+theme_override_fonts/font = SubResource("FontVariation_ucljh")
+theme_override_font_sizes/font_size = 48
+text = "Name of menu"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer/VBoxContainer" unique_id=2063207470]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 16

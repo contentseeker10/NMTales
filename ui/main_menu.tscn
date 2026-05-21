@@ -1,0 +1,102 @@
+[gd_scene format=3 uid="uid://6qafm0cln6yg"]
+
+[ext_resource type="Texture2D" uid="uid://fwk8c7ny8ftl" path="res://assets/MENU-MAIN.png" id="1_t7e0r"]
+[ext_resource type="PackedScene" path="res://ui/components/button.tscn" id="2_0dkrt"]
+[ext_resource type="PackedScene" path="res://ui/components/icon_button.tscn" id="2_wk0pr"]
+[ext_resource type="PackedScene" uid="uid://vtb0087566yo" path="res://ui/components/background_panel.tscn" id="3_wk0pr"]
+[ext_resource type="PackedScene" uid="uid://cmp3dqb0gaqip" path="res://ui/components/line_edit.tscn" id="4_rmr83"]
+
+[node name="MainMenu" type="Control" unique_id=1116928531]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+
+[node name="BackgroundImage" type="TextureRect" parent="." unique_id=1207666052]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_t7e0r")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=498161202]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -70.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="IconButton" parent="MarginContainer" unique_id=1479933873 instance=ExtResource("2_wk0pr")]
+layout_mode = 2
+text = ""
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=904628568]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackgroundPanel" parent="." unique_id=971939153 instance=ExtResource("3_wk0pr")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -201.0
+offset_top = -150.5
+offset_right = 201.0
+offset_bottom = 297.0
+
+[node name="MarginContainer" parent="BackgroundPanel/MarginContainer" parent_id_path=PackedInt32Array(971939153, 1186838683) index="1" unique_id=1544293815]
+theme_override_constants/margin_bottom = 44
+
+[node name="MenuLabel" parent="BackgroundPanel/MarginContainer/MarginContainer/VBoxContainer/MarginContainer" parent_id_path=PackedInt32Array(971939153, 1557704762) index="0" unique_id=947707067]
+theme_override_font_sizes/font_size = 32
+text = "Вхід в аккаунт"
+
+[node name="UsernameEdit" parent="BackgroundPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(971939153, 2063207470) index="0" unique_id=1504955661 instance=ExtResource("4_rmr83")]
+layout_mode = 2
+placeholder_text = "Юзернейм"
+context_menu_enabled = false
+emoji_menu_enabled = false
+
+[node name="PasswordEdit" parent="BackgroundPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(971939153, 2063207470) index="1" unique_id=1847710883 instance=ExtResource("4_rmr83")]
+layout_mode = 2
+placeholder_text = "Пароль"
+context_menu_enabled = false
+emoji_menu_enabled = false
+secret = true
+secret_character = "*"
+
+[node name="LoginButton" parent="BackgroundPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(971939153, 2063207470) index="2" unique_id=763636606 instance=ExtResource("2_0dkrt")]
+layout_mode = 2
+text = "Вхід"
+
+[node name="Button" parent="BackgroundPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(971939153, 2063207470) index="3" unique_id=1951198736 instance=ExtResource("2_0dkrt")]
+layout_mode = 2
+text = "Реєстрація"
+
+[editable path="BackgroundPanel"]
