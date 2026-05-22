@@ -997,9 +997,10 @@ animations = [{
 }]
 
 [node name="Player" type="CharacterBody2D" unique_id=803971865]
-position = Vector2(320, 180)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=572185247]
 sprite_frames = SubResource("SpriteFrames_dy7o0")
 animation = &"idle_down"
 autoplay = "idle_down"
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=2092202800]
