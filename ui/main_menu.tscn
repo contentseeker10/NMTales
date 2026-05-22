@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://6qafm0cln6yg"]
 
 [ext_resource type="Script" uid="uid://dfrgbky5ai1wv" path="res://ui/main_menu.gd" id="1_p8ri8"]
-[ext_resource type="Texture2D" uid="uid://fwk8c7ny8ftl" path="res://assets/MENU-MAIN.png" id="1_t7e0r"]
 [ext_resource type="PackedScene" uid="uid://b6v7toodritgx" path="res://ui/components/button.tscn" id="2_0dkrt"]
+[ext_resource type="Texture2D" uid="uid://dat0x04mhycaf" path="res://assets/background.png" id="2_p8ri8"]
 [ext_resource type="PackedScene" uid="uid://c87e02sv1u0xt" path="res://ui/components/icon_button.tscn" id="2_wk0pr"]
 [ext_resource type="PackedScene" uid="uid://vtb0087566yo" path="res://ui/components/background_panel.tscn" id="3_wk0pr"]
 [ext_resource type="PackedScene" uid="uid://cmp3dqb0gaqip" path="res://ui/components/line_edit.tscn" id="4_rmr83"]
@@ -39,8 +39,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_t7e0r")
-expand_mode = 1
+texture = ExtResource("2_p8ri8")
 stretch_mode = 6
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=904628568]
