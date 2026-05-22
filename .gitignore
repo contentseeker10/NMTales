@@ -1,4 +1,6 @@
+# -----------------------------
 # Godot 4+ specific ignores
+# -----------------------------
 .godot/
 .nomedia
 
@@ -18,3 +20,86 @@ mono_crash.*.json
 
 # Vendor assets ignore
 assets/downloaded/
+
+# -----------------------------
+# Environment / secrets
+# -----------------------------
+.env
+.env.*
+!.env.example
+!.env.sample
+
+# Common secret/cert/key files (only if you don't intend to commit them)
+*.secrets.json
+*.pfx
+*.p12
+*.key
+*.pem
+
+# -----------------------------
+# .NET / C# build artifacts
+# -----------------------------
+**/[Bb]in/
+**/[Oo]bj/
+**/[Dd]ebug/
+**/[Rr]elease/
+**/artifacts/
+*.dll
+*.exe
+*.pdb
+*.cache
+*.log
+
+# NuGet (usually not needed in repo; restore will fetch)
+*.nupkg
+.nuget/NuGet.Config.user
+.nuget/NuGet.*.targets
+packages/
+
+# Test / coverage / analysis output
+TestResults/
+**/coverage*/
+*.coverage
+*.coveragexml
+*.trx
+.sonarqube/
+.scannerwork/
+
+# ASP.NET / backend runtime leftovers
+**/wwwroot/lib/          # if using LibMan and you don't want vendored output committed
+appsettings.*.json.user  # local overrides (do not ignore appsettings.json itself)
+
+# User Secrets (local dev)
+**/secrets.json
+
+# -----------------------------
+# IDEs / editors
+# -----------------------------
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# JetBrains Rider / IntelliJ
+.idea/
+*.sln.iml
+
+# VS Code (ignore by default; commit selectively if you prefer)
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# -----------------------------
+# OS / miscellaneous
+# -----------------------------
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Crash dumps
+*.dmp
