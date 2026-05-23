@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://bkeicmjn3cxpf"]
 
-[ext_resource type="Texture2D" uid="uid://dvvwagk3d6x8" path="res://assets/thumbnail.jpg" id="1_5c2jv"]
-[ext_resource type="PackedScene" uid="uid://cfvmluryph5on" path="res://parts/player/player.tscn" id="1_vi4pn"]
-[ext_resource type="FontFile" uid="uid://gveo56yc8mbo" path="res://assets/font/PixelifySans-VariableFont_wght.ttf" id="3_5c2jv"]
+[ext_resource type="Texture2D" uid="uid://dvvwagk3d6x8" path="res://assets/thumbnail.jpg" id="1_c4040"]
+[ext_resource type="PackedScene" uid="uid://cfvmluryph5on" path="res://parts/player/player.tscn" id="2_lcml1"]
+[ext_resource type="FontFile" uid="uid://gveo56yc8mbo" path="res://assets/font/PixelifySans-VariableFont_wght.ttf" id="3_ydyhl"]
 
 [sub_resource type="FontVariation" id="FontVariation_awkip"]
-base_font = ExtResource("3_5c2jv")
+base_font = ExtResource("3_ydyhl")
 
 [node name="Test" type="Node2D" unique_id=370210118]
 
@@ -14,11 +14,11 @@ offset_left = 39.0
 offset_top = 75.0
 offset_right = 604.0
 offset_bottom = 364.0
-texture = ExtResource("1_5c2jv")
+texture = ExtResource("1_c4040")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Player" parent="." unique_id=803971865 instance=ExtResource("1_vi4pn")]
+[node name="Player" parent="." unique_id=803971865 instance=ExtResource("2_lcml1")]
 position = Vector2(320, 180)
 
 [node name="Label" type="Label" parent="." unique_id=293543149]

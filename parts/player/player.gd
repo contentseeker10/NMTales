@@ -10,7 +10,7 @@ enum STATE { IDLE, RUNNING, ATTACKING }
 @export var _acceleration: float = 10.0
 
 func _process(delta: float) -> void:
-	pass
+	_handle_input()
 
 func _physics_process(delta: float) -> void:
 	var input_direction: Vector2 = Input.get_vector("move_left", "move_right", "move_up", "move_down")
@@ -23,3 +23,21 @@ func _physics_process(delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action("attack"):
 		print("Attacking!")
+
+func _handle_input() -> void:
+	if not Input.is_anything_pressed():
+		_sprite.play("idle_down")
+	match _state:
+		STATE.IDLE:
+			if Input.is_action_pressed("move_up"):
+				_sprite.play("run_up")
+			elif Input.is_action_pressed("move_left"):
+				_sprite.play("run_left")
+			elif Input.is_action_pressed("move_down"):
+				_sprite.play("run_down")
+			elif Input.is_action_pressed("move_right"):
+				_sprite.play("run_right")
+		STATE.RUNNING:
+			pass
+		STATE.ATTACKING:
+			pass
