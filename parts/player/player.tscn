@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cfvmluryph5on"]
 
 [ext_resource type="Texture2D" uid="uid://j3gd6fngav0g" path="res://assets/characters/player/ATTACK 1/attack1_down.png" id="1_1w0r4"]
+[ext_resource type="Script" uid="uid://c4jrer643xh0w" path="res://parts/player/player.gd" id="1_c5j7t"]
 [ext_resource type="Texture2D" uid="uid://cysxc6ky2phot" path="res://assets/characters/player/ATTACK 1/attack1_left.png" id="2_c5j7t"]
 [ext_resource type="Texture2D" uid="uid://c8e138ow0ir80" path="res://assets/characters/player/ATTACK 1/attack1_right.png" id="3_t2hk2"]
 [ext_resource type="Texture2D" uid="uid://4iywwdvoqjs5" path="res://assets/characters/player/ATTACK 1/attack1_up.png" id="4_qn4ci"]
@@ -996,7 +997,11 @@ animations = [{
 "speed": 10.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c5j7t"]
+size = Vector2(20, 35)
+
 [node name="Player" type="CharacterBody2D" unique_id=803971865]
+script = ExtResource("1_c5j7t")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=572185247]
 sprite_frames = SubResource("SpriteFrames_dy7o0")
@@ -1004,3 +1009,19 @@ animation = &"idle_down"
 autoplay = "idle_down"
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2092202800]
+
+[node name="HUD" type="Control" parent="Camera2D" unique_id=1750936339]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="Camera2D/HUD" unique_id=1272378702]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "HUD test"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=804645905]
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_c5j7t")
