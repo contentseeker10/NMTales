@@ -73,7 +73,17 @@ namespace NMTales.Backend
                 });
             });
 
+            builder.Services.AddCors(options => {
+                options.AddDefaultPolicy(policy => {
+                    policy.AllowAnyOrigin()    // In production, specify the exact game URL
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
+
             var app = builder.Build();
+
+            app.UseCors();
 
             if (app.Environment.IsDevelopment())
             {
