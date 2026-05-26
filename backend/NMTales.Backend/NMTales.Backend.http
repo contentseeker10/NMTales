@@ -1,0 +1,27 @@
+@NMTale_HostAddress = http://localhost:5142
+
+POST {{NMTale_HostAddress}}/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "Hero",
+  "password": "Secret123!"
+}
+
+###
+
+POST {{NMTale_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "Hero",
+  "password": "Secret123!"
+}
+
+###
+
+GET {{NMTale_HostAddress}}/api/auth/me
+Accept: application/json
+Authorization: Bearer YOUR_TOKEN_HERE
+
+###

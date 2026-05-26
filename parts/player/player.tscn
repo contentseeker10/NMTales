@@ -17,6 +17,10 @@
 [ext_resource type="Texture2D" uid="uid://dysgh6sy32qrp" path="res://assets/characters/player/RUN/run_left.png" id="14_nhg0g"]
 [ext_resource type="Texture2D" uid="uid://cwanjs7i5icon" path="res://assets/characters/player/RUN/run_right.png" id="15_2rjwc"]
 [ext_resource type="Texture2D" uid="uid://b30rrvlfxx4aj" path="res://assets/characters/player/RUN/run_up.png" id="16_2skyw"]
+[ext_resource type="Script" uid="uid://ch6lt7bt5jgvy" path="res://parts/player/state_machine/player_state_machine.gd" id="18_jl01s"]
+[ext_resource type="Script" uid="uid://boqungs2um7t1" path="res://parts/player/state_machine/idle_state.gd" id="19_40i4h"]
+[ext_resource type="Script" uid="uid://pfxje06c61es" path="res://parts/player/state_machine/running_state.gd" id="20_eoih5"]
+[ext_resource type="Script" uid="uid://c0437e16uy3e3" path="res://parts/player/state_machine/attacking_state.gd" id="21_2xmso"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5v1q1"]
 atlas = ExtResource("1_1w0r4")
@@ -1025,3 +1029,16 @@ text = "HUD test"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=804645905]
 position = Vector2(0, 0.5)
 shape = SubResource("RectangleShape2D_c5j7t")
+
+[node name="StateMachine" type="Node" parent="." unique_id=1890620424 node_paths=PackedStringArray("initial_state")]
+script = ExtResource("18_jl01s")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateMachine" unique_id=589235064]
+script = ExtResource("19_40i4h")
+
+[node name="Running" type="Node" parent="StateMachine" unique_id=1412166078]
+script = ExtResource("20_eoih5")
+
+[node name="Attacking" type="Node" parent="StateMachine" unique_id=365299263]
+script = ExtResource("21_2xmso")

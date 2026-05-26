@@ -1,26 +1,12 @@
 [gd_scene format=3 uid="uid://6qafm0cln6yg"]
 
 [ext_resource type="Script" uid="uid://dfrgbky5ai1wv" path="res://ui/main_menu.gd" id="1_p8ri8"]
-[ext_resource type="PackedScene" uid="uid://b6v7toodritgx" path="res://ui/components/button.tscn" id="2_0dkrt"]
+[ext_resource type="PackedScene" uid="uid://b6v7toodritgx" path="res://ui/components/button/button.tscn" id="2_0dkrt"]
 [ext_resource type="Texture2D" uid="uid://dat0x04mhycaf" path="res://assets/background.png" id="2_p8ri8"]
-[ext_resource type="PackedScene" uid="uid://c87e02sv1u0xt" path="res://ui/components/icon_button.tscn" id="2_wk0pr"]
-[ext_resource type="PackedScene" uid="uid://vtb0087566yo" path="res://ui/components/background_panel.tscn" id="3_wk0pr"]
-[ext_resource type="PackedScene" uid="uid://cmp3dqb0gaqip" path="res://ui/components/line_edit.tscn" id="4_rmr83"]
-[ext_resource type="PackedScene" uid="uid://bbt8ic7m4cf3" path="res://ui/components/custom_checkbox.tscn" id="5_ei257"]
-
-[sub_resource type="GDScript" id="GDScript_ubpvv"]
-script/source = "extends Button
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-"
+[ext_resource type="PackedScene" uid="uid://vtb0087566yo" path="res://ui/components/panel/background_panel.tscn" id="3_wk0pr"]
+[ext_resource type="PackedScene" uid="uid://cmp3dqb0gaqip" path="res://ui/components/line_edit/line_edit.tscn" id="4_rmr83"]
+[ext_resource type="PackedScene" uid="uid://bbt8ic7m4cf3" path="res://ui/components/checkbox/custom_checkbox.tscn" id="5_ei257"]
+[ext_resource type="PackedScene" uid="uid://cky8m2321egnx" path="res://ui/components/notification/notification.tscn" id="7_p8ri8"]
 
 [node name="MainMenu" type="Control" unique_id=1116928531]
 layout_mode = 3
@@ -40,21 +26,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_p8ri8")
+expand_mode = 1
 stretch_mode = 6
-
-[node name="CenterContainer" type="CenterContainer" parent="." unique_id=904628568]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
 
 [node name="LoginPanel" parent="." unique_id=1851499352 instance=ExtResource("3_wk0pr")]
 layout_mode = 1
@@ -63,13 +36,11 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -201.0
-offset_top = -223.75
-offset_right = 201.0
-offset_bottom = 223.75
+offset_right = 0.0
+offset_bottom = 0.0
 
-[node name="MenuLabel" parent="LoginPanel/MarginContainer/MarginContainer/VBoxContainer/MarginContainer" parent_id_path=PackedInt32Array(1851499352, 1557704762) index="0" unique_id=947707067]
-text = "Вхід в аккаунт"
+[node name="MenuLabel" parent="LoginPanel/MarginContainer/MarginContainer/VBoxContainer" parent_id_path=PackedInt32Array(1851499352, 1387726149) index="0" unique_id=947707067]
+text = "Вхід в гру"
 
 [node name="UsernameEdit" parent="LoginPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(1851499352, 2063207470) index="0" unique_id=1504955661 instance=ExtResource("4_rmr83")]
 layout_mode = 2
@@ -85,12 +56,14 @@ emoji_menu_enabled = false
 secret = true
 secret_character = "*"
 
-[node name="LoginButton" parent="LoginPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(1851499352, 2063207470) index="2" unique_id=763636606 instance=ExtResource("2_0dkrt")]
+[node name="TryLoginButton" parent="LoginPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(1851499352, 2063207470) index="2" unique_id=763636606 instance=ExtResource("2_0dkrt")]
 layout_mode = 2
+size_flags_horizontal = 1
 text = "Вхід"
 
-[node name="RegisterButton" parent="LoginPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(1851499352, 2063207470) index="3" unique_id=1951198736 instance=ExtResource("2_0dkrt")]
+[node name="GoRegisterButton" parent="LoginPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(1851499352, 2063207470) index="3" unique_id=1951198736 instance=ExtResource("2_0dkrt")]
 layout_mode = 2
+size_flags_horizontal = 1
 text = "Реєстрація"
 
 [node name="RegisterPanel" parent="." unique_id=971939153 instance=ExtResource("3_wk0pr")]
@@ -101,13 +74,11 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -201.0
-offset_top = -223.75
-offset_right = 201.0
-offset_bottom = 223.75
+offset_right = 0.0
+offset_bottom = 0.0
 
-[node name="MenuLabel" parent="RegisterPanel/MarginContainer/MarginContainer/VBoxContainer/MarginContainer" parent_id_path=PackedInt32Array(971939153, 1557704762) index="0" unique_id=947707067]
-text = "Реєстрація"
+[node name="MenuLabel" parent="RegisterPanel/MarginContainer/MarginContainer/VBoxContainer" parent_id_path=PackedInt32Array(971939153, 1387726149) index="0" unique_id=947707067]
+text = "Новий акаунт"
 
 [node name="UsernameEdit" parent="RegisterPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(971939153, 2063207470) index="0" unique_id=97869084 instance=ExtResource("4_rmr83")]
 layout_mode = 2
@@ -123,12 +94,14 @@ emoji_menu_enabled = false
 secret = true
 secret_character = "*"
 
-[node name="RegisterButton" parent="RegisterPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(971939153, 2063207470) index="2" unique_id=1511828033 instance=ExtResource("2_0dkrt")]
+[node name="TryRegisterButton" parent="RegisterPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(971939153, 2063207470) index="2" unique_id=1511828033 instance=ExtResource("2_0dkrt")]
 layout_mode = 2
+size_flags_horizontal = 1
 text = "Відправити"
 
-[node name="BackButton" parent="RegisterPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(971939153, 2063207470) index="3" unique_id=473104023 instance=ExtResource("2_0dkrt")]
+[node name="GoBackButton" parent="RegisterPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(971939153, 2063207470) index="3" unique_id=473104023 instance=ExtResource("2_0dkrt")]
 layout_mode = 2
+size_flags_horizontal = 1
 text = "Назад"
 
 [node name="SettingsPanel" parent="." unique_id=1351415666 instance=ExtResource("3_wk0pr")]
@@ -137,10 +110,8 @@ layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -360.0
-offset_top = -120.0
+offset_right = 0.0
+offset_bottom = 0.0
 grow_horizontal = 0
 grow_vertical = 0
 size_flags_horizontal = 1
@@ -150,18 +121,14 @@ size_flags_vertical = 2
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
-offset_left = -360.0
-offset_top = -131.0
+offset_left = -131.0
+offset_top = -94.0
 grow_horizontal = 0
 grow_vertical = 0
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 144
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 38
 
-[node name="MarginContainer" parent="SettingsPanel/MarginContainer/MarginContainer/VBoxContainer" parent_id_path=PackedInt32Array(1351415666, 1387726149) index="0" unique_id=1557704762]
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_right = 32
-
-[node name="MenuLabel" parent="SettingsPanel/MarginContainer/MarginContainer/VBoxContainer/MarginContainer" index="0" unique_id=947707067]
+[node name="MenuLabel" parent="SettingsPanel/MarginContainer/MarginContainer/VBoxContainer" parent_id_path=PackedInt32Array(1351415666, 1387726149) index="0" unique_id=947707067]
 text = "Налаштування"
 
 [node name="VBoxContainer" parent="SettingsPanel/MarginContainer/MarginContainer/VBoxContainer" parent_id_path=PackedInt32Array(1351415666, 1387726149) index="1" unique_id=2063207470]
@@ -180,22 +147,25 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -120.0
-offset_top = -120.0
+offset_left = -131.0
+offset_top = -32.0
 grow_horizontal = 0
 grow_vertical = 0
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 24
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
 
-[node name="SettingsButton" parent="MarginContainer" unique_id=1479933873 instance=ExtResource("2_wk0pr")]
+[node name="SettingsButton" parent="MarginContainer" unique_id=1690212328 instance=ExtResource("2_0dkrt")]
 layout_mode = 2
 toggle_mode = true
-text = ""
-script = SubResource("GDScript_ubpvv")
+text = "Налаштування"
 
-[connection signal="pressed" from="LoginPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/RegisterButton" to="." method="_on_register_button_pressed"]
-[connection signal="pressed" from="RegisterPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]
-[connection signal="pressed" from="MarginContainer/SettingsButton" to="." method="_on_settings_button_pressed"]
+[node name="Notification" parent="." unique_id=1396998553 instance=ExtResource("7_p8ri8")]
+layout_mode = 1
+
+[connection signal="pressed" from="LoginPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/TryLoginButton" to="." method="_on_try_login_button_pressed"]
+[connection signal="pressed" from="LoginPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/GoRegisterButton" to="." method="_on_go_register_button_pressed"]
+[connection signal="pressed" from="RegisterPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/TryRegisterButton" to="." method="_on_try_register_button_pressed"]
+[connection signal="pressed" from="RegisterPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/GoBackButton" to="." method="_on_go_back_button_pressed"]
 [connection signal="toggled" from="MarginContainer/SettingsButton" to="." method="_on_settings_button_toggled"]
 
 [editable path="LoginPanel"]
