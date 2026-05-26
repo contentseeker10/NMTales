@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://cky8m2321egnx"]
+
+[ext_resource type="Script" uid="uid://m1x4s2dbn7ux" path="res://ui/components/notification/notification.gd" id="1_8ceti"]
+[ext_resource type="FontFile" uid="uid://gveo56yc8mbo" path="res://assets/font/PixelifySans-VariableFont_wght.ttf" id="1_qqi1i"]
+
+[sub_resource type="FontVariation" id="FontVariation_8ceti"]
+base_font = ExtResource("1_qqi1i")
+
+[node name="Notification" type="MarginContainer" unique_id=1396998553]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 20.0
+grow_horizontal = 2
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+script = ExtResource("1_8ceti")
+
+[node name="NotificationLabel" type="Label" parent="." unique_id=4623821]
+visible = false
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_8ceti")
+theme_override_font_sizes/font_size = 12
+text = "Notification system"
+horizontal_alignment = 2
+
+[node name="Timer" type="Timer" parent="." unique_id=240759913]
+wait_time = 5.0

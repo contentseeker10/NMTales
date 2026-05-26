@@ -4,14 +4,14 @@ extends Node
 const BASE_URL: String = "http://localhost:5142"
 
 
-func send_post(path: String, body: Dictionary, headers: Array[String] = []) -> HTTPRequest:
+func send_post(path: String, body: Dictionary, headers: PackedStringArray = []) -> HTTPRequest:
 	var http_request: HTTPRequest = HTTPRequest.new()
 	add_child(http_request)
 	
 	var json_body = JSON.stringify(body, "\t")
 	
-	var default_headers: Array = ["Content-Type: application/json"]
-	default_headers.append(headers)
+	var default_headers: PackedStringArray = ["Content-Type: application/json"]
+	default_headers.append_array(headers)
 	
 	var error: Error = http_request.request(
 		BASE_URL + path,
