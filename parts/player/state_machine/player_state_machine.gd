@@ -5,7 +5,18 @@ extends Node
 
 var current_state: PlayerState
 var states: Dictionary = {}
-var direction: Vector2
+
+const DIR_NAMES: Dictionary = {
+	Vector2.UP: "up",
+	Vector2.DOWN: "down",
+	Vector2.LEFT: "left",
+	Vector2.RIGHT: "right"
+}
+
+var direction: Vector2 = Vector2.DOWN
+
+func get_direction_name() -> String:
+	return DIR_NAMES.get(direction, "down")
 
 func _ready() -> void:
 	await owner.ready
