@@ -10,12 +10,8 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 
-
 func _on_settings_button_toggled(toggled_on: bool) -> void:
-	if toggled_on:
-		settings_panel.show()
-	else:
-		settings_panel.hide()
+	settings_panel.show() if toggled_on else settings_panel.hide()
 
 func _on_register_button_pressed() -> void:
 	login_panel.hide()

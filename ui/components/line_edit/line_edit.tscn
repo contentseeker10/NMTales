@@ -8,7 +8,7 @@ base_font = ExtResource("1_ta2ay")
 
 [node name="LineEdit" type="LineEdit" unique_id=1504955661]
 theme_override_fonts/font = SubResource("FontVariation_8uxxo")
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 10
 theme_override_styles/normal = ExtResource("2_yntt4")
 placeholder_text = "Логін"
 max_length = 32
