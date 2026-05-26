@@ -5,7 +5,6 @@ Content-Type: application/json
 
 {
   "username": "Hero",
-  "email": "hero@nmtale.dev",
   "password": "Secret123!"
 }
 
@@ -15,7 +14,7 @@ POST {{NMTale_HostAddress}}/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "hero@nmtale.dev",
+  "username": "Hero",
   "password": "Secret123!"
 }
 

@@ -24,15 +24,14 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterDto dto)
     {
-        if (await _context.Users.AnyAsync(x => x.Email == dto.Email))
+        if (await _context.Users.AnyAsync(x => x.Username == dto.Username))
         {
-            return BadRequest("Email already exists");
+            return BadRequest("Username already exists");
         }
 
         var user = new User
         {
             Username = dto.Username,
-            Email = dto.Email,
             Password = BCrypt.Net.BCrypt.HashPassword(dto.Password)
         };
 
@@ -50,11 +49,11 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginDto dto)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == dto.Email);
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.Username == dto.Username);
 
         if (user is null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.Password))
         {
-            return Unauthorized("Invalid email or password");
+            return Unauthorized("Invalid username or password");
         }
 
         return Ok(new AuthResponseDto
