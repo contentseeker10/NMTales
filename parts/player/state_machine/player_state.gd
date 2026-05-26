@@ -1,20 +1,15 @@
-class_name PlayerState
+@abstract class_name PlayerState
 extends Node
 
 var player: Player
 var state_machine: PlayerStateMachine
 
-func enter() -> void:
-	pass
+@abstract func enter() -> void
 
-func exit() -> void:
-	pass
+@abstract func exit() -> void
 
-func handle_input(event: InputEvent) -> void:
-	pass
+@abstract func handle_input(event: InputEvent) -> void
 
-func update(delta: float) -> void:
-	pass
+@abstract func update(delta: float) -> void
 
-func physics_update(delta: float) -> void:
-	pass
+@abstract func physics_update(delta: float) -> void

@@ -5,6 +5,7 @@ extends Node
 
 var current_state: PlayerState
 var states: Dictionary = {}
+var direction: Vector2
 
 func _ready() -> void:
 	await owner.ready
@@ -32,10 +33,10 @@ func _physics_process(delta: float) -> void:
 		current_state.physics_update(delta)
 
 func transition_to(new_state_name: String) -> void:
-	var targer_state: PlayerState = states.get(new_state_name.to_lower())
-	if not targer_state:
+	var target_state: PlayerState = states.get(new_state_name.to_lower())
+	if not target_state:
 		return
 	if current_state:
 		current_state.exit()
-	current_state = targer_state
+	current_state = target_state
 	current_state.enter()
