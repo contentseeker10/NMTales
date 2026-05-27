@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://cacd54mfk10u2"]
+
+[ext_resource type="PackedScene" uid="uid://vtb0087566yo" path="res://ui/components/panel/background_panel.tscn" id="1_ejwgg"]
+[ext_resource type="Script" uid="uid://djspfcr5mm0ge" path="res://ui/pause_menu.gd" id="1_npydk"]
+[ext_resource type="PackedScene" uid="uid://b6v7toodritgx" path="res://ui/components/button/button.tscn" id="2_fob5h"]
+[ext_resource type="PackedScene" uid="uid://dyllr3kfnlcff" path="res://ui/settings.tscn" id="3_fob5h"]
+[ext_resource type="Texture2D" uid="uid://ckq6jaell5ycj" path="res://assets/logo.png" id="4_avurv"]
+
+[node name="PauseMenu" type="CanvasLayer" unique_id=1919530594]
+process_mode = 3
+layer = 100
+visible = false
+script = ExtResource("1_npydk")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2123721274]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.39215687)
+
+[node name="BackgroundPanel" parent="." unique_id=971939153 instance=ExtResource("1_ejwgg")]
+custom_minimum_size = Vector2(100, 0)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -65.5
+offset_top = -48.0
+offset_right = 65.5
+offset_bottom = 48.0
+
+[node name="MenuLabel" parent="BackgroundPanel/MarginContainer/MarginContainer/VBoxContainer" parent_id_path=PackedInt32Array(971939153, 1387726149) index="0" unique_id=947707067]
+text = "Пауза"
+
+[node name="ContinueButton" parent="BackgroundPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(971939153, 2063207470) index="0" unique_id=763636606 instance=ExtResource("2_fob5h")]
+layout_mode = 2
+text = "Продовжити"
+
+[node name="ExitButton" parent="BackgroundPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(971939153, 2063207470) index="1" unique_id=1528696269 instance=ExtResource("2_fob5h")]
+layout_mode = 2
+size_flags_horizontal = 1
+text = "Вийти"
+
+[node name="Settings" parent="." unique_id=671033006 instance=ExtResource("3_fob5h")]
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1932240316]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -119.0
+offset_top = -145.0
+offset_right = 119.0
+offset_bottom = -61.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_avurv")
+expand_mode = 1
+stretch_mode = 4
+
+[connection signal="pressed" from="BackgroundPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/ContinueButton" to="." method="_on_continue_button_pressed"]
+[connection signal="pressed" from="BackgroundPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
+
+[editable path="BackgroundPanel"]
