@@ -69,9 +69,27 @@ func _on_try_login_button_pressed() -> void:
 
 func _on_login_attempted(success: bool, message: String) -> void:
 	if success:
-		get_tree().change_scene_to_file(\"res://locations/test.tscn\")
+		#get_tree().change_scene_to_file(\"res://locations/test/test.tscn\")
+		_load_pack_and_entry_level()
 	else:
 		notification.show_notification(message)
+
+func _load_pack_and_entry_level() -> void:
+	var pck_path: String = \"res://test.pck\"
+	var scene_path: String = \"res://locations/test/test.tscn\"
+	
+	if ResourceLoader.exists(scene_path):
+		get_tree().change_scene_to_file(scene_path)
+		return
+	
+	if FileAccess.file_exists(pck_path):
+		var success: bool = ProjectSettings.load_resource_pack(pck_path)
+		if success:
+			get_tree().change_scene_to_file(scene_path)
+		else:
+			push_error(\"Error loading the pack\")
+	else:
+		push_error(\"Pack file was not found\")
 "
 
 [node name="MainMenu" type="Control" unique_id=1116928531]
