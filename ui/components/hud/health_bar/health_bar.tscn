@@ -1,0 +1,82 @@
+[gd_scene format=3 uid="uid://dol884wu1y0il"]
+
+[ext_resource type="PackedScene" uid="uid://dcfsyw5b83bki" path="res://ui/components/hud/health_bar/heart_icon.tscn" id="1_f6f4i"]
+[ext_resource type="Texture2D" uid="uid://cqfvria54bqn5" path="res://assets/icons/heart_full.png" id="2_kfugc"]
+
+[sub_resource type="GDScript" id="GDScript_cv5mc"]
+script/source = "extends TextureRect
+"
+
+[node name="HealthBar" type="HBoxContainer" unique_id=811577068]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -142.0
+offset_bottom = 16.0
+grow_horizontal = 0
+size_flags_horizontal = 8
+theme_override_constants/separation = 2
+
+[node name="HeartIcon" parent="." unique_id=1356903504 instance=ExtResource("1_f6f4i")]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+texture = ExtResource("2_kfugc")
+expand_mode = 1
+stretch_mode = 3
+script = SubResource("GDScript_cv5mc")
+
+[node name="HeartIcon2" parent="." unique_id=118117640 instance=ExtResource("1_f6f4i")]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+texture = ExtResource("2_kfugc")
+expand_mode = 1
+stretch_mode = 3
+script = SubResource("GDScript_cv5mc")
+
+[node name="HeartIcon3" parent="." unique_id=1718613851 instance=ExtResource("1_f6f4i")]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+texture = ExtResource("2_kfugc")
+expand_mode = 1
+stretch_mode = 3
+script = SubResource("GDScript_cv5mc")
+
+[node name="HeartIcon4" parent="." unique_id=751151411 instance=ExtResource("1_f6f4i")]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+texture = ExtResource("2_kfugc")
+expand_mode = 1
+stretch_mode = 3
+script = SubResource("GDScript_cv5mc")
+
+[node name="HeartIcon5" parent="." unique_id=44462035 instance=ExtResource("1_f6f4i")]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+texture = ExtResource("2_kfugc")
+expand_mode = 1
+stretch_mode = 3
+script = SubResource("GDScript_cv5mc")
+
+[node name="HeartIcon6" parent="." unique_id=290202485 instance=ExtResource("1_f6f4i")]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+texture = ExtResource("2_kfugc")
+expand_mode = 1
+stretch_mode = 3
+script = SubResource("GDScript_cv5mc")
+
+[node name="HeartIcon7" parent="." unique_id=1903063110 instance=ExtResource("1_f6f4i")]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+texture = ExtResource("2_kfugc")
+expand_mode = 1
+stretch_mode = 3
+script = SubResource("GDScript_cv5mc")
+
+[node name="HeartIcon8" parent="." unique_id=1040498141 instance=ExtResource("1_f6f4i")]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+texture = ExtResource("2_kfugc")
+expand_mode = 1
+stretch_mode = 3
+script = SubResource("GDScript_cv5mc")
