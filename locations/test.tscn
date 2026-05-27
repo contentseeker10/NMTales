@@ -10,10 +10,10 @@ base_font = ExtResource("3_ydyhl")
 [node name="Test" type="Node2D" unique_id=370210118]
 
 [node name="Thumbnail" type="TextureRect" parent="." unique_id=587877987]
-offset_left = 39.0
-offset_top = 75.0
-offset_right = 604.0
-offset_bottom = 364.0
+offset_left = 198.0
+offset_top = 111.0
+offset_right = 435.0
+offset_bottom = 247.0
 texture = ExtResource("1_c4040")
 expand_mode = 1
 stretch_mode = 6
@@ -22,13 +22,14 @@ stretch_mode = 6
 position = Vector2(320, 180)
 
 [node name="Label" type="Label" parent="." unique_id=293543149]
-offset_left = 116.0
-offset_top = 17.0
-offset_right = 507.0
-offset_bottom = 56.0
+offset_left = 215.0
+offset_top = 64.0
+offset_right = 411.0
+offset_bottom = 84.0
 size_flags_horizontal = 4
 size_flags_vertical = 0
 theme_override_fonts/font = SubResource("FontVariation_awkip")
-theme_override_font_sizes/font_size = 32
-text = "Welcome to main location!"
+theme_override_font_sizes/font_size = 16
+text = "This is test location"
+horizontal_alignment = 1
 metadata/_edit_use_anchors_ = true

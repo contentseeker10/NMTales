@@ -36,8 +36,21 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_right = 0.0
-offset_bottom = 0.0
+offset_left = -50.0
+offset_top = -80.0
+offset_right = 50.0
+offset_bottom = 80.0
+
+[node name="MarginContainer" parent="LoginPanel" index="0" unique_id=1186838683]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -62.0
+offset_top = -74.5
+offset_right = 62.0
+offset_bottom = 74.5
 
 [node name="MenuLabel" parent="LoginPanel/MarginContainer/MarginContainer/VBoxContainer" parent_id_path=PackedInt32Array(1851499352, 1387726149) index="0" unique_id=947707067]
 text = "Вхід в гру"
@@ -74,8 +87,21 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_right = 0.0
-offset_bottom = 0.0
+offset_left = -50.0
+offset_top = -80.0
+offset_right = 50.0
+offset_bottom = 80.0
+
+[node name="MarginContainer" parent="RegisterPanel" index="0" unique_id=1186838683]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -62.0
+offset_top = -74.0
+offset_right = 62.0
+offset_bottom = 74.0
 
 [node name="MenuLabel" parent="RegisterPanel/MarginContainer/MarginContainer/VBoxContainer" parent_id_path=PackedInt32Array(971939153, 1387726149) index="0" unique_id=947707067]
 text = "Новий акаунт"
@@ -110,6 +136,8 @@ layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
+offset_left = -100.0
+offset_top = -160.0
 offset_right = 0.0
 offset_bottom = 0.0
 grow_horizontal = 0
@@ -121,6 +149,8 @@ size_flags_vertical = 2
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 offset_left = -131.0
 offset_top = -94.0
 grow_horizontal = 0

@@ -1014,18 +1014,6 @@ autoplay = "idle_down"
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2092202800]
 
-[node name="HUD" type="Control" parent="Camera2D" unique_id=1750936339]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Label" type="Label" parent="Camera2D/HUD" unique_id=1272378702]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-text = "HUD test"
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=804645905]
 position = Vector2(0, 0.5)
 shape = SubResource("RectangleShape2D_c5j7t")
