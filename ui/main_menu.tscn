@@ -5,8 +5,8 @@
 [ext_resource type="Texture2D" uid="uid://dat0x04mhycaf" path="res://assets/background.png" id="2_p8ri8"]
 [ext_resource type="PackedScene" uid="uid://vtb0087566yo" path="res://ui/components/panel/background_panel.tscn" id="3_wk0pr"]
 [ext_resource type="PackedScene" uid="uid://cmp3dqb0gaqip" path="res://ui/components/line_edit/line_edit.tscn" id="4_rmr83"]
-[ext_resource type="PackedScene" uid="uid://bbt8ic7m4cf3" path="res://ui/components/checkbox/custom_checkbox.tscn" id="5_ei257"]
 [ext_resource type="PackedScene" uid="uid://cky8m2321egnx" path="res://ui/components/notification/notification.tscn" id="7_p8ri8"]
+[ext_resource type="PackedScene" uid="uid://dyllr3kfnlcff" path="res://ui/settings.tscn" id="7_ubpvv"]
 
 [node name="MainMenu" type="Control" unique_id=1116928531]
 layout_mode = 3
@@ -36,8 +36,23 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_right = 0.0
-offset_bottom = 0.0
+offset_left = -50.0
+offset_top = -80.0
+offset_right = 50.0
+offset_bottom = 80.0
+
+[node name="MarginContainer" parent="LoginPanel" index="0" unique_id=1186838683]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -62.0
+offset_top = -74.5
+offset_right = 62.0
+offset_bottom = 74.5
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="MenuLabel" parent="LoginPanel/MarginContainer/MarginContainer/VBoxContainer" parent_id_path=PackedInt32Array(1851499352, 1387726149) index="0" unique_id=947707067]
 text = "Вхід в гру"
@@ -74,8 +89,23 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_right = 0.0
-offset_bottom = 0.0
+offset_left = -50.0
+offset_top = -80.0
+offset_right = 50.0
+offset_bottom = 80.0
+
+[node name="MarginContainer" parent="RegisterPanel" index="0" unique_id=1186838683]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -62.0
+offset_top = -74.0
+offset_right = 62.0
+offset_bottom = 75.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="MenuLabel" parent="RegisterPanel/MarginContainer/MarginContainer/VBoxContainer" parent_id_path=PackedInt32Array(971939153, 1387726149) index="0" unique_id=947707067]
 text = "Новий акаунт"
@@ -104,71 +134,22 @@ layout_mode = 2
 size_flags_horizontal = 1
 text = "Назад"
 
-[node name="SettingsPanel" parent="." unique_id=1351415666 instance=ExtResource("3_wk0pr")]
-visible = false
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-offset_right = 0.0
-offset_bottom = 0.0
-grow_horizontal = 0
-grow_vertical = 0
-size_flags_horizontal = 1
-size_flags_vertical = 2
-
-[node name="MarginContainer" parent="SettingsPanel" index="0" unique_id=1186838683]
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-offset_left = -131.0
-offset_top = -94.0
-grow_horizontal = 0
-grow_vertical = 0
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 38
-
-[node name="MenuLabel" parent="SettingsPanel/MarginContainer/MarginContainer/VBoxContainer" parent_id_path=PackedInt32Array(1351415666, 1387726149) index="0" unique_id=947707067]
-text = "Налаштування"
-
-[node name="VBoxContainer" parent="SettingsPanel/MarginContainer/MarginContainer/VBoxContainer" parent_id_path=PackedInt32Array(1351415666, 1387726149) index="1" unique_id=2063207470]
-size_flags_horizontal = 1
-
-[node name="CustomCheckbox" parent="SettingsPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" index="0" unique_id=236627766 instance=ExtResource("5_ei257")]
-layout_mode = 2
-
-[node name="Label" parent="SettingsPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/CustomCheckbox" index="0" unique_id=1475765677]
-text = "Музика"
-
-[node name="MarginContainer" type="MarginContainer" parent="." unique_id=135032019]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -131.0
-offset_top = -32.0
-grow_horizontal = 0
-grow_vertical = 0
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
-
-[node name="SettingsButton" parent="MarginContainer" unique_id=1690212328 instance=ExtResource("2_0dkrt")]
-layout_mode = 2
-toggle_mode = true
-text = "Налаштування"
-
 [node name="Notification" parent="." unique_id=1396998553 instance=ExtResource("7_p8ri8")]
 layout_mode = 1
+
+[node name="Settings" parent="." unique_id=671033006 instance=ExtResource("7_ubpvv")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
 
 [connection signal="pressed" from="LoginPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/TryLoginButton" to="." method="_on_try_login_button_pressed"]
 [connection signal="pressed" from="LoginPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/GoRegisterButton" to="." method="_on_go_register_button_pressed"]
 [connection signal="pressed" from="RegisterPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/TryRegisterButton" to="." method="_on_try_register_button_pressed"]
 [connection signal="pressed" from="RegisterPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/GoBackButton" to="." method="_on_go_back_button_pressed"]
-[connection signal="toggled" from="MarginContainer/SettingsButton" to="." method="_on_settings_button_toggled"]
 
 [editable path="LoginPanel"]
 [editable path="RegisterPanel"]
-[editable path="SettingsPanel"]
-[editable path="SettingsPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/CustomCheckbox"]
+[editable path="Settings"]
+[editable path="Settings/SettingsPanel"]
+[editable path="Settings/SettingsPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/CustomCheckbox"]

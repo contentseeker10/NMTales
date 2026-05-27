@@ -6,6 +6,7 @@
 base_font = ExtResource("1_66rt3")
 
 [node name="BackgroundPanel" type="Control" unique_id=971939153]
+custom_minimum_size = Vector2(100, 160)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,11 +20,8 @@ size_flags_vertical = 4
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1186838683]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 104.0
+offset_bottom = 40.0
 
 [node name="BackgroundBox" type="ColorRect" parent="MarginContainer" unique_id=2130326843]
 layout_mode = 2
