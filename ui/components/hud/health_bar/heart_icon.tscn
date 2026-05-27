@@ -20,5 +20,6 @@ func make_empty() -> void:
 "
 
 [node name="TextureRect" type="TextureRect" unique_id=118117640]
+custom_minimum_size = Vector2(16, 16)
 texture = SubResource("AtlasTexture_wtphh")
 script = SubResource("GDScript_wtphh")

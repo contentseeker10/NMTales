@@ -20,12 +20,8 @@ size_flags_vertical = 4
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1186838683]
 layout_mode = 1
-anchors_preset = -1
-anchor_right = 0.65
-anchor_bottom = 0.25
-grow_horizontal = 2
-grow_vertical = 2
-metadata/_edit_use_anchors_ = true
+offset_right = 104.0
+offset_bottom = 40.0
 
 [node name="BackgroundBox" type="ColorRect" parent="MarginContainer" unique_id=2130326843]
 layout_mode = 2

@@ -51,6 +51,8 @@ offset_left = -62.0
 offset_top = -74.5
 offset_right = 62.0
 offset_bottom = 74.5
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="MenuLabel" parent="LoginPanel/MarginContainer/MarginContainer/VBoxContainer" parent_id_path=PackedInt32Array(1851499352, 1387726149) index="0" unique_id=947707067]
 text = "Вхід в гру"
@@ -102,6 +104,8 @@ offset_left = -62.0
 offset_top = -74.0
 offset_right = 62.0
 offset_bottom = 74.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="MenuLabel" parent="RegisterPanel/MarginContainer/MarginContainer/VBoxContainer" parent_id_path=PackedInt32Array(971939153, 1387726149) index="0" unique_id=947707067]
 text = "Новий акаунт"
@@ -153,6 +157,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -131.0
 offset_top = -94.0
+offset_right = 0.0
+offset_bottom = 0.0
 grow_horizontal = 0
 grow_vertical = 0
 theme_override_constants/margin_right = 8

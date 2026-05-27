@@ -1,0 +1,98 @@
+[gd_scene format=3 uid="uid://brcp1og2j4gu1"]
+
+[ext_resource type="FontFile" uid="uid://gveo56yc8mbo" path="res://assets/font/PixelifySans-VariableFont_wght.ttf" id="1_s1e36"]
+[ext_resource type="PackedScene" uid="uid://vtb0087566yo" path="res://ui/components/panel/background_panel.tscn" id="2_2yiqb"]
+[ext_resource type="PackedScene" uid="uid://dol884wu1y0il" path="res://ui/components/hud/health_bar/health_bar.tscn" id="3_18caq"]
+[ext_resource type="PackedScene" uid="uid://b6v7toodritgx" path="res://ui/components/button/button.tscn" id="4_ncb6q"]
+
+[sub_resource type="FontVariation" id="FontVariation_2yiqb"]
+base_font = ExtResource("1_s1e36")
+
+[sub_resource type="FontVariation" id="FontVariation_18caq"]
+base_font = ExtResource("1_s1e36")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ncb6q"]
+content_margin_left = 420.0
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(1, 1, 1, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.99607843, 0.7019608, 0.34509805, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_io5hu"]
+bg_color = Color(0.99607843, 0.7019608, 0.34509805, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_bottom = 1
+border_color = Color(0.29803923, 0.22745098, 0.2, 1)
+
+[node name="Hud" type="CanvasLayer" unique_id=645566866]
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1902451765]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=124743440]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="UsernameLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=747690065]
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_2yiqb")
+theme_override_font_sizes/font_size = 12
+text = "username"
+
+[node name="BackgroundPanel" parent="MarginContainer/VBoxContainer" unique_id=971939153 instance=ExtResource("2_2yiqb")]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="MarginContainer" parent="MarginContainer/VBoxContainer/BackgroundPanel" index="0" unique_id=1186838683]
+offset_right = 140.0
+
+[node name="MenuLabel" parent="MarginContainer/VBoxContainer/BackgroundPanel/MarginContainer/MarginContainer/VBoxContainer" parent_id_path=PackedInt32Array(971939153, 1387726149) index="0" unique_id=947707067]
+theme_override_colors/font_color = Color(0.5882353, 0.50980395, 0.47843137, 1)
+theme_override_font_sizes/font_size = 10
+text = "Поточна задача"
+
+[node name="HealthBar" parent="MarginContainer" unique_id=811577068 instance=ExtResource("3_18caq")]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="LevelProgression" type="HBoxContainer" parent="MarginContainer" unique_id=1989198307]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+
+[node name="LevelLabel" type="Label" parent="MarginContainer/LevelProgression" unique_id=1203919759]
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_18caq")
+theme_override_font_sizes/font_size = 12
+text = "lvl 3"
+
+[node name="ProgressBar" type="ProgressBar" parent="MarginContainer/LevelProgression" unique_id=1687116145]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/background = SubResource("StyleBoxFlat_ncb6q")
+theme_override_styles/fill = SubResource("StyleBoxFlat_io5hu")
+value = 50.0
+show_percentage = false
+
+[node name="NotepadButton" parent="MarginContainer" unique_id=763636606 instance=ExtResource("4_ncb6q")]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "Записник"
+
+[editable path="MarginContainer/VBoxContainer/BackgroundPanel"]

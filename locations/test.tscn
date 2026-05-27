@@ -18,9 +18,6 @@ texture = ExtResource("1_c4040")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Player" parent="." unique_id=803971865 instance=ExtResource("2_lcml1")]
-position = Vector2(320, 180)
-
 [node name="Label" type="Label" parent="." unique_id=293543149]
 offset_left = 215.0
 offset_top = 64.0
@@ -33,3 +30,6 @@ theme_override_font_sizes/font_size = 16
 text = "This is test location"
 horizontal_alignment = 1
 metadata/_edit_use_anchors_ = true
+
+[node name="Player" parent="." unique_id=803971865 instance=ExtResource("2_lcml1")]
+position = Vector2(320, 180)
