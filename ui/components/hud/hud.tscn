@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://brcp1og2j4gu1"]
 
-[ext_resource type="FontFile" uid="uid://gveo56yc8mbo" path="res://assets/font/PixelifySans-VariableFont_wght.ttf" id="1_s1e36"]
+[ext_resource type="FontFile" uid="uid://gveo56yc8mbo" path="res://assets/shared/fonts/PixelifySans-VariableFont_wght.ttf" id="1_s1e36"]
 [ext_resource type="PackedScene" uid="uid://vtb0087566yo" path="res://ui/components/panel/background_panel.tscn" id="2_2yiqb"]
 [ext_resource type="PackedScene" uid="uid://dol884wu1y0il" path="res://ui/components/hud/health_bar/health_bar.tscn" id="3_18caq"]
 [ext_resource type="PackedScene" uid="uid://b6v7toodritgx" path="res://ui/components/button/button.tscn" id="4_ncb6q"]

@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://b6v7toodritgx"]
 
-[ext_resource type="FontFile" uid="uid://gveo56yc8mbo" path="res://assets/font/PixelifySans-VariableFont_wght.ttf" id="1_kikxg"]
-[ext_resource type="StyleBox" uid="uid://dp0mf03bae4sp" path="res://assets/styles/button-pressed.tres" id="3_5gork"]
-[ext_resource type="StyleBox" uid="uid://b0a48wmywpuci" path="res://assets/styles/button-hover.tres" id="3_ku18h"]
+[ext_resource type="FontFile" uid="uid://gveo56yc8mbo" path="res://assets/shared/fonts/PixelifySans-VariableFont_wght.ttf" id="1_kikxg"]
+[ext_resource type="StyleBox" uid="uid://dp0mf03bae4sp" path="res://assets/shared/styles/button-pressed.tres" id="3_5gork"]
+[ext_resource type="StyleBox" uid="uid://b0a48wmywpuci" path="res://assets/shared/styles/button-hover.tres" id="3_ku18h"]
 
 [sub_resource type="FontVariation" id="FontVariation_wk0pr"]
 base_font = ExtResource("1_kikxg")

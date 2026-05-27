@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://bbt8ic7m4cf3"]
 
 [ext_resource type="Script" uid="uid://do4vctw1wolt5" path="res://ui/components/checkbox/custom_checkbox.gd" id="1_0hdso"]
-[ext_resource type="FontFile" uid="uid://gveo56yc8mbo" path="res://assets/font/PixelifySans-VariableFont_wght.ttf" id="2_y6bxu"]
-[ext_resource type="Texture2D" uid="uid://jbuie76yrojm" path="res://assets/icons/checkbox-unchecked.png" id="3_vqh1r"]
-[ext_resource type="Texture2D" uid="uid://d45b2kepd52w" path="res://assets/icons/checkbox-checked.png" id="4_oivv7"]
+[ext_resource type="FontFile" uid="uid://gveo56yc8mbo" path="res://assets/shared/fonts/PixelifySans-VariableFont_wght.ttf" id="2_y6bxu"]
+[ext_resource type="Texture2D" uid="uid://jbuie76yrojm" path="res://assets/shared/icons/checkbox-unchecked.png" id="3_vqh1r"]
+[ext_resource type="Texture2D" uid="uid://d45b2kepd52w" path="res://assets/shared/icons/checkbox-checked.png" id="4_oivv7"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0hdso"]
 
