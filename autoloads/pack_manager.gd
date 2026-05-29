@@ -1,5 +1,18 @@
 extends Node
 
+enum PackType {
+	LOCATION,
+	QUEST
+}
+
+func get_pack_type(pack_type: PackType) -> String:
+	match pack_type:
+		PackType.LOCATION:
+			return "Location"
+		PackType.QUEST:
+			return "Quest"
+	return ""
+
 
 func entry_location(location_name: String) -> void:
 	print("Loading location " + location_name + "...")
@@ -8,28 +21,28 @@ func entry_location(location_name: String) -> void:
 	var scene_path: String = "res://locations/" + location_name.to_lower() + "/" + location_name.to_lower() + ".tscn"
 	
 	if ResourceLoader.exists(scene_path):
-		print("Location was found in game files.")
-		print("Skipping downloading with mounting.")
 		get_tree().change_scene_to_file(scene_path)
 		return
 	
 	if FileAccess.file_exists(local_pack_path):
-		print("Location pack was found locally.")
-		print("Proceeding to mounting.")
-		_mount_pack(local_pack_path)
-		get_tree().change_scene_to_file(scene_path)
-	else:
-		print("Location pack was not found locally.")
-		print("Proceeding to downloading.")
-		if await NetworkManager.download_pack(NetworkManager.PackType.LOCATION, location_name, local_pack_path):
-			_mount_pack(local_pack_path)
+		if _mount_pack(local_pack_path):
 			get_tree().change_scene_to_file(scene_path)
 		else:
-			print("Unable to entry location.")
+			_try_download_location(location_name, local_pack_path, scene_path)
+	else:
+		_try_download_location(location_name, local_pack_path, scene_path)
 
-func _mount_pack(pack_path: String) -> void:
+func _try_download_location(location_name: String, target_path: String, scene_path: String) -> void:
+	if await NetworkManager.download_pack(PackManager.PackType.LOCATION, location_name, target_path):
+		_mount_pack(target_path)
+		get_tree().change_scene_to_file(scene_path)
+	else:
+		print("Unable to entry location.")
+
+func _mount_pack(pack_path: String) -> bool:
 	var success: bool = ProjectSettings.load_resource_pack(pack_path)
 	if success:
-		print("Pack was successfully mounted from user://")
+		return true
 	else:
-		push_error("Error mounting pack " + pack_path)
+		DirAccess.remove_absolute(pack_path)
+		return false
