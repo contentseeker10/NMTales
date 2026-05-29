@@ -1,5 +1,7 @@
 extends Node
 
+var target_spawn_point_id: String = "start"
+
 
 func entry_location(location_name: String) -> void:
 	print("Loading location " + location_name + "...")
@@ -27,7 +29,22 @@ func _try_download_location(location_name: String, target_path: String, scene_pa
 		print("Unable to entry location.")
 
 
-func spawn_player(point: Node2D) -> void:
+func spawn_player() -> void:
 	var player: Player = preload("res://parts/player/player.tscn").instantiate()
 	get_tree().current_scene.add_child(player)
-	player.global_position = point.global_position
+	player.global_position = _get_spawn_point().global_position
+
+func _get_spawn_point() -> SpawnPoint:
+	var spawn_points: Array
+	
+	if get_tree().current_scene.has_node("PlayerSpawnPoints"):
+		spawn_points = get_tree().current_scene.get_node("PlayerSpawnPoints").get_children()
+	else:
+		push_error("Location needs player spawn points list.")
+	
+	for point in spawn_points:
+		if point.spawn_point_id == target_spawn_point_id:
+			return point
+	
+	push_error("No such spawn point.")
+	return null
