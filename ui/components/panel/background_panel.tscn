@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://vtb0087566yo"]
 
-[ext_resource type="FontFile" uid="uid://gveo56yc8mbo" path="res://assets/font/PixelifySans-VariableFont_wght.ttf" id="1_66rt3"]
+[ext_resource type="FontFile" uid="uid://gveo56yc8mbo" path="res://assets/shared/fonts/PixelifySans-VariableFont_wght.ttf" id="1_66rt3"]
 
 [sub_resource type="FontVariation" id="FontVariation_ucljh"]
 base_font = ExtResource("1_66rt3")

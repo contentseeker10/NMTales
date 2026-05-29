@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://btw14j8i3cfuo"]
+
+[ext_resource type="PackedScene" uid="uid://dd17g1dwhtw4w" path="res://parts/teleporter/teleporter.tscn" id="1_1so17"]
+[ext_resource type="FontFile" uid="uid://gveo56yc8mbo" path="res://assets/shared/fonts/PixelifySans-VariableFont_wght.ttf" id="1_fvc5x"]
+[ext_resource type="Script" uid="uid://uce5degvdu43" path="res://locations/test_teleport/test_teleport.gd" id="1_gusvd"]
+
+[sub_resource type="FontVariation" id="FontVariation_gusvd"]
+base_font = ExtResource("1_fvc5x")
+
+[node name="Teleport" type="Node2D" unique_id=1017598378 node_paths=PackedStringArray("spawn_point")]
+script = ExtResource("1_gusvd")
+spawn_point = NodePath("SpawnPoint")
+
+[node name="Label" type="Label" parent="." unique_id=834760849]
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_fonts/font = SubResource("FontVariation_gusvd")
+text = "you have successfully teleported"
+
+[node name="TeleporterToTest" parent="." unique_id=268977910 instance=ExtResource("1_1so17")]
+position = Vector2(113, 111)
+target_location = "test"
+
+[node name="SpawnPoint" type="Marker2D" parent="." unique_id=1986853523]
+position = Vector2(31, 48)

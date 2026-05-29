@@ -1,0 +1,155 @@
+[gd_scene format=3 uid="uid://6qafm0cln6yg"]
+
+[ext_resource type="Script" uid="uid://dfrgbky5ai1wv" path="res://ui/menus/main/main.gd" id="1_sx0bw"]
+[ext_resource type="Texture2D" uid="uid://dat0x04mhycaf" path="res://assets/shared/background.png" id="2_iqfwg"]
+[ext_resource type="PackedScene" uid="uid://vtb0087566yo" path="res://ui/components/panel/background_panel.tscn" id="3_8pase"]
+[ext_resource type="PackedScene" uid="uid://cmp3dqb0gaqip" path="res://ui/components/line_edit/line_edit.tscn" id="4_x37g4"]
+[ext_resource type="PackedScene" uid="uid://b6v7toodritgx" path="res://ui/components/button/button.tscn" id="5_65cc8"]
+[ext_resource type="PackedScene" uid="uid://cky8m2321egnx" path="res://ui/components/notification/notification.tscn" id="6_pf36j"]
+[ext_resource type="PackedScene" uid="uid://dyllr3kfnlcff" path="res://ui/menus/settings/settings.tscn" id="7_58mm7"]
+
+[node name="Main" type="Control" unique_id=1116928531]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+script = ExtResource("1_sx0bw")
+
+[node name="BackgroundImage" type="TextureRect" parent="." unique_id=1207666052]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_iqfwg")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="LoginPanel" parent="." unique_id=1851499352 instance=ExtResource("3_8pase")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -80.0
+offset_right = 50.0
+offset_bottom = 80.0
+
+[node name="MarginContainer" parent="LoginPanel" index="0" unique_id=1186838683]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -62.0
+offset_top = -74.5
+offset_right = 62.0
+offset_bottom = 74.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MenuLabel" parent="LoginPanel/MarginContainer/MarginContainer/VBoxContainer" parent_id_path=PackedInt32Array(1851499352, 1387726149) index="0" unique_id=947707067]
+text = "Вхід в гру"
+
+[node name="UsernameEdit" parent="LoginPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(1851499352, 2063207470) index="0" unique_id=1504955661 instance=ExtResource("4_x37g4")]
+layout_mode = 2
+placeholder_text = "Юзернейм"
+context_menu_enabled = false
+emoji_menu_enabled = false
+
+[node name="PasswordEdit" parent="LoginPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(1851499352, 2063207470) index="1" unique_id=1847710883 instance=ExtResource("4_x37g4")]
+layout_mode = 2
+placeholder_text = "Пароль"
+context_menu_enabled = false
+emoji_menu_enabled = false
+secret = true
+secret_character = "*"
+
+[node name="TryLoginButton" parent="LoginPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(1851499352, 2063207470) index="2" unique_id=763636606 instance=ExtResource("5_65cc8")]
+layout_mode = 2
+size_flags_horizontal = 1
+text = "Вхід"
+
+[node name="GoRegisterButton" parent="LoginPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(1851499352, 2063207470) index="3" unique_id=1951198736 instance=ExtResource("5_65cc8")]
+layout_mode = 2
+size_flags_horizontal = 1
+text = "Реєстрація"
+
+[node name="RegisterPanel" parent="." unique_id=971939153 instance=ExtResource("3_8pase")]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -80.0
+offset_right = 50.0
+offset_bottom = 80.0
+
+[node name="MarginContainer" parent="RegisterPanel" index="0" unique_id=1186838683]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -62.0
+offset_top = -74.0
+offset_right = 62.0
+offset_bottom = 75.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MenuLabel" parent="RegisterPanel/MarginContainer/MarginContainer/VBoxContainer" parent_id_path=PackedInt32Array(971939153, 1387726149) index="0" unique_id=947707067]
+text = "Новий акаунт"
+
+[node name="UsernameEdit" parent="RegisterPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(971939153, 2063207470) index="0" unique_id=97869084 instance=ExtResource("4_x37g4")]
+layout_mode = 2
+placeholder_text = "Новий юзернейм"
+context_menu_enabled = false
+emoji_menu_enabled = false
+
+[node name="PasswordEdit" parent="RegisterPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(971939153, 2063207470) index="1" unique_id=130363489 instance=ExtResource("4_x37g4")]
+layout_mode = 2
+placeholder_text = "Новий пароль"
+context_menu_enabled = false
+emoji_menu_enabled = false
+secret = true
+secret_character = "*"
+
+[node name="TryRegisterButton" parent="RegisterPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(971939153, 2063207470) index="2" unique_id=1511828033 instance=ExtResource("5_65cc8")]
+layout_mode = 2
+size_flags_horizontal = 1
+text = "Відправити"
+
+[node name="GoBackButton" parent="RegisterPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(971939153, 2063207470) index="3" unique_id=473104023 instance=ExtResource("5_65cc8")]
+layout_mode = 2
+size_flags_horizontal = 1
+text = "Назад"
+
+[node name="Notification" parent="." unique_id=1396998553 instance=ExtResource("6_pf36j")]
+layout_mode = 1
+
+[node name="Settings" parent="." unique_id=671033006 instance=ExtResource("7_58mm7")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+
+[connection signal="pressed" from="LoginPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/TryLoginButton" to="." method="_on_try_login_button_pressed"]
+[connection signal="pressed" from="LoginPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/GoRegisterButton" to="." method="_on_go_register_button_pressed"]
+[connection signal="pressed" from="RegisterPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/TryRegisterButton" to="." method="_on_try_register_button_pressed"]
+[connection signal="pressed" from="RegisterPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/GoBackButton" to="." method="_on_go_back_button_pressed"]
+
+[editable path="LoginPanel"]
+[editable path="RegisterPanel"]
+[editable path="Settings"]
+[editable path="Settings/SettingsPanel"]
+[editable path="Settings/SettingsPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/CustomCheckbox"]
