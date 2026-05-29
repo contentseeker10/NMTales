@@ -1,4 +1,4 @@
-class_name MainMenu
+class_name Main
 extends Control
 
 @onready var login_panel: Control = $LoginPanel
@@ -20,7 +20,6 @@ extends Control
 func _ready() -> void:
 	AuthManager.register_attempted.connect(_on_register_attempted)
 	AuthManager.login_attempted.connect(_on_login_attempted)
-	notification.show_notification("Hello World!")
 
 
 func _process(delta: float) -> void:
@@ -60,6 +59,6 @@ func _on_try_login_button_pressed() -> void:
 
 func _on_login_attempted(success: bool, message: String) -> void:
 	if success:
-		get_tree().change_scene_to_file("res://locations/test.tscn")
+		PackManager.entry_location("test")
 	else:
 		notification.show_notification(message)

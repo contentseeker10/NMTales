@@ -9,7 +9,7 @@ func entry_location(location_name: String) -> void:
 	
 	if ResourceLoader.exists(scene_path):
 		print("Location was found in game files.")
-		print("Skipping downloading and mounting.")
+		print("Skipping downloading with mounting.")
 		get_tree().change_scene_to_file(scene_path)
 		return
 	

@@ -15,7 +15,7 @@ func _on_exit_button_pressed() -> void:
 	
 func _toggle_pause() -> void:
 	var current_scene: Node = get_tree().current_scene
-	if current_scene is MainMenu:
+	if current_scene is Main:
 		return
 	get_tree().paused = !get_tree().paused
 	self.visible = get_tree().paused

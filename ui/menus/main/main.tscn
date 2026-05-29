@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://6qafm0cln6yg"]
 
+[ext_resource type="Script" uid="uid://dfrgbky5ai1wv" path="res://ui/menus/main/main.gd" id="1_sx0bw"]
 [ext_resource type="Texture2D" uid="uid://dat0x04mhycaf" path="res://assets/shared/background.png" id="2_iqfwg"]
 [ext_resource type="PackedScene" uid="uid://vtb0087566yo" path="res://ui/components/panel/background_panel.tscn" id="3_8pase"]
 [ext_resource type="PackedScene" uid="uid://cmp3dqb0gaqip" path="res://ui/components/line_edit/line_edit.tscn" id="4_x37g4"]
@@ -7,74 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://cky8m2321egnx" path="res://ui/components/notification/notification.tscn" id="6_pf36j"]
 [ext_resource type="PackedScene" uid="uid://dyllr3kfnlcff" path="res://ui/menus/settings/settings.tscn" id="7_58mm7"]
 
-[sub_resource type="GDScript" id="GDScript_d11k6"]
-script/source = "#class_name MainMenu
-extends Control
-
-@onready var login_panel: Control = $LoginPanel
-@onready var register_panel: Control = $RegisterPanel
-
-@onready var reg_username_edit: LineEdit \\
-		= $RegisterPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/UsernameEdit
-@onready var reg_password_edit: LineEdit \\
-		= $RegisterPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/PasswordEdit
-
-@onready var login_username_edit: LineEdit \\
-		= $LoginPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/UsernameEdit
-@onready var login_password_edit: LineEdit \\
-		= $LoginPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/PasswordEdit
-
-@onready var notification: Notification = $Notification
-
-
-func _ready() -> void:
-	AuthManager.register_attempted.connect(_on_register_attempted)
-	AuthManager.login_attempted.connect(_on_login_attempted)
-
-
-func _process(delta: float) -> void:
-	pass
-
-
-func _on_go_register_button_pressed() -> void:
-	login_panel.hide()
-	register_panel.show()
-
-
-func _on_go_back_button_pressed() -> void:
-	register_panel.hide()
-	login_panel.show()
-
-
-func _on_try_register_button_pressed() -> void:
-	var username: String = reg_username_edit.text
-	var password: String = reg_password_edit.text
-	AuthManager.register(username, password)
-
-func _on_register_attempted(success: bool, message: String) -> void:
-	if success:
-		reg_username_edit.clear()
-		reg_password_edit.clear()
-		register_panel.hide()
-		login_panel.show()
-		notification.show_notification(message)
-	else:
-		notification.show_notification(message)
-
-
-func _on_try_login_button_pressed() -> void:
-	var username: String = login_username_edit.text
-	var password: String = login_password_edit.text
-	AuthManager.login(username, password)
-
-func _on_login_attempted(success: bool, message: String) -> void:
-	if success:
-		PackManager.entry_location(\"test\")
-	else:
-		notification.show_notification(message)
-"
-
-[node name="MainMenu" type="Control" unique_id=1116928531]
+[node name="Main" type="Control" unique_id=1116928531]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -82,7 +16,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 0
-script = SubResource("GDScript_d11k6")
+script = ExtResource("1_sx0bw")
 
 [node name="BackgroundImage" type="TextureRect" parent="." unique_id=1207666052]
 layout_mode = 1

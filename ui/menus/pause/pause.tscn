@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://cacd54mfk10u2"]
 
 [ext_resource type="PackedScene" uid="uid://vtb0087566yo" path="res://ui/components/panel/background_panel.tscn" id="1_ejwgg"]
-[ext_resource type="Script" path="res://ui/menus/pause/pause.gd" id="1_npydk"]
+[ext_resource type="Script" uid="uid://djspfcr5mm0ge" path="res://ui/menus/pause/pause.gd" id="1_npydk"]
 [ext_resource type="PackedScene" uid="uid://b6v7toodritgx" path="res://ui/components/button/button.tscn" id="2_fob5h"]
 [ext_resource type="PackedScene" uid="uid://dyllr3kfnlcff" path="res://ui/menus/settings/settings.tscn" id="3_fob5h"]
-[ext_resource type="Texture2D" uid="uid://ckq6jaell5ycj" path="res://locations/test/assets/logo.png" id="4_avurv"]
+[ext_resource type="Texture2D" uid="uid://bc0k4qltmpwsd" path="res://assets/shared/logo.png" id="5_l10bu"]
 
 [node name="PauseMenu" type="CanvasLayer" unique_id=1919530594]
 process_mode = 3
@@ -58,7 +58,7 @@ offset_right = 119.0
 offset_bottom = -61.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("4_avurv")
+texture = ExtResource("5_l10bu")
 expand_mode = 1
 stretch_mode = 4
 
