@@ -59,6 +59,6 @@ func _on_try_login_button_pressed() -> void:
 
 func _on_login_attempted(success: bool, message: String) -> void:
 	if success:
-		PackManager.entry_location("test")
+		LocationManager.entry_location("test")
 	else:
 		notification.show_notification(message)

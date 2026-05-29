@@ -1,0 +1,32 @@
+[gd_scene format=4 uid="uid://dd17g1dwhtw4w"]
+
+[ext_resource type="Script" uid="uid://c4cv6rrlhyfrd" path="res://parts/teleporter/teleporter.gd" id="1_5c0t2"]
+[ext_resource type="TileSet" uid="uid://c437wjhtdx4ri" path="res://assets/shared/tilesets/valley_ruin.tres" id="1_x4hne"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5c0t2"]
+size = Vector2(50, 70)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5c0t2"]
+radius = 54.0
+
+[node name="Teleporter" type="Node2D" unique_id=268977910]
+script = ExtResource("1_5c0t2")
+
+[node name="TeleporterTiles" type="TileMapLayer" parent="." unique_id=465307943]
+tile_map_data = PackedByteArray("AAD+//7/CQAKAAEAAAD+////CQAKAAIAAAD+/wAACQAKAAMAAAD+/wEACQAKAAQAAAD///3/CQALAAAAAAD///7/CQALAAEAAAD/////CQALAAIAAAD//wAACQALAAMAAAD//wEACQALAAQAAAAAAP3/CQAMAAAAAAAAAP7/CQAMAAEAAAAAAP//CQAMAAIAAAAAAAAACQAMAAMAAAAAAAEACQAMAAQAAAABAP7/CQANAAEAAAABAP//CQANAAIAAAABAAAACQANAAMAAAABAAEACQANAAQAAAA=")
+tile_set = ExtResource("1_x4hne")
+
+[node name="ClickArea" type="Area2D" parent="." unique_id=1786114322]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClickArea" unique_id=2064740390]
+position = Vector2(0, -7)
+shape = SubResource("RectangleShape2D_5c0t2")
+
+[node name="InteractionArea" type="Area2D" parent="." unique_id=391581822]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=1334237700]
+shape = SubResource("CircleShape2D_5c0t2")
+
+[connection signal="input_event" from="ClickArea" to="." method="_on_interaction_area_input_event"]
+[connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]
+[connection signal="body_exited" from="InteractionArea" to="." method="_on_interaction_area_body_exited"]
