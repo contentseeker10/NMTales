@@ -1,9 +1,7 @@
 extends Node
 
-
 signal login_attempted(success: bool, message: String)
 signal register_attempted(success: bool, message: String)
-
 
 var jwt_token: String = ""
 var current_user_info: Dictionary = {}

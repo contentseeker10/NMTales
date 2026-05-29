@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://brcp1og2j4gu1"]
 
+[ext_resource type="Script" uid="uid://duc12wlejpg7j" path="res://ui/components/hud/hud.gd" id="1_io5hu"]
 [ext_resource type="FontFile" uid="uid://gveo56yc8mbo" path="res://assets/shared/fonts/PixelifySans-VariableFont_wght.ttf" id="1_s1e36"]
 [ext_resource type="PackedScene" uid="uid://vtb0087566yo" path="res://ui/components/panel/background_panel.tscn" id="2_2yiqb"]
 [ext_resource type="PackedScene" uid="uid://dol884wu1y0il" path="res://ui/components/hud/health_bar/health_bar.tscn" id="3_18caq"]
@@ -30,6 +31,7 @@ border_width_bottom = 1
 border_color = Color(0.29803923, 0.22745098, 0.2, 1)
 
 [node name="HUD" type="CanvasLayer" unique_id=645566866]
+script = ExtResource("1_io5hu")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1902451765]
 anchors_preset = 15
@@ -79,9 +81,9 @@ size_flags_vertical = 8
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_18caq")
 theme_override_font_sizes/font_size = 12
-text = "lvl 3"
+text = "lvl"
 
-[node name="ProgressBar" type="ProgressBar" parent="MarginContainer/LevelProgression" unique_id=1687116145]
+[node name="LevelProgressBar" type="ProgressBar" parent="MarginContainer/LevelProgression" unique_id=1687116145]
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_styles/background = SubResource("StyleBoxFlat_ncb6q")
