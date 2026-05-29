@@ -1,0 +1,131 @@
+[gd_scene format=3 uid="uid://cm08aaa1oxpsb"]
+
+[ext_resource type="Script" uid="uid://bj23aynksenps" path="res://ui/menus/dialogue/dialogue.gd" id="1_bf25i"]
+[ext_resource type="SpriteFrames" uid="uid://bh5mf1xsf4uf8" path="res://parts/npc/sprite_frames/1.tres" id="1_j452d"]
+[ext_resource type="FontFile" uid="uid://gveo56yc8mbo" path="res://assets/shared/fonts/PixelifySans-VariableFont_wght.ttf" id="2_dlmwp"]
+[ext_resource type="PackedScene" uid="uid://b6v7toodritgx" path="res://ui/components/button/button.tscn" id="3_ypexw"]
+
+[sub_resource type="FontVariation" id="FontVariation_ypexw"]
+base_font = ExtResource("2_dlmwp")
+
+[sub_resource type="FontVariation" id="FontVariation_dlmwp"]
+base_font = ExtResource("2_dlmwp")
+
+[node name="Dialogue" type="CanvasLayer" unique_id=954306754]
+script = ExtResource("1_bf25i")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1248907648]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.39215687)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1175791592]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -24.0
+offset_right = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CenterContainer" unique_id=483007911]
+position = Vector2(-96, 24.000006)
+scale = Vector2(6.639323, 6.639323)
+sprite_frames = ExtResource("1_j452d")
+animation = &"idle_down"
+autoplay = "idle_down"
+
+[node name="Label" type="Label" parent="." unique_id=1105770030]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -174.0
+offset_top = -127.0
+offset_right = -66.0
+offset_bottom = -97.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = SubResource("FontVariation_ypexw")
+theme_override_font_sizes/font_size = 24
+text = "NPC Name"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1398758273]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -28.0
+offset_top = -108.0
+offset_right = 172.0
+offset_bottom = 140.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=153562920]
+layout_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/MarginContainer" unique_id=14083755]
+custom_minimum_size = Vector2(0, 188)
+layout_mode = 2
+color = Color(0.29803923, 0.22745098, 0.2, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/MarginContainer/ColorRect" unique_id=389837358]
+layout_mode = 1
+offset_right = 200.0
+offset_bottom = 188.0
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/MarginContainer/ColorRect/MarginContainer" unique_id=1247849628]
+custom_minimum_size = Vector2(0, 180)
+layout_mode = 2
+color = Color(0.9985873, 0.7825438, 0.5412677, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/MarginContainer/ColorRect/MarginContainer/ColorRect" unique_id=1888575450]
+layout_mode = 0
+offset_left = 6.0
+offset_right = 192.0
+offset_bottom = 180.0
+
+[node name="OutputText" type="RichTextLabel" parent="VBoxContainer/MarginContainer/ColorRect/MarginContainer/ColorRect/MarginContainer" unique_id=1241367823]
+layout_mode = 2
+theme_override_colors/default_color = Color(0.16470589, 0.1254902, 0.10980392, 1)
+theme_override_fonts/normal_font = SubResource("FontVariation_dlmwp")
+theme_override_font_sizes/normal_font_size = 10
+text = "3. Глобальный менеджер диалогов DialogueManager (Autoload)
+Синглтон, который будет управлять показом диалогов. Когда игрок нажимает кнопку взаимодействия рядом с NPC:
+
+Игрок посылает сигнал взаимодействия в DialogueManager, передавая npc_id.
+DialogueManager ищет файл диалога (например, res://dialogues/taras_intro.json).
+Загружает этот JSON, парсит его и передает по строчке в UI-окно диалога.
+С чего начнем имплементацию?
+Предлагаю начать с создания сцены NPC и зоны взаимодействия (Interaction Area). Нам нужно научить игру понимать:"
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer" unique_id=875824073]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+columns = 2
+
+[node name="Button" parent="VBoxContainer/GridContainer" unique_id=763636606 instance=ExtResource("3_ypexw")]
+layout_mode = 2
+
+[node name="Button3" parent="VBoxContainer/GridContainer" unique_id=48765510 instance=ExtResource("3_ypexw")]
+layout_mode = 2
+
+[node name="Button4" parent="VBoxContainer/GridContainer" unique_id=368335428 instance=ExtResource("3_ypexw")]
+layout_mode = 2
+
+[node name="Button2" parent="VBoxContainer/GridContainer" unique_id=775023134 instance=ExtResource("3_ypexw")]
+layout_mode = 2

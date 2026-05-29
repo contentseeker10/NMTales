@@ -1,0 +1,39 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://bh5mf1xsf4uf8"]
+
+[ext_resource type="Texture2D" uid="uid://b5xq5pmudv6ba" path="res://assets/shared/characters/npc/001.png" id="1_0lf57"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3b4nw"]
+atlas = ExtResource("1_0lf57")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1d2jf"]
+atlas = ExtResource("1_0lf57")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fecon"]
+atlas = ExtResource("1_0lf57")
+region = Rect2(96, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mwch3"]
+atlas = ExtResource("1_0lf57")
+region = Rect2(144, 0, 48, 48)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3b4nw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1d2jf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fecon")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mwch3")
+}],
+"loop": true,
+"name": &"idle_down",
+"speed": 2.0
+}]

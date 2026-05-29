@@ -5,11 +5,12 @@
 [ext_resource type="PackedScene" uid="uid://dd17g1dwhtw4w" path="res://parts/teleporter/teleporter.tscn" id="2_csja3"]
 [ext_resource type="FontFile" uid="uid://gveo56yc8mbo" path="res://assets/shared/fonts/PixelifySans-VariableFont_wght.ttf" id="4_gcwut"]
 [ext_resource type="PackedScene" uid="uid://dgudnnaupgsr7" path="res://parts/player/spawn_point/spawn_point.tscn" id="5_e4v2d"]
+[ext_resource type="PackedScene" uid="uid://c8cfoewmx3r6c" path="res://parts/npc/npc.tscn" id="6_b0pkk"]
 
 [sub_resource type="FontVariation" id="FontVariation_e4v2d"]
 base_font = ExtResource("4_gcwut")
 
-[node name="Test" type="Node2D" unique_id=370210118]
+[node name="Test" type="Node2D" unique_id=243513179]
 script = ExtResource("1_csja3")
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1493848801]
@@ -49,3 +50,6 @@ spawn_point_id = "teleporter"
 position = Vector2(472, 240)
 target_location = "test_teleport"
 target_spawn_point_id = "start"
+
+[node name="NPC" parent="." unique_id=840380367 instance=ExtResource("6_b0pkk")]
+position = Vector2(337, 236)
