@@ -9,6 +9,12 @@
 [sub_resource type="FontVariation" id="FontVariation_2yiqb"]
 base_font = ExtResource("1_s1e36")
 
+[sub_resource type="FontVariation" id="FontVariation_io5hu"]
+base_font = ExtResource("1_s1e36")
+
+[sub_resource type="FontVariation" id="FontVariation_rdhe8"]
+base_font = ExtResource("1_s1e36")
+
 [sub_resource type="FontVariation" id="FontVariation_18caq"]
 base_font = ExtResource("1_s1e36")
 
@@ -67,6 +73,28 @@ offset_right = 140.0
 theme_override_colors/font_color = Color(0.5882353, 0.50980395, 0.47843137, 1)
 theme_override_font_sizes/font_size = 10
 text = "Поточна задача"
+
+[node name="VBoxContainer" parent="MarginContainer/VBoxContainer/BackgroundPanel/MarginContainer/MarginContainer/VBoxContainer" parent_id_path=PackedInt32Array(971939153, 1387726149) index="1" unique_id=2063207470]
+theme_override_constants/separation = 2
+
+[node name="CurrentObjectiveTitle" type="Label" parent="MarginContainer/VBoxContainer/BackgroundPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" index="0" unique_id=548836138]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_io5hu")
+theme_override_font_sizes/font_size = 12
+text = "Пусто."
+horizontal_alignment = 1
+autowrap_mode = 1
+
+[node name="CurrentObjectiveDescription" type="Label" parent="MarginContainer/VBoxContainer/BackgroundPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" index="1" unique_id=1812409089]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.99607843, 0.7019608, 0.34509805, 1)
+theme_override_constants/line_spacing = -2
+theme_override_fonts/font = SubResource("FontVariation_rdhe8")
+theme_override_font_sizes/font_size = 10
+horizontal_alignment = 1
+autowrap_mode = 1
 
 [node name="HealthBar" parent="MarginContainer" unique_id=811577068 instance=ExtResource("3_18caq")]
 layout_mode = 2

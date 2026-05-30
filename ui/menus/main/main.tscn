@@ -59,6 +59,7 @@ text = "Вхід в гру"
 
 [node name="UsernameEdit" parent="LoginPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(1851499352, 2063207470) index="0" unique_id=1504955661 instance=ExtResource("4_x37g4")]
 layout_mode = 2
+text = "contentseeker10"
 placeholder_text = "Юзернейм"
 context_menu_enabled = false
 emoji_menu_enabled = false
