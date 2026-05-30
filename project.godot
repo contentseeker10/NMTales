@@ -20,8 +20,10 @@ config/icon="res://icon.svg"
 NetworkManager="*uid://bncsmqxm3611d"
 AuthManager="*uid://bitl6d8q6mvb4"
 PackManager="*uid://cujeumm7u4ow"
+EventBus="*uid://dh3ottjk488rh"
 LocationManager="*uid://hbsiv4ob7m1m"
 DialogueManager="*uid://vdh0fb2awxiy"
+QuestManager="*uid://brmhns4qffobg"
 PauseMenu="*uid://cacd54mfk10u2"
 
 [display]

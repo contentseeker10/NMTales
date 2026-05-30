@@ -37,7 +37,8 @@ func add_player_answer(text: String) -> void:
 
 func show_choices(choices: Array) -> void:
 	var buttons: Array = button_grid.get_children()
-	for i in range(choices.size()):
+	var count: int = min(choices.size(), buttons.size())
+	for i in range(count):
 		buttons[i].show()
 		buttons[i].text = choices[i].get("text", "error")
 		buttons[i].pressed.connect(func(): DialogueManager.select_choice(choices[i]), CONNECT_ONE_SHOT)
@@ -46,3 +47,5 @@ func clear_choices_ui() -> void:
 	for button in button_grid.get_children():
 		button.text = ""
 		button.hide()
+		for connection in button.pressed.get_connections():
+			button.pressed.disconnect(connection.callable)

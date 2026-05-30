@@ -1,0 +1,5 @@
+talk_npc : talk with NPC to complete
+enter_location : enter the exact location to complete
+open_menu : open some UI menu to complete
+complete_quiz : successfully complete a quiz to complete
+kill_mob : kill enemies to complete

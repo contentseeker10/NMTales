@@ -39,6 +39,11 @@ func _load_dialogue(npc_id: String, dialogue_id: int) -> void:
 
 
 func advance_dialogue() -> void:
+	if not current_dialogue_data.has(current_node_id):
+		push_error("Dialog node was not found: " + current_node_id)
+		end_dialogue()
+		return
+	
 	var node: Dictionary = current_dialogue_data.get(current_node_id, {})
 	var answer: String = node.get("text", "error")
 	dialogue.add_npc_answer(answer)

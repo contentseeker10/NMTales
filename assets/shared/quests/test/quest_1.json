@@ -1,0 +1,14 @@
+{
+	"id": "test",
+	"title": "Test Quest #1",
+	"description": "Talk with npc_test to complete",
+	"rewards": {
+		"xp": 100
+	},
+	"objective": {
+		"type": "talk_npc",
+		"target": "npc_test",
+		"required_amount": 1,
+		"current_amount": 0
+	}
+}
