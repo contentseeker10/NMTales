@@ -1,0 +1,29 @@
+{
+  "start": {
+	"text": "Привіт! Готовий до швидкого тесту з історії?",
+	"choices": [
+	  {"text": "Так, почнемо!", "next_node": "question_1"},
+	  {"text": "Ні, бувай.", "next_node": "exit"}
+	]
+  },
+  "question_1": {
+	"text": "У якому році відбулася Люблінська унія?",
+	"choices": [
+	  {"text": "1569 рік", "next_node": "correct_answer"},
+	  {"text": "1648 рік", "next_node": "wrong_answer"}
+	]
+  },
+  "correct_answer": {
+	"text": "Правильно! Ти отримуєш досвід.",
+	"choices": [
+		{"text": "Вийти", "next_node": "exit"}
+	]
+  },
+  "wrong_answer": {
+	"text": "Неправильно. Спробуй ще раз!",
+	"choices": [
+	  {"text": "Повторити спробу", "next_node": "question_1"},
+	  {"text": "Вийти", "next_node": "exit"}
+	]
+  }
+}

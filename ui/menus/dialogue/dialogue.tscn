@@ -44,6 +44,7 @@ border_color = Color(0.9985873, 0.7825438, 0.5412677, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jfjx0"]
 content_margin_left = 6.0
+bg_color = Color(1, 1, 1, 0)
 
 [sub_resource type="Theme" id="Theme_cstq7"]
 VScrollBar/styles/grabber = SubResource("StyleBoxFlat_a6xe4")
@@ -157,13 +158,17 @@ size_flags_vertical = 4
 columns = 2
 
 [node name="Button" parent="VBoxContainer/GridContainer" unique_id=763636606 instance=ExtResource("3_ypexw")]
+visible = false
 layout_mode = 2
 
-[node name="Button3" parent="VBoxContainer/GridContainer" unique_id=48765510 instance=ExtResource("3_ypexw")]
+[node name="Button2" parent="VBoxContainer/GridContainer" unique_id=1466803438 instance=ExtResource("3_ypexw")]
+visible = false
 layout_mode = 2
 
-[node name="Button4" parent="VBoxContainer/GridContainer" unique_id=368335428 instance=ExtResource("3_ypexw")]
+[node name="Button3" parent="VBoxContainer/GridContainer" unique_id=933573211 instance=ExtResource("3_ypexw")]
+visible = false
 layout_mode = 2
 
-[node name="Button2" parent="VBoxContainer/GridContainer" unique_id=775023134 instance=ExtResource("3_ypexw")]
+[node name="Button4" parent="VBoxContainer/GridContainer" unique_id=272198454 instance=ExtResource("3_ypexw")]
+visible = false
 layout_mode = 2

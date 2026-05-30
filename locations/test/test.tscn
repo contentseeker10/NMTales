@@ -53,3 +53,4 @@ target_spawn_point_id = "start"
 
 [node name="NPC" parent="." unique_id=840380367 instance=ExtResource("6_b0pkk")]
 position = Vector2(337, 236)
+npc_id = "npc_test"
