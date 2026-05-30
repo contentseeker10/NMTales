@@ -39,7 +39,7 @@ text = "this is teleport"
 [node name="PlayerSpawnPoints" type="Node2D" parent="." unique_id=1671624340]
 
 [node name="Start" parent="PlayerSpawnPoints" unique_id=1811807046 instance=ExtResource("5_e4v2d")]
-position = Vector2(30, 344)
+position = Vector2(337, 311)
 spawn_point_id = "start"
 
 [node name="Teleporter" parent="PlayerSpawnPoints" unique_id=145559084 instance=ExtResource("5_e4v2d")]
