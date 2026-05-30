@@ -14,6 +14,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 
 
 func start_dialogue(npc: NPC) -> void:
+	EventBus.npc_talked.emit(npc.npc_id)
 	get_tree().paused = true
 	_add_dialogue_scene(npc)
 	_load_dialogue(npc.npc_id, 1)
