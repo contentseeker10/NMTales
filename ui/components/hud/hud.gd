@@ -21,15 +21,13 @@ func _load_user_data() -> void:
 	level_progress_bar.value = AuthManager.current_user_info.get("xp", 0.0)
 
 
-func _on_quest_updated(quest_data: Dictionary) -> void:
-	current_objective_title.text = quest_data.get("title", "error")
-	var objective: Dictionary = quest_data.get("objective", {})
-	var current_amount: int = objective.get("current_amount", 0)
-	var required_amount: int = objective.get("required_amount", 0)
-	current_objective_description.text = quest_data.get("description", "error") \
-									+ " (" + str(current_amount) + "/" + str(required_amount) + ")"
+func _on_quest_updated(quest: Quest) -> void:
+	current_objective_title.text = quest.title
+	current_objective_description.text = quest.description \
+									+ " (" + str(quest.current_amount) \
+									+ "/" + str(quest.required_amount) + ")"
 
 
-func _on_quest_completed(_quest_data: Dictionary) -> void:
+func _on_quest_completed(_quest: Quest) -> void:
 	current_objective_title.text = "Пусто."
 	current_objective_description.text = ""
