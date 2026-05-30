@@ -8,7 +8,7 @@ func exit() -> void:
 	pass
 
 func handle_input(event: InputEvent) -> void:
-	if event.is_action_pressed("attack"):
+	if event.is_action_pressed("attack") and player.can_attack:
 		state_machine.transition_to("attacking")
 
 func update(delta: float) -> void:

@@ -5,5 +5,7 @@ class_name Player extends CharacterBody2D
 
 @export var speed: float = 150.0
 
+var can_attack: bool = true
+
 func _ready() -> void:
 	hud.visible = true
