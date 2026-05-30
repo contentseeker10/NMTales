@@ -12,6 +12,7 @@ extends CanvasLayer
 func _ready() -> void:
 	_load_user_data()
 	QuestManager.quest_updated.connect(_on_quest_updated)
+	QuestManager.objective_completed.connect(_on_objective_completed)
 	QuestManager.quest_completed.connect(_on_quest_completed)
 
 func _load_user_data() -> void:
@@ -26,6 +27,10 @@ func _on_quest_updated(quest: Quest) -> void:
 	current_objective_description.text = quest.description \
 									+ " (" + str(quest.current_amount) \
 									+ "/" + str(quest.required_amount) + ")"
+
+
+func _on_objective_completed(quest: Quest) -> void:
+	current_objective_description.text = "Завдання виконано.\nПоговоріть з " + quest.giver
 
 
 func _on_quest_completed(_quest: Quest) -> void:

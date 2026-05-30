@@ -1,0 +1,19 @@
+{
+  "start": {
+	"text": "Ну шо потужний, друге завдання?",
+	"choices": [
+	  {
+		"text": "Так, почнемо!",
+		"next_node": "exit",
+		"action": {
+		  "type": "accept_quest",
+		  "quest_id": "quest_2"
+		}
+	  },
+	  {
+		"text": "Ні, бувай.",
+		"next_node": "exit"
+	  }
+	]
+  }
+}

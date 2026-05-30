@@ -1,0 +1,14 @@
+{
+	"id": "quest_2",
+	"title": "Teleporting",
+	"description": "Use teleport to access new location",
+	"rewards": {
+		"xp": 100
+	},
+	"objective": {
+		"type": "enter_location",
+		"target": "test_teleport",
+		"required_amount": 1,
+		"current_amount": 0
+	}
+}

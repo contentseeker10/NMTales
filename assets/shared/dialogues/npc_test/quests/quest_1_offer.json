@@ -1,0 +1,19 @@
+{
+  "start": {
+	"text": "Привіт! Готовий до першого завдання?",
+	"choices": [
+	  {
+		"text": "Так, почнемо!",
+		"next_node": "exit",
+		"action": {
+		  "type": "accept_quest",
+		  "quest_id": "quest_1"
+		}
+	  },
+	  {
+		"text": "Ні, бувай.",
+		"next_node": "exit"
+	  }
+	]
+  }
+}

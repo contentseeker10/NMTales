@@ -3,11 +3,13 @@ extends RefCounted
 
 var id: String = ""
 var title: String = ""
+var giver: String = ""
 var description: String = ""
 var type: String = ""
 var target: String = ""
 var current_amount: int = 0
-var required_amount: int = 0
+var required_amount: int = 1
+var completed = false
 
 
 func _init(quest_giver: String, quest_id: String) -> void:
@@ -18,6 +20,7 @@ func _init(quest_giver: String, quest_id: String) -> void:
 		var content: String = file.get_as_text()
 		file.close()
 		quest_data = JSON.parse_string(content)
+		giver = quest_giver
 		_parse_quest_data(quest_data)
 	else:
 		push_error("Quest was not found: " + path)
@@ -33,5 +36,5 @@ func _parse_quest_data(quest_data: Dictionary) -> void:
 	required_amount = objective.get("required_amount", 0)
 
 
-func is_completed() -> bool:
+func is_objective_done() -> bool:
 	return current_amount >= required_amount
