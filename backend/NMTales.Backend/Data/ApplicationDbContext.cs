@@ -13,6 +13,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<User> Users {  get; set; }
     public DbSet<Question> Questions { get; set; }
     public DbSet<Answer> Answers { get; set; }
+    public DbSet<UserQuest> UserQuests { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
