@@ -1,5 +1,6 @@
 {
   "id": "quest_1",
+  "giver": "npc_test",
   "title": "Перший крок",
   "description": "Поговоріть з Тарасом на локації.",
   "rewards": {
@@ -7,7 +8,7 @@
   },
   "objective": {
     "type": "talk_npc",
-    "target": "npc_test",
+    "target": "npc_quest",
     "required_amount": 1,
     "current_amount": 0
   }

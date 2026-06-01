@@ -9,24 +9,14 @@ var type: String = ""
 var target: String = ""
 var current_amount: int = 0
 var required_amount: int = 1
-var completed = false
 
 
-func _init(quest_giver: String, quest_id: String) -> void:
-	var path: String = "res://assets/shared/quests/" + quest_giver + "/" + quest_id + ".json"
-	var quest_data: Dictionary
-	if FileAccess.file_exists(path):
-		var file: FileAccess = FileAccess.open(path, FileAccess.READ)
-		var content: String = file.get_as_text()
-		file.close()
-		quest_data = JSON.parse_string(content)
-		giver = quest_giver
-		_parse_quest_data(quest_data)
-	else:
-		push_error("Quest was not found: " + path)
+func _init(quest_data: Dictionary) -> void:
+	_parse_quest_data(quest_data)
 
 func _parse_quest_data(quest_data: Dictionary) -> void:
 	id = quest_data.get("id", "error")
+	giver = quest_data.get("giver", "error")
 	title = quest_data.get("title", "error")
 	description = quest_data.get("description", "error")
 	var objective: Dictionary = quest_data.get("objective", {})

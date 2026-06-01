@@ -17,7 +17,6 @@ func _ready() -> void:
 	
 	if QuestManager.active_quest:
 		_on_quest_updated(QuestManager.active_quest)
-		_on_objective_completed(QuestManager.active_quest)
 
 func _load_user_data() -> void:
 	username_label.text = AuthManager.current_user_info.get("username", "Player")

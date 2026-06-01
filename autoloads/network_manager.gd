@@ -35,7 +35,7 @@ func send_get(url: String, headers: PackedStringArray = [], \
 	if downloading:
 		http_request.download_file = target_path
 	
-	var err: Error = http_request.request(url, headers, HTTPClient.METHOD_GET)
+	var err: Error = http_request.request(BASE_URL + url, headers, HTTPClient.METHOD_GET)
 	if err != OK:
 		push_error("HTTP Request GET failed for " + url)
 		http_request.queue_free()
@@ -48,14 +48,9 @@ func send_get(url: String, headers: PackedStringArray = [], \
 
 
 func download_pack(pack_type: PackManager.PackType, pack_name: String, target_path: String) -> bool:
-	var url: String = BASE_URL + "/api/" + PackManager.get_pack_type(pack_type) + "/" + pack_name + "/pack"
+	var url: String = "/api/" + PackManager.get_pack_type(pack_type) + "/" + pack_name + "/pack"
 	
-	var token: String = AuthManager.jwt_token
-	var headers: PackedStringArray = [
-		"Authorization: Bearer " + token
-	]
-	
-	var response: Array = await send_get(url, headers, true, target_path)
+	var response: Array = await send_get(url, AuthManager.token_header, true, target_path)
 	var response_code: int = response[1]
 	
 	if response_code == 200:
