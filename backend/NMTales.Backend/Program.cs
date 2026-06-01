@@ -1,10 +1,13 @@
 using System.Text;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NMTales.Backend.Data;
 using NMTales.Backend.Services;
+using NMTales.Backend.Validators;
 
 namespace NMTales.Backend
 {
@@ -80,6 +83,8 @@ namespace NMTales.Backend
                         .AllowAnyMethod();
                 });
             });
+            
+            builder.Services.AddValidatorsFromAssemblyContaining<RegisterValidator>();
 
             var app = builder.Build();
 
