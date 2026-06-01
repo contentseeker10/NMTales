@@ -13,6 +13,9 @@ public class UserQuest
     public string QuestId { get; set; } = string.Empty; // e.g., "quest_1"
 
     [Required]
+    public string NpcId { get; set; } = string.Empty; // e.g., "npc_test"
+
+    [Required]
     public int CurrentAmount { get; set; }
 
     [Required]

@@ -1,0 +1,71 @@
+class_name NPC
+extends StaticBody2D
+
+@onready var action_icon: Label = $ActionIcon
+@onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+
+@export var npc_id: String
+@export var has_quests: bool
+var is_available: bool = false
+
+
+func _ready() -> void:
+	action_icon.text = npc_id
+	
+	QuestManager.quest_updated.connect(func(_quest): update_quests_availability())
+	QuestManager.quest_completed.connect(func(_quest): update_quests_availability())
+	
+	update_quests_availability()
+
+
+func update_quests_availability() -> void:
+	has_quests = _check_available_quests()
+
+func _check_available_quests() -> bool:
+	if QuestManager.active_quest and QuestManager.active_quest.giver == npc_id:
+		return false
+	
+	var quest_index: int = 1
+	while true:
+		var quest_id = "quest_" + str(quest_index)
+		
+		if QuestManager.is_quest_completed(npc_id, quest_id):
+			quest_index += 1
+			continue
+		
+		var dialogue_file_path = "res://assets/shared/dialogues/" + npc_id + "/quests/" + quest_id + "_offer.json"
+		return FileAccess.file_exists(dialogue_file_path)
+		
+	return false
+
+
+func _on_quest_available_area_body_entered(_body: Node2D) -> void:
+	if has_quests:
+		action_icon.global_position.y -= 10
+		action_icon.text = npc_id + "\nМаю квест!"
+	action_icon.show()
+
+
+func _on_quest_available_area_body_exited(_body: Node2D) -> void:
+	if has_quests:
+		action_icon.global_position.y += 10
+	action_icon.hide()
+
+
+func _on_interaction_area_body_entered(body: Node2D) -> void:
+	action_icon.add_theme_color_override("font_color", Color.YELLOW)
+	is_available = true
+	body.can_attack = false
+
+
+func _on_interaction_area_body_exited(body: Node2D) -> void:
+	action_icon.add_theme_color_override("font_color", Color.WHITE)
+	is_available = false
+	body.can_attack = true
+
+
+func _on_interaction_area_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
+	if is_available and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT \
+		and event.is_pressed():
+		DialogueManager.start_dialogue(self)
+		get_viewport().set_input_as_handled()

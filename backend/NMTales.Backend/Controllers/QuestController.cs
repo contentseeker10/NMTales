@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NMTales.Backend.Data;
+using NMTales.Backend.DTO;
 using NMTales.Backend.Models;
 using System.Collections.Concurrent;
 using System.IO;
@@ -19,10 +20,6 @@ public class QuestController : ControllerBase
     // The closed folder that holds quest configuration files. It lives under the
     // content root (NOT wwwroot) so the raw JSON can never be downloaded directly.
     private const string QuestsRoot = "Quests";
-
-    // Quests currently belong to a single test NPC. Active/complete look the file up
-    // here because UserQuest only stores the quest id, not the owning NPC. See README.
-    private const string DefaultNpc = "npc_test";
 
     // Identifiers come straight from the route, so restrict them to a safe charset
     // to prevent path traversal (e.g. "../../appsettings") when building file paths.
@@ -60,7 +57,7 @@ public class QuestController : ControllerBase
             return NoContent(); // No active quest.
         }
 
-        if (!TryGetQuestFilePath(DefaultNpc, userQuest.QuestId, out var filePath))
+        if (!TryGetQuestFilePath(userQuest.NpcId, userQuest.QuestId, out var filePath))
         {
             return NotFound("Quest file not found on server.");
         }
@@ -77,6 +74,20 @@ public class QuestController : ControllerBase
         }
 
         return Ok(jsonNode);
+    }
+
+    /// <summary>
+    /// Get the list of completed quest IDs for the authenticated player.
+    /// </summary>
+    [HttpGet("completed")]
+    public async Task<IActionResult> GetCompletedQuests()
+    {
+        if (!TryGetUserId(out var userId)) return Unauthorized();
+        var completedIds = await _context.UserQuests
+            .Where(uq => uq.UserId == userId && uq.IsCompleted)
+            .Select(uq => $"{uq.NpcId}:{uq.QuestId}") // Склеиваем в формат "npcId:questId"
+            .ToListAsync();
+        return Ok(completedIds);
     }
 
     /// <summary>
@@ -100,6 +111,11 @@ public class QuestController : ControllerBase
             return NotFound("Requested quest was not found.");
         }
 
+        if (!TryReadQuestConfig(await System.IO.File.ReadAllTextAsync(filePath), out var jsonNode))
+        {
+            return BadRequest("Corrupt quest file.");
+        }
+
         var gate = GateFor(userId);
         await gate.WaitAsync();
         try
@@ -111,10 +127,26 @@ public class QuestController : ControllerBase
                 return BadRequest("You already have an active quest.");
             }
 
+            var repeatable = false;
+            if (jsonNode["repeatable"] is JsonValue repeatableVal && repeatableVal.TryGetValue<bool>(out var rep))
+            {
+                repeatable = rep;
+            }
+
+            if (!repeatable)
+            {
+                var alreadyCompleted = await _context.UserQuests.AnyAsync(uq => uq.UserId == userId && uq.NpcId == npcId && uq.QuestId == questId && uq.IsCompleted);
+                if (alreadyCompleted)
+                {
+                    return BadRequest("This quest is not repeatable.");
+                }
+            }
+
             _context.UserQuests.Add(new UserQuest
             {
                 UserId = userId,
                 QuestId = questId,
+                NpcId = npcId,
                 CurrentAmount = 0,
                 IsCompleted = false
             });
@@ -145,7 +177,7 @@ public class QuestController : ControllerBase
 
             if (userQuest == null) return BadRequest("No active quest to complete.");
 
-            if (!TryGetQuestFilePath(DefaultNpc, userQuest.QuestId, out var filePath))
+            if (!TryGetQuestFilePath(userQuest.NpcId, userQuest.QuestId, out var filePath))
             {
                 return NotFound("Quest file not found.");
             }
@@ -190,6 +222,75 @@ public class QuestController : ControllerBase
                 xpEarned = xpReward,
                 newLevel = user.Level,
                 newXp = user.XP
+            });
+        }
+        finally
+        {
+            gate.Release();
+        }
+    }
+
+    /// <summary>
+    /// Update the progress of the active quest based on an event.
+    /// </summary>
+    [HttpPost("progress")]
+    public async Task<IActionResult> UpdateProgress([FromBody] QuestProgressRequest request)
+    {
+        if (request == null)
+        {
+            return BadRequest("Invalid request body.");
+        }
+
+        if (!TryGetUserId(out var userId)) return Unauthorized();
+
+        var gate = GateFor(userId);
+        await gate.WaitAsync();
+        try
+        {
+            var userQuest = await _context.UserQuests
+                .FirstOrDefaultAsync(uq => uq.UserId == userId && !uq.IsCompleted);
+
+            if (userQuest == null)
+            {
+                return BadRequest("No active quest.");
+            }
+
+            if (!TryGetQuestFilePath(userQuest.NpcId, userQuest.QuestId, out var filePath))
+            {
+                return NotFound("Quest file not found.");
+            }
+
+            if (!TryReadQuestConfig(await System.IO.File.ReadAllTextAsync(filePath), out var jsonNode))
+            {
+                return BadRequest("Corrupt quest file.");
+            }
+
+            if (jsonNode["objective"] is not JsonObject objective)
+            {
+                return BadRequest("Invalid quest objective.");
+            }
+
+            var objectiveType = (string?)objective["type"];
+            var objectiveTarget = (string?)objective["target"];
+            var requiredAmount = ReadInt(objective["required_amount"], 1);
+
+            var eventType = request.EventType ?? string.Empty;
+            var target = request.Target ?? string.Empty;
+
+            if (objectiveType == eventType && objectiveTarget == target)
+            {
+                if (userQuest.CurrentAmount < requiredAmount)
+                {
+                    userQuest.CurrentAmount++;
+                    await _context.SaveChangesAsync();
+                }
+            }
+
+            return Ok(new
+            {
+                message = "Progress updated successfully.",
+                currentAmount = userQuest.CurrentAmount,
+                requiredAmount = requiredAmount
             });
         }
         finally

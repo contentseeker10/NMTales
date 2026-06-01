@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://d3xivonlpt18t"]
+
+[ext_resource type="FontFile" uid="uid://gveo56yc8mbo" path="res://assets/shared/fonts/PixelifySans-VariableFont_wght.ttf" id="1_q3kkw"]
+
+[sub_resource type="FontVariation" id="FontVariation_djtvt"]
+base_font = ExtResource("1_q3kkw")
+
+[node name="PlayerText" type="RichTextLabel" unique_id=871804185]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -1.0
+offset_bottom = 32.0
+grow_horizontal = 0
+theme_override_colors/default_color = Color(0.16470589, 0.1254902, 0.10980392, 1)
+theme_override_fonts/normal_font = SubResource("FontVariation_djtvt")
+theme_override_fonts/bold_font = ExtResource("1_q3kkw")
+theme_override_font_sizes/normal_font_size = 12
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+horizontal_alignment = 2

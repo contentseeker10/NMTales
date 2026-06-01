@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://c8cfoewmx3r6c"]
+
+[ext_resource type="Script" uid="uid://b5y7yp3ix5ifo" path="res://parts/npc/npc.gd" id="1_ekbtl"]
+[ext_resource type="SpriteFrames" uid="uid://bh5mf1xsf4uf8" path="res://parts/npc/sprite_frames/1.tres" id="1_u6las"]
+[ext_resource type="FontFile" uid="uid://gveo56yc8mbo" path="res://assets/shared/fonts/PixelifySans-VariableFont_wght.ttf" id="2_0jfv6"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0jfv6"]
+size = Vector2(12, 13)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ekbtl"]
+radius = 115.44
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ekbtl"]
+size = Vector2(50, 48)
+
+[sub_resource type="FontVariation" id="FontVariation_k7nu2"]
+base_font = ExtResource("2_0jfv6")
+
+[node name="NPC" type="StaticBody2D" unique_id=840380367]
+collision_layer = 2
+script = ExtResource("1_ekbtl")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=982053377]
+sprite_frames = ExtResource("1_u6las")
+animation = &"idle_down"
+autoplay = "idle_down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1794124557]
+position = Vector2(0, 8.5)
+shape = SubResource("RectangleShape2D_0jfv6")
+
+[node name="QuestAvailableArea" type="Area2D" parent="." unique_id=1410247360]
+collision_mask = 4
+
+[node name="Zone" type="CollisionShape2D" parent="QuestAvailableArea" unique_id=1498592719]
+shape = SubResource("CircleShape2D_ekbtl")
+debug_color = Color(0, 0.6, 0.69803923, 0)
+
+[node name="InteractionArea" type="Area2D" parent="." unique_id=319606430]
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=1444913455]
+position = Vector2(0, 16)
+shape = SubResource("RectangleShape2D_ekbtl")
+
+[node name="ActionIcon" type="Label" parent="." unique_id=1526744255]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -28.5
+offset_top = -31.5
+offset_right = 28.5
+offset_bottom = -7.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/line_spacing = -2
+theme_override_fonts/font = SubResource("FontVariation_k7nu2")
+theme_override_font_sizes/font_size = 10
+text = "npc_test
+Маю квест!"
+horizontal_alignment = 1
+
+[connection signal="body_entered" from="QuestAvailableArea" to="." method="_on_quest_available_area_body_entered"]
+[connection signal="body_exited" from="QuestAvailableArea" to="." method="_on_quest_available_area_body_exited"]
+[connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]
+[connection signal="body_exited" from="InteractionArea" to="." method="_on_interaction_area_body_exited"]
+[connection signal="input_event" from="InteractionArea" to="." method="_on_interaction_area_input_event"]

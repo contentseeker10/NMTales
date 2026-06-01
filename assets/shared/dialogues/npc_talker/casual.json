@@ -1,0 +1,24 @@
+{
+  "start": {
+	"text": "Шо як справи",
+	"choices": [
+	  {
+		"text": "Та потужно, а ти як?",
+		"next_node": "talk_1"
+	  },
+	  {
+		"text": "Бувай.",
+		"next_node": "exit"
+	  }
+	]
+  },
+  "talk_1": {
+	"text": "Та я теж по тихеньку",
+	"choices": [
+	  {
+		"text": "Ясно, бувай.",
+		"next_node": "exit"
+	  }
+	]
+  }
+}

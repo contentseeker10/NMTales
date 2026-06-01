@@ -1,11 +1,9 @@
 extends Node
 
-
 signal login_attempted(success: bool, message: String)
 signal register_attempted(success: bool, message: String)
 
-
-var jwt_token: String = ""
+var token_header: Array = [""]
 var current_user_info: Dictionary = {}
 
 
@@ -28,9 +26,16 @@ func login(username: String, password: String) -> void:
 	
 	if result_code == 200:
 		var json_data: Variant = JSON.parse_string(response_body)
-		jwt_token = json_data.get("token", "")
+		token_header[0] = "Authorization: Bearer " + json_data.get("token", "")
 		current_user_info = json_data.get("user", {})
+		
+		#QuestManager.clear_state()
+		await QuestManager.sync_quests()
+		
 		login_attempted.emit(true, "Login successful")
+		
+		# For backend debug:
+		#print(token_header)
 	else:
 		login_attempted.emit(false, response_body)
 
@@ -56,3 +61,12 @@ func register(username: String, password: String) -> void:
 		register_attempted.emit(true, "Registration successful")
 	else:
 		register_attempted.emit(false, "Registration failed")
+
+
+func update_user_info() -> void:
+	var response: Array = await NetworkManager.send_get("/api/Auth/me", token_header)
+	if response[1] == 200:
+		var response_body: String = response[3].get_string_from_utf8()
+		current_user_info = JSON.parse_string(response_body)
+	else:
+		push_error("Error updating user info. Status: " + response[1])

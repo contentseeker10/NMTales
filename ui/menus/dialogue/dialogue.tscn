@@ -1,0 +1,174 @@
+[gd_scene format=3 uid="uid://cm08aaa1oxpsb"]
+
+[ext_resource type="Script" uid="uid://bj23aynksenps" path="res://ui/menus/dialogue/dialogue.gd" id="1_bf25i"]
+[ext_resource type="FontFile" uid="uid://gveo56yc8mbo" path="res://assets/shared/fonts/PixelifySans-VariableFont_wght.ttf" id="2_dlmwp"]
+[ext_resource type="PackedScene" uid="uid://b6v7toodritgx" path="res://ui/components/button/button.tscn" id="3_ypexw"]
+[ext_resource type="PackedScene" uid="uid://cd4dlux2r57rx" path="res://ui/menus/dialogue/answers/npc_text.tscn" id="4_a6xe4"]
+[ext_resource type="SpriteFrames" uid="uid://duqi2aml56f2f" path="res://parts/npc/sprite_frames/4.tres" id="4_hjr1u"]
+[ext_resource type="PackedScene" uid="uid://d3xivonlpt18t" path="res://ui/menus/dialogue/answers/player_text.tscn" id="5_hjr1u"]
+
+[sub_resource type="FontVariation" id="FontVariation_ypexw"]
+base_font = ExtResource("2_dlmwp")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bf25i"]
+bg_color = Color(0.9985873, 0.7825438, 0.5412677, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.99607843, 0.7019608, 0.34509805, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a6xe4"]
+bg_color = Color(0.16470589, 0.1254902, 0.10980392, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9985873, 0.7825438, 0.5412677, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hjr1u"]
+bg_color = Color(0.16470589, 0.1254902, 0.10980392, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9985873, 0.7825438, 0.5412677, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tcp2r"]
+bg_color = Color(0.16470589, 0.1254902, 0.10980392, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9985873, 0.7825438, 0.5412677, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jfjx0"]
+content_margin_left = 6.0
+bg_color = Color(1, 1, 1, 0)
+
+[sub_resource type="Theme" id="Theme_cstq7"]
+VScrollBar/styles/grabber = SubResource("StyleBoxFlat_a6xe4")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_hjr1u")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_tcp2r")
+VScrollBar/styles/scroll = SubResource("StyleBoxFlat_jfjx0")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u3ek1"]
+bg_color = Color(0.9985873, 0.7825438, 0.5412677, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.29803923, 0.22745098, 0.2, 1)
+
+[node name="Dialogue" type="CanvasLayer" unique_id=954306754]
+process_mode = 3
+script = ExtResource("1_bf25i")
+npc_name = "Bebra"
+npc_answer = ExtResource("4_a6xe4")
+player_answer = ExtResource("5_hjr1u")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1248907648]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.39215687)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1175791592]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -24.0
+offset_right = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CenterContainer" unique_id=483007911]
+position = Vector2(-96, 24.000006)
+scale = Vector2(6.639323, 6.639323)
+sprite_frames = ExtResource("4_hjr1u")
+animation = &"idle_down"
+autoplay = "idle_down"
+
+[node name="NPCNameLabel" type="Label" parent="." unique_id=1105770030]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -174.0
+offset_top = -127.0
+offset_right = -66.0
+offset_bottom = -97.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = SubResource("FontVariation_ypexw")
+theme_override_font_sizes/font_size = 24
+text = "NPC Name"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1398758273]
+anchors_preset = -1
+anchor_left = 0.45600003
+anchor_top = 0.544
+anchor_right = 0.45600003
+anchor_bottom = 0.544
+offset_left = 0.15997314
+offset_top = -123.84001
+offset_right = 200.15997
+offset_bottom = 124.15999
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/separation = 8
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer" unique_id=1880426306]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_bf25i")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/PanelContainer" unique_id=173506256]
+layout_mode = 2
+theme = SubResource("Theme_cstq7")
+theme_override_styles/panel = SubResource("StyleBoxFlat_u3ek1")
+horizontal_scroll_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer" unique_id=771012950]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 4
+
+[node name="ChatBox" type="VBoxContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer" unique_id=1611840836]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer" unique_id=875824073]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+columns = 2
+
+[node name="Button" parent="VBoxContainer/GridContainer" unique_id=763636606 instance=ExtResource("3_ypexw")]
+visible = false
+layout_mode = 2
+
+[node name="Button2" parent="VBoxContainer/GridContainer" unique_id=1466803438 instance=ExtResource("3_ypexw")]
+visible = false
+layout_mode = 2
+
+[node name="Button3" parent="VBoxContainer/GridContainer" unique_id=933573211 instance=ExtResource("3_ypexw")]
+visible = false
+layout_mode = 2
+
+[node name="Button4" parent="VBoxContainer/GridContainer" unique_id=272198454 instance=ExtResource("3_ypexw")]
+visible = false
+layout_mode = 2

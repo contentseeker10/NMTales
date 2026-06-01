@@ -1,0 +1,16 @@
+{
+    "id": "quest_1",
+    "giver": "npc_quest",
+    "title": "Потужність",
+    "description": "Потужна потрійна телепортація",
+    "rewards": {
+        "xp": 100
+    },
+    "repeatable": false,
+    "objective": {
+        "type": "enter_location",
+        "target": "test_teleport",
+        "required_amount": 3,
+        "current_amount": 0
+    }
+}

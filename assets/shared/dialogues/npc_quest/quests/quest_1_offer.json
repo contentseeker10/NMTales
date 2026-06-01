@@ -1,0 +1,19 @@
+{
+	"start": {
+		"text": "Так ну шо, виконаєш завдання?",
+		"choices": [
+			{
+				"text": "Погнали!",
+				"next_node": "exit",
+				"action": {
+					"type": "accept_quest",
+					"quest_id": "quest_1"
+				}
+			},
+			{
+				"text": "Ні, бувай.",
+				"next_node": "exit"
+			}
+		]
+	}
+}

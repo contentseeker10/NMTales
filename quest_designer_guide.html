@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NMTales — Quest Creation Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: hsl(230, 30%, 6%);
+            --card-bg: rgba(20, 24, 38, 0.55);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --primary: hsl(265, 85%, 65%);
+            --primary-glow: hsla(265, 85%, 65%, 0.3);
+            --secondary: hsl(190, 90%, 50%);
+            --text-color: hsl(225, 20%, 90%);
+            --text-muted: hsl(225, 10%, 65%);
+            --success: hsl(145, 80%, 45%);
+            --accent: hsl(325, 85%, 55%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 0% 0%, hsla(265, 70%, 15%, 0.4) 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, hsla(190, 70%, 15%, 0.3) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Header Style */
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 150px;
+            background: var(--primary-glow);
+            filter: blur(80px);
+            z-index: -1;
+        }
+
+        h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            background: linear-gradient(135deg, #fff 30%, var(--primary) 70%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Layout Grid */
+        .layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+
+        @media (min-width: 992px) {
+            .layout {
+                grid-template-columns: 1.2fr 1fr;
+            }
+        }
+
+        /* Glass Cards */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.6);
+        }
+
+        .card-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #fff;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 15px;
+        }
+
+        .card-title span.badge {
+            background: var(--primary);
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        /* Steps */
+        .step {
+            margin-bottom: 25px;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .step::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 8px;
+            bottom: -20px;
+            width: 2px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .step:last-child::before {
+            display: none;
+        }
+
+        .step-num {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--secondary);
+            box-shadow: 0 0 10px var(--secondary);
+        }
+
+        .step h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .step p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+
+        /* Form Inputs */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px 16px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus, input[type="number"]:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            margin-top: 25px;
+        }
+
+        .checkbox-group input {
+            cursor: pointer;
+            accent-color: var(--primary);
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Interactive Tabs and Outputs */
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 4px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 4px 12px var(--primary-glow);
+        }
+
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        pre {
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            overflow-x: auto;
+            max-height: 480px;
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            color: hsl(190, 80%, 75%);
+        }
+
+        .badge-path {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--secondary);
+            font-family: 'Fira Code', monospace;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        .file-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>NMTales Quest Guide</h1>
+            <p class="subtitle">Гайд для гейм-дизайнерів з проектування квестів, діалогів та налаштування NPC у грі.</p>
+        </header>
+
+        <div class="layout">
+            <!-- Documentation Column -->
+            <div class="card">
+                <h2 class="card-title">📘 Документація Пайплайну <span class="badge">V2.0</span></h2>
+                
+                <div class="step">
+                    <div class="step-num"></div>
+                    <h3>1. Створення NPC у Godot</h3>
+                    <p>Кожен NPC має бути унікальним об'єктом сцени. Для налаштування переконайтеся, що ви експортували параметр <code>npc_id</code> (наприклад, <code>npc_quest</code>) в інспекторі Godot. Цей ідентифікатор зв'язує фізичного персонажа на карті з його файлами квестів та діалогів.</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-num"></div>
+                    <h3>2. Діалоги та логіка гілкування</h3>
+                    <p>Діалоги зчитуються клієнтом динамічно на основі поточного стану квесту. Менеджер діалогів перевіряє стан у такому порядку:</p>
+                    <p>• Якщо квест активний і ціль виконана → завантажується <code>quest_complete.json</code>.<br>
+                       • Якщо квест активний, але не виконаний → <code>quest_progress.json</code>.<br>
+                       • Якщо є наступний не пройдений квест і для нього існує файл пропозиції → завантажується <code>{quest_id}_offer.json</code>.<br>
+                       • В іншому випадку завантажується casual-діалог <code>casual.json</code>.</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-num"></div>
+                    <h3>3. Файл пропозиції квесту (*_offer.json)</h3>
+                    <p>Файли пропозицій містять репліки NPC та вибір гравця для старту квесту. Для кнопки згоди необхідно обов'язково налаштувати екшн:</p>
+                    <pre style="padding: 10px; margin-top: 5px; max-height: 80px;"><code>"action": {
+  "type": "accept_quest",
+  "quest_id": "quest_1"
+}</code></pre>
+                </div>
+
+                <div class="step">
+                    <div class="step-num"></div>
+                    <h3>4. Файл завершення квесту (quest_complete.json)</h3>
+                    <p>Файл завершення квесту підвантажується автоматично при виконаній цілі. В кнопці підтвердження обов'язково пропишіть екшн:</p>
+                    <pre style="padding: 10px; margin-top: 5px; max-height: 80px;"><code>"action": {
+  "type": "complete_quest"
+}</code></pre>
+                </div>
+
+                <div class="step">
+                    <div class="step-num"></div>
+                    <h3>5. Серверна конфігурація квесту</h3>
+                    <p>Сам квест реєструється на бекенді. Бекенд валідує події, нараховує досвід і підвищує рівень. Файли мають лежати в закритій папці бд на сервері, щоб уникнути датамайнінгу.</p>
+                </div>
+            </div>
+
+            <!-- Generator Column -->
+            <div class="card">
+                <h2 class="card-title">⚙️ Інтерактивний Генератор Квестів</h2>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label for="npc_id">NPC ID (Гівер)</label>
+                        <input type="text" id="npc_id" value="npc_test">
+                    </div>
+                    <div class="form-group">
+                        <label for="quest_id">Quest ID</label>
+                        <input type="text" id="quest_id" value="quest_1">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="quest_title">Назва квесту</label>
+                    <input type="text" id="quest_title" value="Перший крок">
+                </div>
+
+                <div class="form-group">
+                    <label for="quest_desc">Опис квесту</label>
+                    <input type="text" id="quest_desc" value="Поговоріть з Тарасом на локації.">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label for="obj_type">Тип цілі</label>
+                        <select id="obj_type">
+                            <option value="talk_npc">Поговорити з NPC (talk_npc)</option>
+                            <option value="enter_location">Увійти в локацію (enter_location)</option>
+                            <option value="kill_mob">Вбити моба (kill_mob)</option>
+                            <option value="complete_quiz">Пройти тест (complete_quiz)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="obj_target">Ціль (Target)</label>
+                        <input type="text" id="obj_target" value="npc_quest">
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label for="xp_reward">Нагорода XP</label>
+                        <input type="number" id="xp_reward" value="100" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="obj_amount">Кількість (Amount)</label>
+                        <input type="number" id="obj_amount" value="1" min="1">
+                    </div>
+                </div>
+
+                <div class="checkbox-group" onclick="toggleRepeatable()">
+                    <input type="checkbox" id="repeatable">
+                    <span style="font-size: 0.95rem; font-weight: 600;">Повторюваний квест (Repeatable)</span>
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <div class="output-header">
+                        <div class="tabs">
+                            <button class="tab-btn active" onclick="switchTab('server')">Серверний Конфіг</button>
+                            <button class="tab-btn" onclick="switchTab('client')">Діалог Пропозиції</button>
+                        </div>
+                        <button class="copy-btn" onclick="copyCode()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                            Копіювати
+                        </button>
+                    </div>
+
+                    <div id="server-panel">
+                        <div class="file-label">Зберегти на бекенді в папку:</div>
+                        <div class="badge-path" id="server-path">game/backend/NMTales.Backend/Quests/npc_test/quest_1.json</div>
+                        <pre style="margin-top: 8px;"><code id="server-code"></code></pre>
+                    </div>
+
+                    <div id="client-panel" style="display: none;">
+                        <div class="file-label">Зберегти в Godot проект по дорозі:</div>
+                        <div class="badge-path" id="client-path">res://assets/shared/dialogues/npc_test/quests/quest_1_offer.json</div>
+                        <pre style="margin-top: 8px;"><code id="client-code"></code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentTab = 'server';
+
+        const inputs = ['npc_id', 'quest_id', 'quest_title', 'quest_desc', 'obj_type', 'obj_target', 'xp_reward', 'obj_amount', 'repeatable'];
+        inputs.forEach(id => {
+            document.getElementById(id).addEventListener('input', generateJsons);
+            if(document.getElementById(id).type === 'checkbox') {
+                document.getElementById(id).addEventListener('change', generateJsons);
+            }
+        });
+
+        function toggleRepeatable() {
+            const cb = document.getElementById('repeatable');
+            cb.checked = !cb.checked;
+            generateJsons();
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if(tab === 'server') {
+                document.getElementById('server-panel').style.display = 'block';
+                document.getElementById('client-panel').style.display = 'none';
+            } else {
+                document.getElementById('server-panel').style.display = 'none';
+                document.getElementById('client-panel').style.display = 'block';
+            }
+        }
+
+        function generateJsons() {
+            const npcId = document.getElementById('npc_id').value;
+            const questId = document.getElementById('quest_id').value;
+            const title = document.getElementById('quest_title').value;
+            const desc = document.getElementById('quest_desc').value;
+            const objType = document.getElementById('obj_type').value;
+            const objTarget = document.getElementById('obj_target').value;
+            const xpReward = parseInt(document.getElementById('xp_reward').value) || 0;
+            const objAmount = parseInt(document.getElementById('obj_amount').value) || 1;
+            const repeatable = document.getElementById('repeatable').checked;
+
+            // Generate Path Badges
+            document.getElementById('server-path').innerText = `game/backend/NMTales.Backend/Quests/${npcId}/${questId}.json`;
+            document.getElementById('client-path').innerText = `res://assets/shared/dialogues/${npcId}/quests/${questId}_offer.json`;
+
+            // Generate Server Configuration JSON
+            const serverConfig = {
+                "id": questId,
+                "giver": npcId,
+                "repeatable": repeatable,
+                "title": title,
+                "description": desc,
+                "rewards": {
+                    "xp": xpReward
+                },
+                "objective": {
+                    "type": objType,
+                    "target": objTarget,
+                    "required_amount": objAmount,
+                    "current_amount": 0
+                }
+            };
+            document.getElementById('server-code').innerText = JSON.stringify(serverConfig, null, 2);
+
+            // Generate Client Dialogue JSON
+            const clientDialogue = {
+                "start": {
+                    "text": `Привіт! Мені потрібна твоя допомога з завданням "${title}". Допоможеш мені?`,
+                    "choices": [
+                        {
+                            "text": "Так, звісно! Я допоможу.",
+                            "next_node": "accept",
+                            "action": {
+                                "type": "accept_quest",
+                                "quest_id": questId
+                            }
+                        },
+                        {
+                            "text": "Ні, зараз не маю часу.",
+                            "next_node": "exit"
+                        }
+                    ]
+                },
+                "accept": {
+                    "text": `Чудово! Твоя ціль: ${desc}. Удачі!`,
+                    "choices": [
+                        {
+                            "text": "Дякую, я побіг!",
+                            "next_node": "exit"
+                        }
+                    ]
+                }
+            };
+            document.getElementById('client-code').innerText = JSON.stringify(clientDialogue, null, 2);
+        }
+
+        function copyCode() {
+            const codeElement = currentTab === 'server' ? document.getElementById('server-code') : document.getElementById('client-code');
+            navigator.clipboard.writeText(codeElement.innerText).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const origText = btn.innerHTML;
+                btn.innerHTML = 'Скопійовано!';
+                setTimeout(() => {
+                    btn.innerHTML = origText;
+                }, 1500);
+            });
+        }
+
+        // Initial generation
+        generateJsons();
+    </script>
+</body>
+</html>

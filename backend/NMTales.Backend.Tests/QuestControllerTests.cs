@@ -311,4 +311,211 @@ public class QuestControllerTests
         // The closed Quests/ folder must never be reachable as a static file.
         Assert.NotEqual(HttpStatusCode.OK, response.StatusCode);
     }
+
+    // ----- progress -------------------------------------------------------------
+
+    [Fact]
+    public async Task UpdateProgress_WithoutToken_ReturnsUnauthorized()
+    {
+        using var factory = new QuestApiFactory();
+        var client = factory.CreateClient();
+
+        var response = await client.PostAsJsonAsync("/api/quest/progress", new { eventType = "talk_npc", target = "npc_test" });
+
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task UpdateProgress_WhenNoActiveQuest_ReturnsBadRequest()
+    {
+        using var factory = new QuestApiFactory();
+        var client = await CreateAuthenticatedClientAsync(factory, "no_active_progress");
+
+        var response = await client.PostAsJsonAsync("/api/quest/progress", new { eventType = "talk_npc", target = "npc_test" });
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task UpdateProgress_WithNonMatchingEvent_DoesNotIncrementProgress()
+    {
+        using var factory = new QuestApiFactory();
+        var client = await CreateAuthenticatedClientAsync(factory, "non_matching_user");
+        (await client.PostAsync("/api/quest/accept/npc_test/quest_1", null)).EnsureSuccessStatusCode();
+
+        var response = await client.PostAsJsonAsync("/api/quest/progress", new { eventType = "talk_npc", target = "wrong_npc" });
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        using var doc = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+        Assert.Equal(0, doc.RootElement.GetProperty("currentAmount").GetInt32());
+
+        // Also check database status
+        using var scope = factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var userQuest = db.UserQuests.Single(q => q.UserId == GetUserId(factory, "non_matching_user"));
+        Assert.Equal(0, userQuest.CurrentAmount);
+    }
+
+    [Fact]
+    public async Task UpdateProgress_WithMatchingEvent_IncrementsProgress()
+    {
+        using var factory = new QuestApiFactory();
+        var client = await CreateAuthenticatedClientAsync(factory, "matching_user");
+        (await client.PostAsync("/api/quest/accept/npc_test/quest_1", null)).EnsureSuccessStatusCode();
+
+        var response = await client.PostAsJsonAsync("/api/quest/progress", new { eventType = "talk_npc", target = "npc_quest" });
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        using var doc = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+        Assert.Equal(1, doc.RootElement.GetProperty("currentAmount").GetInt32());
+        Assert.Equal(1, doc.RootElement.GetProperty("requiredAmount").GetInt32());
+
+        // Verify in database
+        using var scope = factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var userQuest = db.UserQuests.Single(q => q.UserId == GetUserId(factory, "matching_user"));
+        Assert.Equal(1, userQuest.CurrentAmount);
+    }
+
+    [Fact]
+    public async Task UpdateProgress_WithMatchingEventWhenAlreadyCompleted_DoesNotIncrementProgress()
+    {
+        using var factory = new QuestApiFactory();
+        var client = await CreateAuthenticatedClientAsync(factory, "already_done_user");
+        (await client.PostAsync("/api/quest/accept/npc_test/quest_1", null)).EnsureSuccessStatusCode();
+
+        // Increment it to 1 (met)
+        var firstResponse = await client.PostAsJsonAsync("/api/quest/progress", new { eventType = "talk_npc", target = "npc_quest" });
+        Assert.Equal(HttpStatusCode.OK, firstResponse.StatusCode);
+
+        // Try to increment again - since it's already 1/1, it should not increment further
+        var secondResponse = await client.PostAsJsonAsync("/api/quest/progress", new { eventType = "talk_npc", target = "npc_quest" });
+        Assert.Equal(HttpStatusCode.OK, secondResponse.StatusCode);
+
+        using var doc = JsonDocument.Parse(await secondResponse.Content.ReadAsStringAsync());
+        Assert.Equal(1, doc.RootElement.GetProperty("currentAmount").GetInt32());
+
+        // Verify database
+        using var scope = factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var userQuest = db.UserQuests.Single(q => q.UserId == GetUserId(factory, "already_done_user"));
+        Assert.Equal(1, userQuest.CurrentAmount);
+    }
+
+    [Fact]
+    public async Task UpdateProgress_WhenQuestIsMarkedCompleted_ReturnsBadRequest()
+    {
+        using var factory = new QuestApiFactory();
+        var client = await CreateAuthenticatedClientAsync(factory, "completed_quest_user");
+        (await client.PostAsync("/api/quest/accept/npc_test/quest_1", null)).EnsureSuccessStatusCode();
+
+        // Simulate objective being met
+        var userId = GetUserId(factory, "completed_quest_user");
+        Mutate(factory, db =>
+            db.UserQuests.Single(q => q.UserId == userId && !q.IsCompleted).CurrentAmount = 1);
+
+        // Complete the quest
+        (await client.PostAsync("/api/quest/complete", null)).EnsureSuccessStatusCode();
+
+        // Now try updating progress
+        var response = await client.PostAsJsonAsync("/api/quest/progress", new { eventType = "talk_npc", target = "npc_quest" });
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task AcceptQuest_StoresNpcIdInDatabase()
+    {
+        using var factory = new QuestApiFactory();
+        var client = await CreateAuthenticatedClientAsync(factory, "npc_id_user");
+
+        var response = await client.PostAsync("/api/quest/accept/npc_test/quest_1", null);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        using var scope = factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var userQuest = db.UserQuests.Single();
+        Assert.Equal("npc_test", userQuest.NpcId);
+    }
+
+    [Fact]
+    public async Task GetCompletedQuests_ReturnsCompletedQuestIds()
+    {
+        using var factory = new QuestApiFactory();
+        var client = await CreateAuthenticatedClientAsync(factory, "completed_list_user");
+
+        // Initially no completed quests
+        var initialResponse = await client.GetAsync("/api/quest/completed");
+        Assert.Equal(HttpStatusCode.OK, initialResponse.StatusCode);
+        var initialList = await initialResponse.Content.ReadFromJsonAsync<List<string>>();
+        Assert.NotNull(initialList);
+        Assert.Empty(initialList);
+
+        // Accept a quest
+        (await client.PostAsync("/api/quest/accept/npc_test/quest_1", null)).EnsureSuccessStatusCode();
+
+        // Mutate to set progress to met
+        var userId = GetUserId(factory, "completed_list_user");
+        Mutate(factory, db =>
+            db.UserQuests.Single(q => q.UserId == userId && !q.IsCompleted).CurrentAmount = 1);
+
+        // Complete the quest
+        (await client.PostAsync("/api/quest/complete", null)).EnsureSuccessStatusCode();
+
+        // Check completed quests list again
+        var response = await client.GetAsync("/api/quest/completed");
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var completedList = await response.Content.ReadFromJsonAsync<List<string>>();
+        Assert.NotNull(completedList);
+        Assert.Single(completedList);
+        Assert.Equal("npc_test:quest_1", completedList[0]);
+    }
+
+    [Fact]
+    public async Task AcceptQuest_WhenNonRepeatableAndAlreadyCompleted_ReturnsBadRequest()
+    {
+        using var factory = new QuestApiFactory();
+        var client = await CreateAuthenticatedClientAsync(factory, "repeat_limit_user");
+
+        // First acceptance
+        (await client.PostAsync("/api/quest/accept/npc_test/quest_1", null)).EnsureSuccessStatusCode();
+
+        // Complete the quest
+        var userId = GetUserId(factory, "repeat_limit_user");
+        Mutate(factory, db =>
+            db.UserQuests.Single(q => q.UserId == userId && !q.IsCompleted).CurrentAmount = 1);
+        (await client.PostAsync("/api/quest/complete", null)).EnsureSuccessStatusCode();
+
+        // Try accepting again
+        var secondAccept = await client.PostAsync("/api/quest/accept/npc_test/quest_1", null);
+        Assert.Equal(HttpStatusCode.BadRequest, secondAccept.StatusCode);
+    }
+
+    [Fact]
+    public async Task AcceptQuest_SameQuestIdDifferentNpc_Allowed()
+    {
+        using var factory = new QuestApiFactory();
+        var client = await CreateAuthenticatedClientAsync(factory, "multi_npc_user");
+
+        // 1. Accept and complete quest_1 from npc_test
+        (await client.PostAsync("/api/quest/accept/npc_test/quest_1", null)).EnsureSuccessStatusCode();
+
+        var userId = GetUserId(factory, "multi_npc_user");
+        Mutate(factory, db =>
+            db.UserQuests.Single(q => q.UserId == userId && !q.IsCompleted).CurrentAmount = 1);
+        (await client.PostAsync("/api/quest/complete", null)).EnsureSuccessStatusCode();
+
+        // 2. Accept quest_1 from npc_quest (should be allowed even though quest_1 from npc_test was completed)
+        var secondAccept = await client.PostAsync("/api/quest/accept/npc_quest/quest_1", null);
+        Assert.Equal(HttpStatusCode.OK, secondAccept.StatusCode);
+
+        // 3. Try to accept quest_1 from npc_test again (should fail)
+        // Complete the npc_quest quest_1 first so we have no active quests
+        Mutate(factory, db =>
+            db.UserQuests.Single(q => q.UserId == userId && !q.IsCompleted).CurrentAmount = 3);
+        (await client.PostAsync("/api/quest/complete", null)).EnsureSuccessStatusCode();
+
+        // Now try accepting npc_test quest_1 again
+        var thirdAccept = await client.PostAsync("/api/quest/accept/npc_test/quest_1", null);
+        Assert.Equal(HttpStatusCode.BadRequest, thirdAccept.StatusCode);
+    }
 }
