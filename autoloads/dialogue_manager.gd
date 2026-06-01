@@ -51,10 +51,12 @@ func _get_dialogue_id(npc: NPC) -> String:
 			if QuestManager.is_quest_completed(quest_id):
 				quest_index += 1
 				continue
-			var quest_file_path = "res://assets/shared/quests/" + npc.npc_id + "/" + quest_id + ".json"
+			var quest_file_path = "res://assets/shared/dialogues/" \
+								+ npc.npc_id + "/quests/" + quest_id + "_offer.json"
 			if FileAccess.file_exists(quest_file_path):
 				return npc.npc_id + "/quests/" + quest_id + "_offer"
 			else:
+				push_error("File not found: " + quest_file_path)
 				break
 		return npc.npc_id + "/casual"
 

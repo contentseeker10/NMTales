@@ -363,7 +363,7 @@ public class QuestControllerTests
         var client = await CreateAuthenticatedClientAsync(factory, "matching_user");
         (await client.PostAsync("/api/quest/accept/npc_test/quest_1", null)).EnsureSuccessStatusCode();
 
-        var response = await client.PostAsJsonAsync("/api/quest/progress", new { eventType = "talk_npc", target = "npc_test" });
+        var response = await client.PostAsJsonAsync("/api/quest/progress", new { eventType = "talk_npc", target = "npc_quest" });
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         using var doc = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
@@ -385,11 +385,11 @@ public class QuestControllerTests
         (await client.PostAsync("/api/quest/accept/npc_test/quest_1", null)).EnsureSuccessStatusCode();
 
         // Increment it to 1 (met)
-        var firstResponse = await client.PostAsJsonAsync("/api/quest/progress", new { eventType = "talk_npc", target = "npc_test" });
+        var firstResponse = await client.PostAsJsonAsync("/api/quest/progress", new { eventType = "talk_npc", target = "npc_quest" });
         Assert.Equal(HttpStatusCode.OK, firstResponse.StatusCode);
 
         // Try to increment again - since it's already 1/1, it should not increment further
-        var secondResponse = await client.PostAsJsonAsync("/api/quest/progress", new { eventType = "talk_npc", target = "npc_test" });
+        var secondResponse = await client.PostAsJsonAsync("/api/quest/progress", new { eventType = "talk_npc", target = "npc_quest" });
         Assert.Equal(HttpStatusCode.OK, secondResponse.StatusCode);
 
         using var doc = JsonDocument.Parse(await secondResponse.Content.ReadAsStringAsync());
@@ -418,7 +418,7 @@ public class QuestControllerTests
         (await client.PostAsync("/api/quest/complete", null)).EnsureSuccessStatusCode();
 
         // Now try updating progress
-        var response = await client.PostAsJsonAsync("/api/quest/progress", new { eventType = "talk_npc", target = "npc_test" });
+        var response = await client.PostAsJsonAsync("/api/quest/progress", new { eventType = "talk_npc", target = "npc_quest" });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
@@ -468,5 +468,25 @@ public class QuestControllerTests
         Assert.NotNull(completedList);
         Assert.Single(completedList);
         Assert.Equal("quest_1", completedList[0]);
+    }
+
+    [Fact]
+    public async Task AcceptQuest_WhenNonRepeatableAndAlreadyCompleted_ReturnsBadRequest()
+    {
+        using var factory = new QuestApiFactory();
+        var client = await CreateAuthenticatedClientAsync(factory, "repeat_limit_user");
+
+        // First acceptance
+        (await client.PostAsync("/api/quest/accept/npc_test/quest_1", null)).EnsureSuccessStatusCode();
+
+        // Complete the quest
+        var userId = GetUserId(factory, "repeat_limit_user");
+        Mutate(factory, db =>
+            db.UserQuests.Single(q => q.UserId == userId && !q.IsCompleted).CurrentAmount = 1);
+        (await client.PostAsync("/api/quest/complete", null)).EnsureSuccessStatusCode();
+
+        // Try accepting again
+        var secondAccept = await client.PostAsync("/api/quest/accept/npc_test/quest_1", null);
+        Assert.Equal(HttpStatusCode.BadRequest, secondAccept.StatusCode);
     }
 }

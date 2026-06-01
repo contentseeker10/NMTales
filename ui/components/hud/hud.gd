@@ -39,3 +39,7 @@ func _on_objective_completed(quest: Quest) -> void:
 func _on_quest_completed(_quest: Quest) -> void:
 	current_objective_title.text = "Пусто."
 	current_objective_description.text = ""
+	
+	level_label.text = "lvl " + str(int(AuthManager.current_user_info.get("level", 0)))
+	level_progress_bar.max_value = (AuthManager.current_user_info.get("level") + 1) * 100.0
+	level_progress_bar.value = AuthManager.current_user_info.get("xp", 0.0)

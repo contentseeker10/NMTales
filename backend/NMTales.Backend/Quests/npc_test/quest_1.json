@@ -6,6 +6,7 @@
   "rewards": {
     "xp": 100
   },
+  "repeatable": false,
   "objective": {
     "type": "talk_npc",
     "target": "npc_quest",

@@ -17,6 +17,11 @@ func _ready() -> void:
 	EventBus.mob_killed.connect(_on_mob_killed)
 
 
+func clear_state() -> void:
+	active_quest = null;
+	completed_quest_ids.clear()
+
+
 func sync_quests() -> void:
 	var active_response: Array = await NetworkManager.send_get("/api/Quest/active", AuthManager.token_header)
 	if active_response[1] == 200:
@@ -34,7 +39,6 @@ func sync_quests() -> void:
 
 
 func is_quest_completed(quest_id: String) -> bool:
-	print("Check quest updating: ", quest_id, ". Current list: ", completed_quest_ids)
 	return completed_quest_ids.has(quest_id)
 
 
@@ -75,8 +79,8 @@ func _complete_active_quest() -> void:
 		if get_completed_quests[1] == 200:
 			var response_data: String = get_completed_quests[3].get_string_from_utf8()
 			completed_quest_ids = JSON.parse_string(response_data)
-			print("Updated completed quests from server: ", completed_quest_ids)
 	
+	await AuthManager.update_user_info()
 	quest_completed.emit(active_quest)
 	active_quest = null
 

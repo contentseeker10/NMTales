@@ -111,6 +111,11 @@ public class QuestController : ControllerBase
             return NotFound("Requested quest was not found.");
         }
 
+        if (!TryReadQuestConfig(await System.IO.File.ReadAllTextAsync(filePath), out var jsonNode))
+        {
+            return BadRequest("Corrupt quest file.");
+        }
+
         var gate = GateFor(userId);
         await gate.WaitAsync();
         try
@@ -120,6 +125,21 @@ public class QuestController : ControllerBase
             if (hasActive)
             {
                 return BadRequest("You already have an active quest.");
+            }
+
+            var repeatable = false;
+            if (jsonNode["repeatable"] is JsonValue repeatableVal && repeatableVal.TryGetValue<bool>(out var rep))
+            {
+                repeatable = rep;
+            }
+
+            if (!repeatable)
+            {
+                var alreadyCompleted = await _context.UserQuests.AnyAsync(uq => uq.UserId == userId && uq.QuestId == questId && uq.IsCompleted);
+                if (alreadyCompleted)
+                {
+                    return BadRequest("This quest is not repeatable.");
+                }
             }
 
             _context.UserQuests.Add(new UserQuest

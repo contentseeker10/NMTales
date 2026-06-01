@@ -29,7 +29,12 @@ func login(username: String, password: String) -> void:
 		token_header[0] += json_data.get("token", "")
 		current_user_info = json_data.get("user", {})
 		login_attempted.emit(true, "Login successful")
+		
+		QuestManager.clear_state()
 		QuestManager.sync_quests()
+		
+		# For backend debug:
+		#print(token_header)
 	else:
 		login_attempted.emit(false, response_body)
 
@@ -55,3 +60,12 @@ func register(username: String, password: String) -> void:
 		register_attempted.emit(true, "Registration successful")
 	else:
 		register_attempted.emit(false, "Registration failed")
+
+
+func update_user_info() -> void:
+	var response: Array = await NetworkManager.send_get("/api/Auth/me", token_header)
+	if response[1] == 200:
+		var response_body: String = response[3].get_string_from_utf8()
+		current_user_info = JSON.parse_string(response_body)
+	else:
+		push_error("Error updating user info. Status: " + response[1])
