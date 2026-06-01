@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NMTales — Dialogue Creation Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: hsl(230, 30%, 6%);
+            --card-bg: rgba(20, 24, 38, 0.55);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --primary: hsl(265, 85%, 65%);
+            --primary-glow: hsla(265, 85%, 65%, 0.3);
+            --secondary: hsl(190, 90%, 50%);
+            --secondary-glow: hsla(190, 90%, 50%, 0.3);
+            --text-color: hsl(225, 20%, 90%);
+            --text-muted: hsl(225, 10%, 65%);
+            --success: hsl(145, 80%, 45%);
+            --accent: hsl(325, 85%, 55%);
+            --accent-glow: hsla(325, 85%, 55%, 0.3);
+            --danger: hsl(355, 75%, 50%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 0% 0%, hsla(265, 70%, 15%, 0.4) 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, hsla(190, 70%, 15%, 0.3) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Header Style */
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 150px;
+            background: var(--primary-glow);
+            filter: blur(80px);
+            z-index: -1;
+        }
+
+        h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            background: linear-gradient(135deg, #fff 30%, var(--primary) 70%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            font-weight: 300;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Layout Grid */
+        .layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        @media (min-width: 992px) {
+            .layout {
+                grid-template-columns: 1.1fr 1.3fr;
+            }
+        }
+
+        /* Glass Cards */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.6);
+        }
+
+        .card-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #fff;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 15px;
+        }
+
+        .card-title span.badge {
+            background: var(--accent);
+            box-shadow: 0 0 10px var(--accent-glow);
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        /* Steps & Details */
+        .step {
+            margin-bottom: 25px;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .step::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 8px;
+            bottom: -20px;
+            width: 2px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .step:last-child::before {
+            display: none;
+        }
+
+        .step-num {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--secondary);
+            box-shadow: 0 0 10px var(--secondary);
+        }
+
+        .step h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .step p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        input[type="text"], select, textarea {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px 16px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        input[type="text"]:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        /* Interactive Builder Styles */
+        .node-container {
+            border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .node-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .node-title {
+            font-weight: 600;
+            color: var(--secondary);
+            font-size: 1.1rem;
+        }
+
+        .choice-container {
+            border-left: 2px solid var(--primary);
+            padding-left: 15px;
+            margin-left: 10px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        .choice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .choice-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        /* Buttons */
+        .btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            border-color: transparent;
+            box-shadow: 0 4px 12px var(--primary-glow);
+        }
+
+        .btn-primary:hover {
+            background: hsl(265, 85%, 70%);
+            box-shadow: 0 6px 16px var(--primary-glow);
+        }
+
+        .btn-accent {
+            background: var(--accent);
+            border-color: transparent;
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+
+        .btn-accent:hover {
+            background: hsl(325, 85%, 60%);
+            box-shadow: 0 6px 16px var(--accent-glow);
+        }
+
+        .btn-danger {
+            background: rgba(244, 67, 54, 0.2);
+            border-color: rgba(244, 67, 54, 0.4);
+            color: hsl(0, 100%, 75%);
+        }
+
+        .btn-danger:hover {
+            background: rgba(244, 67, 54, 0.35);
+            border-color: rgba(244, 67, 54, 0.6);
+        }
+
+        /* Output & Tabs */
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            margin-top: 25px;
+        }
+
+        pre {
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            overflow-x: auto;
+            max-height: 500px;
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            color: hsl(190, 80%, 75%);
+        }
+
+        .badge-path {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--secondary);
+            font-family: 'Fira Code', monospace;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        .path-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .info-box {
+            background: rgba(190, 90, 50, 0.1);
+            border-left: 3px solid var(--secondary);
+            padding: 15px;
+            border-radius: 4px 12px 12px 4px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        .info-box.accent {
+            background: rgba(325, 85, 55, 0.1);
+            border-left: 3px solid var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>NMTales Dialogue Guide</h1>
+            <p class="subtitle">Гайд для гейм-дизайнерів з написання розгалужених діалогів та інтеграції їх із системою квестів.</p>
+        </header>
+
+        <div class="layout">
+            <!-- Documentation Column -->
+            <div class="card">
+                <h2 class="card-title">📘 Документація Діалогів <span class="badge">V1.1</span></h2>
+                
+                <div class="step">
+                    <div class="step-num"></div>
+                    <h3>1. Загальний принцип дерева діалогу</h3>
+                    <p>Діалоги описуються у форматі JSON у вигляді дерева вузлів (Nodes). Кожен вузол має унікальний текстовий ключ (ідентифікатор вузла). За замовчуванням діалог завжди починається з вузла з ключем <code>"start"</code>.</p>
+                    <p>Вузол містить репліку NPC (<code>"text"</code>) та список варіантів відповіді гравця (<code>"choices"</code>).</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-num"></div>
+                    <h3>2. Формат вибору (Choice)</h3>
+                    <p>Кожен вибір гравця містить:</p>
+                    <p>• <code>"text"</code> — репліка гравця на кнопці вибору.<br>
+                       • <code>"next_node"</code> — ідентифікатор наступного вузла діалогу. Якщо вибрати значення <code>"exit"</code>, то діалог завершиться і вікно закриється.<br>
+                       • <code>"action"</code> (опціонально) — тригер спеціальної дії (наприклад, для квестів).</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-num"></div>
+                    <h3>3. Специфіка квестових діалогів</h3>
+                    <p>У системі NMTales діалоги тісно пов'язані зі станом квесту у гравця. Залежно від етапу, гра шукає JSON-файли за певними шляхами:</p>
+                    
+                    <div class="info-box">
+                        <strong>📌 Типи файлів та шляхи їх збереження:</strong><br><br>
+                        <strong>1. Casual (Звичайний діалог):</strong><br>
+                        Показується, коли у NPC немає доступних чи активних квестів.<br>
+                        💾 Шлях: <code style="color: var(--secondary);">res://assets/shared/dialogues/{npc_id}/casual.json</code><br><br>
+                        
+                        <strong>2. Offer (Пропозиція квесту):</strong><br>
+                        Завантажується, якщо у NPC є доступний квест, який гравець ще не взяв.<br>
+                        💾 Шлях: <code style="color: var(--secondary);">res://assets/shared/dialogues/{npc_id}/quests/{quest_id}_offer.json</code><br>
+                        💡 <em>Обов'язкова дія для взяття:</em> Вузол згоди має містити action:
+                        <pre style="padding: 8px; margin-top: 5px; max-height: 80px; background: rgba(0,0,0,0.5);"><code>"action": {
+  "type": "accept_quest",
+  "quest_id": "quest_id_here"
+}</code></pre>
+                    </div>
+
+                    <div class="info-box accent">
+                        <strong>⚠️ Глобальні квестовi стани (Спільні файли):</strong><br><br>
+                        <strong>3. Progress (Квест виконується):</strong><br>
+                        Завантажується автоматично, коли у гравця є активний квест від цього NPC, але умови ще не виконані.<br>
+                        💾 Шлях: <code style="color: var(--accent);">res://assets/shared/dialogues/quest_progress.json</code><br><br>
+                        
+                        <strong>4. Complete (Квест виконано!):</strong><br>
+                        Завантажується, коли гравець виконав умови активного квесту і прийшов здавати його NPC.<br>
+                        💾 Шлях: <code style="color: var(--accent);">res://assets/shared/dialogues/quest_complete.json</code><br>
+                        💡 <em>Обов'язкова дія для завершення:</em> Кнопка завершення має містити action:
+                        <pre style="padding: 8px; margin-top: 5px; max-height: 80px; background: rgba(0,0,0,0.5);"><code>"action": {
+  "type": "complete_quest"
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-num"></div>
+                    <h3>4. Специфікація вузла дії (Action Node)</h3>
+                    <p>Клієнт гри реагує на події в діалогах. Доступні два ключові екшени:</p>
+                    <p>• <code>"accept_quest"</code> — бере квест у бд на сервері та активує його на клієнті.<br>
+                       • <code>"complete_quest"</code> — завершує квест на сервері, видає нагороди (XP/Level) та оновлює HUD гравця.</p>
+                </div>
+            </div>
+
+            <!-- Generator Column -->
+            <div class="card">
+                <h2 class="card-title">⚙️ Інтерактивний Конструктор Діалогів</h2>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label for="npc_id">NPC ID</label>
+                        <input type="text" id="npc_id" value="npc_quest" placeholder="Наприклад: npc_test">
+                    </div>
+                    <div class="form-group">
+                        <label for="dialogue_type">Тип діалогу</label>
+                        <select id="dialogue_type" onchange="onDialogueTypeChange()">
+                            <option value="casual">Casual (Звичайний)</option>
+                            <option value="offer">Quest Offer (Пропозиція квесту)</option>
+                            <option value="progress">Quest Progress (Глобальний прогрес)</option>
+                            <option value="complete">Quest Complete (Глобальне завершення)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" id="quest_id_group" style="display: none;">
+                    <label for="quest_id">Quest ID</label>
+                    <input type="text" id="quest_id" value="quest_1" placeholder="Наприклад: quest_1">
+                </div>
+
+                <!-- Dialogue Nodes Editor Area -->
+                <div id="nodes_editor">
+                    <h3 style="margin-bottom: 15px; color: #fff; display: flex; justify-content: space-between; align-items: center;">
+                        Вузли діалогу (Nodes)
+                        <button class="btn btn-primary" onclick="addDialogueNode()">+ Додати вузол</button>
+                    </h3>
+                    
+                    <div id="nodes_list">
+                        <!-- Dynamic Nodes Inserted Here -->
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <div class="output-header">
+                        <div>
+                            <div class="path-label">Куди зберегти файл в Godot:</div>
+                            <div class="badge-path" id="file_path_badge">res://assets/shared/dialogues/npc_quest/casual.json</div>
+                        </div>
+                        <button class="btn btn-accent" onclick="copyDialogueJson()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                            Копіювати JSON
+                        </button>
+                    </div>
+
+                    <pre><code id="json_output"></code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Start state with preloaded template data
+        let dialogueData = {
+            "start": {
+                "text": "Привіт, мандрівнику! Чи не хочеш виконати невелике доручення для мене?",
+                "choices": [
+                    {
+                        "text": "Так, що треба зробити?",
+                        "next_node": "accept_info",
+                        "action": {}
+                    },
+                    {
+                        "text": "Ні, бувай.",
+                        "next_node": "exit",
+                        "action": {}
+                    }
+                ]
+            },
+            "accept_info": {
+                "text": "Потрібно перемогти кількох монстрів біля входу в ліс. Повертайся, як впораєшся!",
+                "choices": [
+                    {
+                        "text": "Зрозумів, я пішов!",
+                        "next_node": "exit",
+                        "action": {
+                            "type": "accept_quest",
+                            "quest_id": "quest_1"
+                        }
+                    }
+                ]
+            }
+        };
+
+        function onDialogueTypeChange() {
+            const type = document.getElementById('dialogue_type').value;
+            const questGroup = document.getElementById('quest_id_group');
+            
+            if (type === 'offer') {
+                questGroup.style.display = 'block';
+            } else {
+                questGroup.style.display = 'none';
+            }
+
+            // Load templates to make it easier for designer
+            if (type === 'progress') {
+                dialogueData = {
+                    "start": {
+                        "text": "Ти ще не виконав моє завдання. Повертайся, коли зробиш усе, про що я просив.",
+                        "choices": [
+                            {
+                                "text": "Добре, я повернуся пізніше.",
+                                "next_node": "exit",
+                                "action": {}
+                            }
+                        ]
+                    }
+                };
+            } else if (type === 'complete') {
+                dialogueData = {
+                    "start": {
+                        "text": "О, ти виконав моє прохання! Чудова робота. Ось твоя заслужена нагорода.",
+                        "choices": [
+                            {
+                                "text": "Дякую! Рад допомогти.",
+                                "next_node": "exit",
+                                "action": {
+                                    "type": "complete_quest"
+                                }
+                            }
+                        ]
+                    }
+                };
+            } else if (type === 'casual' && !dialogueData["start"]) {
+                dialogueData = {
+                    "start": {
+                        "text": "Гарний сьогодні день для пригод!",
+                        "choices": [
+                            {
+                                "text": "Згоден, бувай!",
+                                "next_node": "exit",
+                                "action": {}
+                            }
+                        ]
+                    }
+                };
+            }
+            
+            renderEditor();
+        }
+
+        function renderEditor() {
+            const container = document.getElementById('nodes_list');
+            container.innerHTML = '';
+
+            const npcId = document.getElementById('npc_id').value || "npc_quest";
+            const questId = document.getElementById('quest_id').value || "quest_1";
+            const type = document.getElementById('dialogue_type').value;
+
+            // Render Paths
+            let path = "";
+            if (type === 'casual') {
+                path = `res://assets/shared/dialogues/${npcId}/casual.json`;
+            } else if (type === 'offer') {
+                path = `res://assets/shared/dialogues/${npcId}/quests/${questId}_offer.json`;
+            } else if (type === 'progress') {
+                path = `res://assets/shared/dialogues/quest_progress.json`;
+            } else if (type === 'complete') {
+                path = `res://assets/shared/dialogues/quest_complete.json`;
+            }
+            document.getElementById('file_path_badge').innerText = path;
+
+            // Render Nodes
+            Object.keys(dialogueData).forEach(nodeKey => {
+                const node = dialogueData[nodeKey];
+                
+                const nodeDiv = document.createElement('div');
+                nodeDiv.className = 'node-container';
+                
+                nodeDiv.innerHTML = `
+                    <div class="node-header">
+                        <div class="node-title">Вузол: <span style="font-family: 'Fira Code', monospace; color: #fff;">${nodeKey}</span></div>
+                        ${nodeKey !== 'start' ? `<button class="btn btn-danger" onclick="deleteNode('${nodeKey}')">Видалити вузол</button>` : ''}
+                    </div>
+                    <div class="form-group">
+                        <label>Ідентифікатор вузла (Node ID)</label>
+                        <input type="text" value="${nodeKey}" onchange="renameNode('${nodeKey}', this.value)" ${nodeKey === 'start' ? 'disabled' : ''}>
+                    </div>
+                    <div class="form-group">
+                        <label>Репліка NPC (Текст)</label>
+                        <textarea oninput="updateNodeText('${nodeKey}', this.value)">${node.text}</textarea>
+                    </div>
+                    
+                    <div class="choices-area">
+                        <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 10px; color: var(--text-muted);">ВАРІАНТИ ВІДПОВІДЕЙ ГРАВЦЯ:</div>
+                        <div id="choices_list_${nodeKey}"></div>
+                        <button class="btn" style="margin-top: 10px;" onclick="addChoice('${nodeKey}')">+ Додати вибір</button>
+                    </div>
+                `;
+
+                container.appendChild(nodeDiv);
+
+                const choicesList = nodeDiv.querySelector(`#choices_list_${nodeKey}`);
+                node.choices.forEach((choice, choiceIndex) => {
+                    const choiceDiv = document.createElement('div');
+                    choiceDiv.className = 'choice-container';
+                    
+                    const actionType = choice.action ? choice.action.type || 'none' : 'none';
+                    const choiceQuestId = choice.action ? choice.action.quest_id || '' : '';
+
+                    choiceDiv.innerHTML = `
+                        <div class="choice-header">
+                            <div class="choice-title">Вибір #${choiceIndex + 1}</div>
+                            <button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.75rem;" onclick="deleteChoice('${nodeKey}', ${choiceIndex})">Видалити</button>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 10px; margin-bottom: 10px;">
+                            <div>
+                                <label style="font-size: 0.75rem;">Текст вибору (Кнопка гравця)</label>
+                                <input type="text" value="${choice.text}" oninput="updateChoiceText('${nodeKey}', ${choiceIndex}, this.value)">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.75rem;">Наступний вузол (next_node)</label>
+                                <input type="text" value="${choice.next_node}" oninput="updateChoiceNextNode('${nodeKey}', ${choiceIndex}, this.value)">
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <div>
+                                <label style="font-size: 0.75rem;">Тип дії (Quest Action)</label>
+                                <select onchange="updateChoiceActionType('${nodeKey}', ${choiceIndex}, this.value)">
+                                    <option value="none" ${actionType === 'none' ? 'selected' : ''}>Немає</option>
+                                    <option value="accept_quest" ${actionType === 'accept_quest' ? 'selected' : ''}>Прийняти квест (accept_quest)</option>
+                                    <option value="complete_quest" ${actionType === 'complete_quest' ? 'selected' : ''}>Завершити квест (complete_quest)</option>
+                                </select>
+                            </div>
+                            <div id="choice_quest_group_${nodeKey}_${choiceIndex}" style="display: ${actionType === 'accept_quest' ? 'block' : 'none'};">
+                                <label style="font-size: 0.75rem;">Quest ID дії</label>
+                                <input type="text" value="${choiceQuestId}" placeholder="Наприклад: quest_1" oninput="updateChoiceActionQuestId('${nodeKey}', ${choiceIndex}, this.value)">
+                            </div>
+                        </div>
+                    `;
+                    choicesList.appendChild(choiceDiv);
+                });
+            });
+
+            updateJsonOutput();
+        }
+
+        // State update helpers
+        function updateNodeText(nodeKey, val) {
+            dialogueData[nodeKey].text = val;
+            updateJsonOutput();
+        }
+
+        function renameNode(oldKey, newKey) {
+            if (!newKey || oldKey === newKey || dialogueData[newKey]) return;
+            dialogueData[newKey] = dialogueData[oldKey];
+            delete dialogueData[oldKey];
+            
+            // Update reference points in choices
+            Object.keys(dialogueData).forEach(k => {
+                dialogueData[k].choices.forEach(c => {
+                    if (c.next_node === oldKey) {
+                        c.next_node = newKey;
+                    }
+                });
+            });
+            
+            renderEditor();
+        }
+
+        function addDialogueNode() {
+            let index = 1;
+            while(dialogueData[`node_${index}`]) {
+                index++;
+            }
+            const newNodeKey = `node_${index}`;
+            dialogueData[newNodeKey] = {
+                "text": "Новий діалоговий вузол. Що скаже NPC?",
+                "choices": [
+                    {
+                        "text": "Зрозуміло.",
+                        "next_node": "exit",
+                        "action": {}
+                    }
+                ]
+            };
+            renderEditor();
+        }
+
+        function deleteNode(nodeKey) {
+            delete dialogueData[nodeKey];
+            renderEditor();
+        }
+
+        function addChoice(nodeKey) {
+            dialogueData[nodeKey].choices.push({
+                "text": "Новий вибір гравця",
+                "next_node": "exit",
+                "action": {}
+            });
+            renderEditor();
+        }
+
+        function deleteChoice(nodeKey, index) {
+            dialogueData[nodeKey].choices.splice(index, 1);
+            renderEditor();
+        }
+
+        function updateChoiceText(nodeKey, index, val) {
+            dialogueData[nodeKey].choices[index].text = val;
+            updateJsonOutput();
+        }
+
+        function updateChoiceNextNode(nodeKey, index, val) {
+            dialogueData[nodeKey].choices[index].next_node = val;
+            updateJsonOutput();
+        }
+
+        function updateChoiceActionType(nodeKey, index, val) {
+            const choice = dialogueData[nodeKey].choices[index];
+            const questGroup = document.getElementById(`choice_quest_group_${nodeKey}_${index}`);
+            
+            if (val === 'none') {
+                choice.action = {};
+                questGroup.style.display = 'none';
+            } else if (val === 'accept_quest') {
+                const questId = document.getElementById('quest_id').value || 'quest_1';
+                choice.action = {
+                    "type": "accept_quest",
+                    "quest_id": questId
+                };
+                questGroup.style.display = 'block';
+            } else if (val === 'complete_quest') {
+                choice.action = {
+                    "type": "complete_quest"
+                };
+                questGroup.style.display = 'none';
+            }
+            renderEditor();
+        }
+
+        function updateChoiceActionQuestId(nodeKey, index, val) {
+            const choice = dialogueData[nodeKey].choices[index];
+            if (choice.action && choice.action.type === 'accept_quest') {
+                choice.action.quest_id = val;
+            }
+            updateJsonOutput();
+        }
+
+        function updateJsonOutput() {
+            // Filter empty actions from output to make it clean JSON
+            const outputObj = {};
+            Object.keys(dialogueData).forEach(nodeKey => {
+                const node = dialogueData[nodeKey];
+                const choicesCopy = node.choices.map(c => {
+                    const choiceCopy = {
+                        "text": c.text,
+                        "next_node": c.next_node
+                    };
+                    if (c.action && Object.keys(c.action).length > 0) {
+                        choiceCopy.action = c.action;
+                    }
+                    return choiceCopy;
+                });
+                outputObj[nodeKey] = {
+                    "text": node.text,
+                    "choices": choicesCopy
+                };
+            });
+
+            document.getElementById('json_output').innerText = JSON.stringify(outputObj, null, 2);
+        }
+
+        function copyDialogueJson() {
+            const codeElement = document.getElementById('json_output');
+            navigator.clipboard.writeText(codeElement.innerText).then(() => {
+                const btn = document.querySelector('.btn-accent');
+                const origText = btn.innerHTML;
+                btn.innerHTML = 'Скопійовано!';
+                setTimeout(() => {
+                    btn.innerHTML = origText;
+                }, 1500);
+            });
+        }
+
+        // Add change listeners to base fields
+        document.getElementById('npc_id').addEventListener('input', renderEditor);
+        document.getElementById('quest_id').addEventListener('input', renderEditor);
+
+        // Initial setup
+        renderEditor();
+    </script>
+</body>
+</html>
