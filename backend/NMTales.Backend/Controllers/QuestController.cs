@@ -1,0 +1,265 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using NMTales.Backend.Data;
+using NMTales.Backend.Models;
+using System.Collections.Concurrent;
+using System.IO;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
+
+namespace NMTales.Backend.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+[Authorize]
+public class QuestController : ControllerBase
+{
+    // The closed folder that holds quest configuration files. It lives under the
+    // content root (NOT wwwroot) so the raw JSON can never be downloaded directly.
+    private const string QuestsRoot = "Quests";
+
+    // Quests currently belong to a single test NPC. Active/complete look the file up
+    // here because UserQuest only stores the quest id, not the owning NPC. See README.
+    private const string DefaultNpc = "npc_test";
+
+    // Identifiers come straight from the route, so restrict them to a safe charset
+    // to prevent path traversal (e.g. "../../appsettings") when building file paths.
+    private static readonly Regex SafeIdentifier = new(@"\A[A-Za-z0-9_-]+\z", RegexOptions.Compiled);
+
+    // Serialize accept/complete per user so the check-then-act sequences are atomic and
+    // a quest is awarded exactly once. This guards a single server instance (and the
+    // in-memory provider, which has no transactions). A multi-instance deployment on a
+    // relational provider should additionally use a rowversion/concurrency token and a
+    // filtered unique index (UserId WHERE IsCompleted = 0).
+    private static readonly ConcurrentDictionary<int, SemaphoreSlim> UserGates = new();
+
+    private readonly ApplicationDbContext _context;
+    private readonly IWebHostEnvironment _env;
+
+    public QuestController(ApplicationDbContext context, IWebHostEnvironment env)
+    {
+        _context = context;
+        _env = env;
+    }
+
+    /// <summary>
+    /// Get the current active quest with the player's live progress merged in.
+    /// </summary>
+    [HttpGet("active")]
+    public async Task<IActionResult> GetActiveQuest()
+    {
+        if (!TryGetUserId(out var userId)) return Unauthorized();
+
+        var userQuest = await _context.UserQuests
+            .FirstOrDefaultAsync(uq => uq.UserId == userId && !uq.IsCompleted);
+
+        if (userQuest == null)
+        {
+            return NoContent(); // No active quest.
+        }
+
+        if (!TryGetQuestFilePath(DefaultNpc, userQuest.QuestId, out var filePath))
+        {
+            return NotFound("Quest file not found on server.");
+        }
+
+        if (!TryReadQuestConfig(await System.IO.File.ReadAllTextAsync(filePath), out var jsonNode))
+        {
+            return BadRequest("Corrupt quest file.");
+        }
+
+        // Substitute the player's real progress from the DB before returning.
+        if (jsonNode["objective"] is JsonObject objectiveNode)
+        {
+            objectiveNode["current_amount"] = userQuest.CurrentAmount;
+        }
+
+        return Ok(jsonNode);
+    }
+
+    /// <summary>
+    /// Accept a new quest offered by an NPC.
+    /// </summary>
+    [HttpPost("accept/{npcId}/{questId}")]
+    public async Task<IActionResult> AcceptQuest(string npcId, string questId)
+    {
+        if (!TryGetUserId(out var userId)) return Unauthorized();
+
+        // Reject malformed identifiers up front (distinct from a genuinely missing quest).
+        if (!IsSafeIdentifier(npcId) || !IsSafeIdentifier(questId))
+        {
+            return BadRequest("Invalid quest identifier.");
+        }
+
+        // The quest must actually exist on the server.
+        var filePath = Path.Combine(_env.ContentRootPath, QuestsRoot, npcId, $"{questId}.json");
+        if (!System.IO.File.Exists(filePath))
+        {
+            return NotFound("Requested quest was not found.");
+        }
+
+        var gate = GateFor(userId);
+        await gate.WaitAsync();
+        try
+        {
+            // Only one active quest at a time.
+            var hasActive = await _context.UserQuests.AnyAsync(uq => uq.UserId == userId && !uq.IsCompleted);
+            if (hasActive)
+            {
+                return BadRequest("You already have an active quest.");
+            }
+
+            _context.UserQuests.Add(new UserQuest
+            {
+                UserId = userId,
+                QuestId = questId,
+                CurrentAmount = 0,
+                IsCompleted = false
+            });
+            await _context.SaveChangesAsync();
+        }
+        finally
+        {
+            gate.Release();
+        }
+
+        return Ok(new { message = "Quest accepted successfully." });
+    }
+
+    /// <summary>
+    /// Turn in the current active quest and receive the XP reward (server-authoritative).
+    /// </summary>
+    [HttpPost("complete")]
+    public async Task<IActionResult> CompleteQuest()
+    {
+        if (!TryGetUserId(out var userId)) return Unauthorized();
+
+        var gate = GateFor(userId);
+        await gate.WaitAsync();
+        try
+        {
+            var userQuest = await _context.UserQuests
+                .FirstOrDefaultAsync(uq => uq.UserId == userId && !uq.IsCompleted);
+
+            if (userQuest == null) return BadRequest("No active quest to complete.");
+
+            if (!TryGetQuestFilePath(DefaultNpc, userQuest.QuestId, out var filePath))
+            {
+                return NotFound("Quest file not found.");
+            }
+
+            if (!TryReadQuestConfig(await System.IO.File.ReadAllTextAsync(filePath), out var jsonNode))
+            {
+                return BadRequest("Corrupt quest file.");
+            }
+
+            var requiredAmount = ReadInt(jsonNode["objective"]?["required_amount"], 1);
+
+            // Validate that the objective is actually met before granting any reward.
+            if (userQuest.CurrentAmount < requiredAmount)
+            {
+                return BadRequest("Quest objectives are not completed yet.");
+            }
+
+            // Load the rewarded user before mutating state so a missing user can't burn the quest.
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null) return Unauthorized();
+
+            userQuest.IsCompleted = true;
+
+            // Award XP on the server only. The client never decides how much XP it gets.
+            var xpReward = ReadInt(jsonNode["rewards"]?["xp"], 0);
+            user.XP += xpReward;
+
+            // Level-up: the XP needed for the next level is (Level + 1) * 100.
+            var neededXp = (user.Level + 1) * 100;
+            while (user.XP >= neededXp)
+            {
+                user.XP -= neededXp;
+                user.Level += 1;
+                neededXp = (user.Level + 1) * 100;
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new
+            {
+                message = "Quest completed successfully.",
+                xpEarned = xpReward,
+                newLevel = user.Level,
+                newXp = user.XP
+            });
+        }
+        finally
+        {
+            gate.Release();
+        }
+    }
+
+    private bool TryGetUserId(out int userId)
+    {
+        var userIdValue = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        return int.TryParse(userIdValue, out userId);
+    }
+
+    private static bool IsSafeIdentifier(string value) => SafeIdentifier.IsMatch(value);
+
+    private static SemaphoreSlim GateFor(int userId) => UserGates.GetOrAdd(userId, _ => new SemaphoreSlim(1, 1));
+
+    /// <summary>
+    /// Resolve a quest config path, rejecting unsafe identifiers and confirming the file exists.
+    /// </summary>
+    private bool TryGetQuestFilePath(string npcId, string questId, out string filePath)
+    {
+        filePath = string.Empty;
+
+        if (!IsSafeIdentifier(npcId) || !IsSafeIdentifier(questId))
+        {
+            return false;
+        }
+
+        var candidate = Path.Combine(_env.ContentRootPath, QuestsRoot, npcId, $"{questId}.json");
+        if (!System.IO.File.Exists(candidate))
+        {
+            return false;
+        }
+
+        filePath = candidate;
+        return true;
+    }
+
+    /// <summary>
+    /// Parse a quest config, treating corrupt JSON as a handled failure rather than a 500.
+    /// </summary>
+    private static bool TryReadQuestConfig(string jsonString, out JsonNode jsonNode)
+    {
+        jsonNode = null!;
+        try
+        {
+            var parsed = JsonNode.Parse(jsonString);
+            if (parsed == null) return false;
+            jsonNode = parsed;
+            return true;
+        }
+        catch (JsonException)
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Read an integer JSON field, falling back when it is absent or not an integer
+    /// (a string "100" or 1.5 must not throw).
+    /// </summary>
+    private static int ReadInt(JsonNode? node, int fallback)
+    {
+        if (node is JsonValue value && value.TryGetValue<int>(out var result))
+        {
+            return result;
+        }
+
+        return fallback;
+    }
+}
