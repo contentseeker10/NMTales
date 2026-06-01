@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,21 +15,25 @@ public class AuthController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
     private readonly JwtService _jwtService;
+    private readonly IValidator<RegisterDto> _registerValidator;
+    private readonly IValidator<LoginDto> _loginValidator;
 
-    public AuthController(ApplicationDbContext context, JwtService jwtService)
+    public AuthController(ApplicationDbContext context, JwtService jwtService, IValidator<RegisterDto> registerValidator, IValidator<LoginDto> loginValidator)
     {
         _context = context;
         _jwtService = jwtService;
+        _registerValidator = registerValidator;
+        _loginValidator = loginValidator;
     }
 
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterDto dto)
     {
-        if (await _context.Users.AnyAsync(x => x.Username == dto.Username))
-        {
-            return BadRequest("Username already exists");
-        }
+        var validationResult = await _registerValidator.ValidateAsync(dto);
 
+        if (!validationResult.IsValid)
+            return BadRequest(AuthValidationErrorResponseDto.FromValidationResult(validationResult));
+        
         var user = new User
         {
             Username = dto.Username,
@@ -49,6 +54,11 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginDto dto)
     {
+        var validationResult = await _loginValidator.ValidateAsync(dto);
+        
+        if (!validationResult.IsValid)
+            return BadRequest(AuthValidationErrorResponseDto.FromValidationResult(validationResult));
+        
         var user = await _context.Users.FirstOrDefaultAsync(x => x.Username == dto.Username);
 
         if (user is null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.Password))
