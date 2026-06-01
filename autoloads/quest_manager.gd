@@ -17,14 +17,32 @@ func _ready() -> void:
 	EventBus.mob_killed.connect(_on_mob_killed)
 
 
+func sync_quests() -> void:
+	var active_response: Array = await NetworkManager.send_get("/api/Quest/active", AuthManager.token_header)
+	if active_response[1] == 200:
+		var response_body: String = active_response[3].get_string_from_utf8()
+		var quest_data: Dictionary = JSON.parse_string(response_body)
+		active_quest = Quest.new(quest_data)
+		quest_updated.emit(active_quest)
+	else:
+		active_quest = null
+	
+	var completed_response: Array = await NetworkManager.send_get("/api/Quest/completed", AuthManager.token_header)
+	if completed_response[1] == 200:
+		var response_body: String = completed_response[3].get_string_from_utf8()
+		completed_quest_ids = JSON.parse_string(response_body)
+
+
 func is_quest_completed(quest_id: String) -> bool:
+	print("Check quest updating: ", quest_id, ". Current list: ", completed_quest_ids)
 	return completed_quest_ids.has(quest_id)
 
 
 func accept_quest(npc_id: String, quest_id: String) -> void:
 	if active_quest == null:
-		NetworkManager.send_post("/api/Quest/accept/" + npc_id + "/" + quest_id, {}, \
+		var post_accept: HTTPRequest = NetworkManager.send_post("/api/Quest/accept/" + npc_id + "/" + quest_id, {}, \
 			AuthManager.token_header)
+		var post_response: Array = await post_accept.request_completed
 		
 		var response: Array = await NetworkManager.send_get("/api/Quest/active", \
 			AuthManager.token_header)
@@ -48,28 +66,45 @@ func _on_dialogue_action_triggered(npc: NPC, action: Dictionary) -> void:
 
 
 func _complete_active_quest() -> void:
-	NetworkManager.send_post("/api/Quest/complete", {}, AuthManager.token_header)
-	
-	var get_completed_quests: Array = await \
+	var request: HTTPRequest = NetworkManager.send_post("/api/Quest/complete", {}, AuthManager.token_header)
+	if request:
+		var _response: Array = await request.request_completed
+		request.queue_free()
+		var get_completed_quests: Array = await \
 		NetworkManager.send_get("/api/Quest/completed", AuthManager.token_header)
-	if get_completed_quests[1] == 200:
-		var response_data: String = get_completed_quests[3].get_string_from_utf8()
-		completed_quest_ids = JSON.parse_string(response_data)
-		
+		if get_completed_quests[1] == 200:
+			var response_data: String = get_completed_quests[3].get_string_from_utf8()
+			completed_quest_ids = JSON.parse_string(response_data)
+			print("Updated completed quests from server: ", completed_quest_ids)
+	
 	quest_completed.emit(active_quest)
 	active_quest = null
 
 
-func _increment_objective_progress() -> void:
-	active_quest.current_amount += 1
-	quest_updated.emit(active_quest)
-	if active_quest.is_objective_done():
-		objective_completed.emit(active_quest)
-
-
 func _process_event(event_type: String, target: String) -> void:
+	if active_quest == null:
+		return
+	
 	if active_quest.type == event_type and active_quest.target == target:
-		_increment_objective_progress()
+		var body: Dictionary = {
+			"eventType": event_type,
+			"target": target
+		}
+		
+		var request: HTTPRequest = NetworkManager.send_post("/api/Quest/progress", body, AuthManager.token_header)
+		if request:
+			var response: Array = await request.request_completed
+			request.queue_free()
+			
+			if response[1] == 200:
+				var response_body: Dictionary = JSON.parse_string(response[3].get_string_from_utf8())
+				var server_current_amount = response_body.get("currentAmount", 0)
+				
+				active_quest.current_amount = server_current_amount
+				quest_updated.emit(active_quest)
+				
+				if active_quest.is_objective_done():
+					objective_completed.emit(active_quest)
 
 
 func _on_npc_talked(npc_id: String) -> void:

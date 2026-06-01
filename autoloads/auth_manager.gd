@@ -29,6 +29,7 @@ func login(username: String, password: String) -> void:
 		token_header[0] += json_data.get("token", "")
 		current_user_info = json_data.get("user", {})
 		login_attempted.emit(true, "Login successful")
+		QuestManager.sync_quests()
 	else:
 		login_attempted.emit(false, response_body)
 
