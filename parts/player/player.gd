@@ -8,4 +8,4 @@ class_name Player extends CharacterBody2D
 var can_attack: bool = true
 
 func _ready() -> void:
-	hud.visible = true
+	hud.visible = true;

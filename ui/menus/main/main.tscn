@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cmp3dqb0gaqip" path="res://ui/components/line_edit/line_edit.tscn" id="4_x37g4"]
 [ext_resource type="PackedScene" uid="uid://b6v7toodritgx" path="res://ui/components/button/button.tscn" id="5_65cc8"]
 [ext_resource type="PackedScene" uid="uid://cky8m2321egnx" path="res://ui/components/notification/notification.tscn" id="6_pf36j"]
+[ext_resource type="Script" uid="uid://cp56f72utniss" path="res://ui/components/button/button.gd" id="6_td0j8"]
 [ext_resource type="PackedScene" uid="uid://dyllr3kfnlcff" path="res://ui/menus/settings/settings.tscn" id="7_58mm7"]
 
 [node name="Main" type="Control" unique_id=1116928531]
@@ -77,6 +78,7 @@ secret_character = "*"
 layout_mode = 2
 size_flags_horizontal = 1
 text = "Вхід"
+script = ExtResource("6_td0j8")
 
 [node name="GoRegisterButton" parent="LoginPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(1851499352, 2063207470) index="3" unique_id=1951198736 instance=ExtResource("5_65cc8")]
 layout_mode = 2
