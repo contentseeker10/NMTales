@@ -3,7 +3,7 @@ extends Node
 signal login_attempted(success: bool, message: String)
 signal register_attempted(success: bool, message: String)
 
-var token_header: Array = ["Authorization: Bearer "]
+var token_header: Array = [""]
 var current_user_info: Dictionary = {}
 
 
@@ -26,12 +26,13 @@ func login(username: String, password: String) -> void:
 	
 	if result_code == 200:
 		var json_data: Variant = JSON.parse_string(response_body)
-		token_header[0] += json_data.get("token", "")
+		token_header[0] = "Authorization: Bearer " + json_data.get("token", "")
 		current_user_info = json_data.get("user", {})
-		login_attempted.emit(true, "Login successful")
 		
-		QuestManager.clear_state()
-		QuestManager.sync_quests()
+		#QuestManager.clear_state()
+		await QuestManager.sync_quests()
+		
+		login_attempted.emit(true, "Login successful")
 		
 		# For backend debug:
 		#print(token_header)

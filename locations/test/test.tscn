@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://dgudnnaupgsr7" path="res://parts/player/spawn_point/spawn_point.tscn" id="5_e4v2d"]
 [ext_resource type="PackedScene" uid="uid://c8cfoewmx3r6c" path="res://parts/npc/npc.tscn" id="6_b0pkk"]
 [ext_resource type="SpriteFrames" uid="uid://ch2p8b7klomvr" path="res://parts/npc/sprite_frames/2.tres" id="7_gdpg5"]
+[ext_resource type="SpriteFrames" uid="uid://duqi2aml56f2f" path="res://parts/npc/sprite_frames/4.tres" id="8_y5mnx"]
 
 [sub_resource type="FontVariation" id="FontVariation_e4v2d"]
 base_font = ExtResource("4_gcwut")
@@ -55,12 +56,22 @@ target_spawn_point_id = "start"
 [node name="npc_test" parent="." unique_id=840380367 instance=ExtResource("6_b0pkk")]
 position = Vector2(337, 236)
 npc_id = "npc_test"
+has_quests = true
 
 [node name="npc_quest" parent="." unique_id=642226026 instance=ExtResource("6_b0pkk")]
 position = Vector2(395, 284)
 npc_id = "npc_quest"
+has_quests = true
 
 [node name="AnimatedSprite2D" parent="npc_quest" index="0" unique_id=982053377]
 sprite_frames = ExtResource("7_gdpg5")
 
+[node name="npc_talker" parent="." unique_id=1172160738 instance=ExtResource("6_b0pkk")]
+position = Vector2(281, 287)
+npc_id = "npc_talker"
+
+[node name="AnimatedSprite2D" parent="npc_talker" index="0" unique_id=982053377]
+sprite_frames = ExtResource("8_y5mnx")
+
 [editable path="npc_quest"]
+[editable path="npc_talker"]

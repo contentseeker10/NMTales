@@ -17,9 +17,10 @@ func _ready() -> void:
 	EventBus.mob_killed.connect(_on_mob_killed)
 
 
-func clear_state() -> void:
-	active_quest = null;
-	completed_quest_ids.clear()
+# --- buggy at the moment ---
+#func clear_state() -> void:
+	#completed_quest_ids.clear()
+	#active_quest = null;
 
 
 func sync_quests() -> void:
@@ -38,8 +39,9 @@ func sync_quests() -> void:
 		completed_quest_ids = JSON.parse_string(response_body)
 
 
-func is_quest_completed(quest_id: String) -> bool:
-	return completed_quest_ids.has(quest_id)
+func is_quest_completed(npc_id: String, quest_id: String) -> bool:
+	var composite_key: String = npc_id + ":" + quest_id
+	return completed_quest_ids.has(composite_key)
 
 
 func accept_quest(npc_id: String, quest_id: String) -> void:

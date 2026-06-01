@@ -66,6 +66,7 @@ emoji_menu_enabled = false
 
 [node name="PasswordEdit" parent="LoginPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(1851499352, 2063207470) index="1" unique_id=1847710883 instance=ExtResource("4_x37g4")]
 layout_mode = 2
+text = "user12"
 placeholder_text = "Пароль"
 context_menu_enabled = false
 emoji_menu_enabled = false
@@ -113,12 +114,14 @@ text = "Новий акаунт"
 
 [node name="UsernameEdit" parent="RegisterPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(971939153, 2063207470) index="0" unique_id=97869084 instance=ExtResource("4_x37g4")]
 layout_mode = 2
+text = "user"
 placeholder_text = "Новий юзернейм"
 context_menu_enabled = false
 emoji_menu_enabled = false
 
 [node name="PasswordEdit" parent="RegisterPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(971939153, 2063207470) index="1" unique_id=130363489 instance=ExtResource("4_x37g4")]
 layout_mode = 2
+text = "user12"
 placeholder_text = "Новий пароль"
 context_menu_enabled = false
 emoji_menu_enabled = false

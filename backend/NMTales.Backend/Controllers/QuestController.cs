@@ -85,7 +85,7 @@ public class QuestController : ControllerBase
         if (!TryGetUserId(out var userId)) return Unauthorized();
         var completedIds = await _context.UserQuests
             .Where(uq => uq.UserId == userId && uq.IsCompleted)
-            .Select(uq => uq.QuestId)
+            .Select(uq => $"{uq.NpcId}:{uq.QuestId}") // Склеиваем в формат "npcId:questId"
             .ToListAsync();
         return Ok(completedIds);
     }
@@ -135,7 +135,7 @@ public class QuestController : ControllerBase
 
             if (!repeatable)
             {
-                var alreadyCompleted = await _context.UserQuests.AnyAsync(uq => uq.UserId == userId && uq.QuestId == questId && uq.IsCompleted);
+                var alreadyCompleted = await _context.UserQuests.AnyAsync(uq => uq.UserId == userId && uq.NpcId == npcId && uq.QuestId == questId && uq.IsCompleted);
                 if (alreadyCompleted)
                 {
                     return BadRequest("This quest is not repeatable.");

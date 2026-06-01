@@ -467,7 +467,7 @@ public class QuestControllerTests
         var completedList = await response.Content.ReadFromJsonAsync<List<string>>();
         Assert.NotNull(completedList);
         Assert.Single(completedList);
-        Assert.Equal("quest_1", completedList[0]);
+        Assert.Equal("npc_test:quest_1", completedList[0]);
     }
 
     [Fact]
@@ -488,5 +488,34 @@ public class QuestControllerTests
         // Try accepting again
         var secondAccept = await client.PostAsync("/api/quest/accept/npc_test/quest_1", null);
         Assert.Equal(HttpStatusCode.BadRequest, secondAccept.StatusCode);
+    }
+
+    [Fact]
+    public async Task AcceptQuest_SameQuestIdDifferentNpc_Allowed()
+    {
+        using var factory = new QuestApiFactory();
+        var client = await CreateAuthenticatedClientAsync(factory, "multi_npc_user");
+
+        // 1. Accept and complete quest_1 from npc_test
+        (await client.PostAsync("/api/quest/accept/npc_test/quest_1", null)).EnsureSuccessStatusCode();
+
+        var userId = GetUserId(factory, "multi_npc_user");
+        Mutate(factory, db =>
+            db.UserQuests.Single(q => q.UserId == userId && !q.IsCompleted).CurrentAmount = 1);
+        (await client.PostAsync("/api/quest/complete", null)).EnsureSuccessStatusCode();
+
+        // 2. Accept quest_1 from npc_quest (should be allowed even though quest_1 from npc_test was completed)
+        var secondAccept = await client.PostAsync("/api/quest/accept/npc_quest/quest_1", null);
+        Assert.Equal(HttpStatusCode.OK, secondAccept.StatusCode);
+
+        // 3. Try to accept quest_1 from npc_test again (should fail)
+        // Complete the npc_quest quest_1 first so we have no active quests
+        Mutate(factory, db =>
+            db.UserQuests.Single(q => q.UserId == userId && !q.IsCompleted).CurrentAmount = 3);
+        (await client.PostAsync("/api/quest/complete", null)).EnsureSuccessStatusCode();
+
+        // Now try accepting npc_test quest_1 again
+        var thirdAccept = await client.PostAsync("/api/quest/accept/npc_test/quest_1", null);
+        Assert.Equal(HttpStatusCode.BadRequest, thirdAccept.StatusCode);
     }
 }

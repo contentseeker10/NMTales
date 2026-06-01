@@ -48,7 +48,7 @@ func _get_dialogue_id(npc: NPC) -> String:
 		var quest_index: int = 1
 		while true:
 			var quest_id = "quest_" + str(quest_index)
-			if QuestManager.is_quest_completed(quest_id):
+			if QuestManager.is_quest_completed(npc.npc_id, quest_id):
 				quest_index += 1
 				continue
 			var quest_file_path = "res://assets/shared/dialogues/" \
