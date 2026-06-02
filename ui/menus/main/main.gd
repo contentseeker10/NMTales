@@ -58,7 +58,4 @@ func _on_try_login_button_pressed() -> void:
 	AuthManager.login(username, password)
 
 func _on_login_attempted(success: bool, message: String) -> void:
-	if success:
-		LocationManager.entry_location("test")
-	else:
-		notification.show_notification(message)
+	notification.show_notification(message)

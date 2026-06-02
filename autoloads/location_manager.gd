@@ -29,10 +29,14 @@ func _try_download_location(location_name: String, target_path: String, scene_pa
 		print("Unable to entry location.")
 
 
-func spawn_player() -> void:
+func spawn_player(coords: Vector2 = Vector2.INF) -> void:
 	var player: Player = preload("res://parts/player/player.tscn").instantiate()
 	get_tree().current_scene.add_child(player)
-	player.global_position = _get_spawn_point().global_position
+	if coords != Vector2.INF:
+		player.global_position = coords
+	else:
+		player.global_position = _get_spawn_point().global_position
+
 
 func _get_spawn_point() -> SpawnPoint:
 	var spawn_points: Array
