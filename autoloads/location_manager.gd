@@ -11,6 +11,7 @@ func entry_location(location_name: String) -> void:
 	
 	if ResourceLoader.exists(scene_path):
 		get_tree().change_scene_to_file(scene_path)
+		_update_player_location(location_name, Vector2.ZERO)
 		return
 	
 	if FileAccess.file_exists(local_pack_path):
@@ -18,8 +19,10 @@ func entry_location(location_name: String) -> void:
 			get_tree().change_scene_to_file(scene_path)
 		else:
 			_try_download_location(location_name, local_pack_path, scene_path)
+			_update_player_location(location_name, Vector2.ZERO)
 	else:
 		_try_download_location(location_name, local_pack_path, scene_path)
+		_update_player_location(location_name, Vector2.ZERO)
 
 func _try_download_location(location_name: String, target_path: String, scene_path: String) -> void:
 	if await NetworkManager.download_pack(PackManager.PackType.LOCATION, location_name, target_path):
@@ -27,6 +30,15 @@ func _try_download_location(location_name: String, target_path: String, scene_pa
 		get_tree().change_scene_to_file(scene_path)
 	else:
 		print("Unable to entry location.")
+
+
+func _update_player_location(location_name: String, player_coords: Vector2) -> void:
+	var body: Dictionary = {
+		"currentLocation": location_name,
+		"currentPositionX": player_coords.x,
+		"currentPositionY": player_coords.y
+	}
+	NetworkManager.send_post("/api/Player/location", body, AuthManager.token_header)
 
 
 func spawn_player(coords: Vector2 = Vector2.INF) -> void:
