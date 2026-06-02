@@ -1,6 +1,7 @@
 extends Node
 
 var target_spawn_point_id: String = "start"
+var current_location: String
 
 
 func entry_location(location_name: String) -> void:
@@ -11,7 +12,7 @@ func entry_location(location_name: String) -> void:
 	
 	if ResourceLoader.exists(scene_path):
 		get_tree().change_scene_to_file(scene_path)
-		_update_player_location(location_name, Vector2.ZERO)
+		current_location = location_name
 		return
 	
 	if FileAccess.file_exists(local_pack_path):
@@ -19,20 +20,19 @@ func entry_location(location_name: String) -> void:
 			get_tree().change_scene_to_file(scene_path)
 		else:
 			_try_download_location(location_name, local_pack_path, scene_path)
-			_update_player_location(location_name, Vector2.ZERO)
 	else:
 		_try_download_location(location_name, local_pack_path, scene_path)
-		_update_player_location(location_name, Vector2.ZERO)
 
 func _try_download_location(location_name: String, target_path: String, scene_path: String) -> void:
 	if await NetworkManager.download_pack(PackManager.PackType.LOCATION, location_name, target_path):
 		PackManager.mount_pack(target_path)
+		current_location = location_name
 		get_tree().change_scene_to_file(scene_path)
 	else:
 		print("Unable to entry location.")
 
 
-func _update_player_location(location_name: String, player_coords: Vector2) -> void:
+func update_player_location(location_name: String, player_coords: Vector2) -> void:
 	var body: Dictionary = {
 		"currentLocation": location_name,
 		"currentPositionX": player_coords.x,
@@ -41,13 +41,11 @@ func _update_player_location(location_name: String, player_coords: Vector2) -> v
 	NetworkManager.send_post("/api/Player/location", body, AuthManager.token_header)
 
 
-func spawn_player(coords: Vector2 = Vector2.INF) -> void:
+func spawn_player() -> Player:
 	var player: Player = preload("res://parts/player/player.tscn").instantiate()
 	get_tree().current_scene.add_child(player)
-	if coords != Vector2.INF:
-		player.global_position = coords
-	else:
-		player.global_position = _get_spawn_point().global_position
+	player.global_position = _get_spawn_point().global_position
+	return player
 
 
 func _get_spawn_point() -> SpawnPoint:

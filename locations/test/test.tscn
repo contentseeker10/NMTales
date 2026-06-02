@@ -51,7 +51,7 @@ spawn_point_id = "teleporter"
 [node name="TeleporterToTester" parent="." unique_id=268977910 instance=ExtResource("2_csja3")]
 position = Vector2(472, 240)
 target_location = "test_teleport"
-target_spawn_point_id = "start"
+target_spawn_point_id = "teleporter"
 
 [node name="npc_test" parent="." unique_id=840380367 instance=ExtResource("6_b0pkk")]
 position = Vector2(337, 236)
