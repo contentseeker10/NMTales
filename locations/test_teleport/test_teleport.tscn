@@ -25,5 +25,8 @@ target_spawn_point_id = "teleporter"
 [node name="PlayerSpawnPoints" type="Node2D" parent="." unique_id=482911802]
 
 [node name="Start" parent="PlayerSpawnPoints" unique_id=1811807046 instance=ExtResource("4_dp6dn")]
-position = Vector2(114, 155)
 spawn_point_id = "start"
+
+[node name="Teleporter" parent="PlayerSpawnPoints" unique_id=2129097137 instance=ExtResource("4_dp6dn")]
+position = Vector2(113, 152)
+spawn_point_id = "teleporter"

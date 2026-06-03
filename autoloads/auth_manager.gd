@@ -34,6 +34,8 @@ func login(username: String, password: String) -> void:
 		
 		login_attempted.emit(true, "Login successful")
 		
+		LocationManager.entry_location(current_user_info.get("currentLocation", "error"))
+		
 		# For backend debug:
 		#print(token_header)
 	else:

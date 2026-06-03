@@ -2,6 +2,8 @@ extends Node
 
 var target_spawn_point_id: String = "start"
 
+var current_location: String
+
 
 func entry_location(location_name: String) -> void:
 	print("Loading location " + location_name + "...")
@@ -11,6 +13,7 @@ func entry_location(location_name: String) -> void:
 	
 	if ResourceLoader.exists(scene_path):
 		get_tree().change_scene_to_file(scene_path)
+		current_location = location_name
 		return
 	
 	if FileAccess.file_exists(local_pack_path):
@@ -24,15 +27,35 @@ func entry_location(location_name: String) -> void:
 func _try_download_location(location_name: String, target_path: String, scene_path: String) -> void:
 	if await NetworkManager.download_pack(PackManager.PackType.LOCATION, location_name, target_path):
 		PackManager.mount_pack(target_path)
+		current_location = location_name
 		get_tree().change_scene_to_file(scene_path)
 	else:
 		print("Unable to entry location.")
 
 
-func spawn_player() -> void:
+func update_player_location(location_name: String, player_coords: Vector2) -> void:
+	var body: Dictionary = {
+		"currentLocation": location_name,
+		"currentPositionX": player_coords.x,
+		"currentPositionY": player_coords.y
+	}
+	NetworkManager.send_post("/api/Player/location", body, AuthManager.token_header)
+
+
+func spawn_player() -> Player:
 	var player: Player = preload("res://parts/player/player.tscn").instantiate()
 	get_tree().current_scene.add_child(player)
 	player.global_position = _get_spawn_point().global_position
+	target_spawn_point_id = "start"
+	return player
+
+
+func init_start_spawn() -> void:
+	var start_spawn: SpawnPoint = get_tree().current_scene.get_node("PlayerSpawnPoints/Start")
+	var spawnX: int = AuthManager.current_user_info.get("currentPositionX", 0)
+	var spawnY: int = AuthManager.current_user_info.get("currentPositionY", 0)
+	start_spawn.global_position = Vector2(spawnX, spawnY)
+
 
 func _get_spawn_point() -> SpawnPoint:
 	var spawn_points: Array
