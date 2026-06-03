@@ -1,0 +1,156 @@
+[gd_scene format=3 uid="uid://s73fsrtqjp4s"]
+
+[ext_resource type="Texture2D" uid="uid://ckq6jaell5ycj" path="res://locations/test/assets/logo.png" id="1_qy85f"]
+[ext_resource type="PackedScene" uid="uid://b6v7toodritgx" path="res://ui/components/button/button.tscn" id="2_xutsq"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q1epi"]
+bg_color = Color(0.367667, 0.37970495, 0.47733545, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.7322104, 0.8054101, 0.92420524, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_78has"]
+content_margin_left = 16.0
+content_margin_top = 4.0
+content_margin_right = 16.0
+content_margin_bottom = 4.0
+bg_color = Color(0.36862746, 0.38039216, 0.47843137, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.99607843, 0.7019608, 0.34509805, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5xuo4"]
+content_margin_left = 16.0
+content_margin_top = 4.0
+content_margin_right = 16.0
+content_margin_bottom = 4.0
+bg_color = Color(0.23071954, 0.23909739, 0.31049383, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.99607843, 0.7019608, 0.34509805, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o73d7"]
+content_margin_left = 16.0
+content_margin_top = 4.0
+content_margin_right = 16.0
+content_margin_bottom = 4.0
+bg_color = Color(0.34178364, 0.35297775, 0.44683748, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.6, 0.42352942, 0.20784314, 1)
+
+[node name="MathUI" type="CanvasLayer" unique_id=1633758803]
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1520274574]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.39215687)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1515287222]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TestContainer" type="VBoxContainer" parent="CenterContainer" unique_id=404603615]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HeaderVBox" type="VBoxContainer" parent="CenterContainer/TestContainer" unique_id=583679155]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="TopicNameLabel" type="Label" parent="CenterContainer/TestContainer/HeaderVBox" unique_id=799952550]
+layout_mode = 2
+text = "Тема тесту"
+horizontal_alignment = 1
+
+[node name="ProgressLabel" type="Label" parent="CenterContainer/TestContainer/HeaderVBox" unique_id=1006823032]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Задача 1/3"
+horizontal_alignment = 1
+
+[node name="TaskPanel" type="PanelContainer" parent="CenterContainer/TestContainer" unique_id=1899246015]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_q1epi")
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/TestContainer/TaskPanel" unique_id=1443421275]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 8
+
+[node name="CenterContainer" type="CenterContainer" parent="CenterContainer/TestContainer/TaskPanel/MarginContainer" unique_id=1184513930]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/TestContainer/TaskPanel/MarginContainer/CenterContainer" unique_id=389596959]
+layout_mode = 2
+
+[node name="TaskLabel" type="Label" parent="CenterContainer/TestContainer/TaskPanel/MarginContainer/CenterContainer/VBoxContainer" unique_id=1584938857]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Sample text"
+horizontal_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="CenterContainer/TestContainer/TaskPanel/MarginContainer/CenterContainer/VBoxContainer" unique_id=1840927291]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+texture = ExtResource("1_qy85f")
+expand_mode = 5
+stretch_mode = 5
+
+[node name="AnswersGrid" type="GridContainer" parent="CenterContainer/TestContainer" unique_id=517050879]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+columns = 3
+
+[node name="Button" parent="CenterContainer/TestContainer/AnswersGrid" unique_id=763636606 instance=ExtResource("2_xutsq")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_78has")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5xuo4")
+theme_override_styles/hover = SubResource("StyleBoxFlat_o73d7")
+
+[node name="Button2" parent="CenterContainer/TestContainer/AnswersGrid" unique_id=1824225100 instance=ExtResource("2_xutsq")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_78has")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5xuo4")
+theme_override_styles/hover = SubResource("StyleBoxFlat_o73d7")
+
+[node name="Button3" parent="CenterContainer/TestContainer/AnswersGrid" unique_id=1787376644 instance=ExtResource("2_xutsq")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_78has")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5xuo4")
+theme_override_styles/hover = SubResource("StyleBoxFlat_o73d7")
+
+[node name="Button4" parent="CenterContainer/TestContainer/AnswersGrid" unique_id=1301887584 instance=ExtResource("2_xutsq")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_78has")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5xuo4")
+theme_override_styles/hover = SubResource("StyleBoxFlat_o73d7")
+
+[node name="Button5" parent="CenterContainer/TestContainer/AnswersGrid" unique_id=332890130 instance=ExtResource("2_xutsq")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_78has")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5xuo4")
+theme_override_styles/hover = SubResource("StyleBoxFlat_o73d7")
+
+[node name="Button6" parent="CenterContainer/TestContainer/AnswersGrid" unique_id=1977020259 instance=ExtResource("2_xutsq")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_78has")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5xuo4")
+theme_override_styles/hover = SubResource("StyleBoxFlat_o73d7")

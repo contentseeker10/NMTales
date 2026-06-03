@@ -38,6 +38,10 @@ window/stretch/aspect="expand"
 
 project/assembly_name="NMTales"
 
+[gui]
+
+theme/custom_font="uid://gveo56yc8mbo"
+
 [input]
 
 move_up={
