@@ -14,6 +14,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Question> Questions { get; set; }
     public DbSet<Answer> Answers { get; set; }
     public DbSet<UserQuest> UserQuests { get; set; }
+    public DbSet<UserTestSession> UserTestSessions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

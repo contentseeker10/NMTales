@@ -3,6 +3,7 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NMTales.Backend.Data;
@@ -88,7 +89,17 @@ namespace NMTales.Backend
 
             var app = builder.Build();
 
+            // Seed starter content (questions/answers) into the in-memory database on boot.
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                DbSeeder.Seed(db);
+            }
+
             app.UseCors();
+
+            // Serve illustrations (e.g. rendered math formulas) from wwwroot/.
+            app.UseStaticFiles();
 
             if (app.Environment.IsDevelopment())
             {
