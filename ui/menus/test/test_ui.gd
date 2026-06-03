@@ -1,2 +1,2 @@
-class_name TestUI
+@abstract class_name TestUI
 extends CanvasLayer

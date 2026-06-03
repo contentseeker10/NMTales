@@ -1,6 +1,6 @@
 [gd_scene format=4 uid="uid://2g5go513qcbg"]
 
-[ext_resource type="Script" uid="uid://brfiqbvj2bp3p" path="res://parts/tester/math/math.gd" id="1_05tpv"]
+[ext_resource type="Script" uid="uid://brfiqbvj2bp3p" path="res://parts/tester/math/math_tester.gd" id="1_05tpv"]
 [ext_resource type="TileSet" uid="uid://c437wjhtdx4ri" path="res://assets/shared/tilesets/valley_ruin.tres" id="1_s1ri7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_s1ri7"]
