@@ -1,6 +1,7 @@
 extends Node
 
 var target_spawn_point_id: String = "start"
+
 var current_location: String
 
 
@@ -45,7 +46,15 @@ func spawn_player() -> Player:
 	var player: Player = preload("res://parts/player/player.tscn").instantiate()
 	get_tree().current_scene.add_child(player)
 	player.global_position = _get_spawn_point().global_position
+	target_spawn_point_id = "start"
 	return player
+
+
+func init_start_spawn() -> void:
+	var start_spawn: SpawnPoint = get_tree().current_scene.get_node("PlayerSpawnPoints/Start")
+	var spawnX: int = AuthManager.current_user_info.get("currentPositionX", 0)
+	var spawnY: int = AuthManager.current_user_info.get("currentPositionY", 0)
+	start_spawn.global_position = Vector2(spawnX, spawnY)
 
 
 func _get_spawn_point() -> SpawnPoint:
