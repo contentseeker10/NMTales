@@ -1,7 +1,7 @@
 class_name Tester
 extends Node2D
 
-@export var test_type: TestManager.TestType 
+@export var test_type: String
 @export var test_topic: String
 
 var is_available: bool = false
