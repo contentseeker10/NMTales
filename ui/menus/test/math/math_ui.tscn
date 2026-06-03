@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://s73fsrtqjp4s"]
 
+[ext_resource type="Script" uid="uid://bo718kvki6byr" path="res://ui/menus/test/math/math_ui.gd" id="1_78has"]
 [ext_resource type="Texture2D" uid="uid://ckq6jaell5ycj" path="res://locations/test/assets/logo.png" id="1_qy85f"]
 [ext_resource type="PackedScene" uid="uid://b6v7toodritgx" path="res://ui/components/button/button.tscn" id="2_xutsq"]
 
@@ -48,6 +49,8 @@ border_width_bottom = 1
 border_color = Color(0.6, 0.42352942, 0.20784314, 1)
 
 [node name="MathUI" type="CanvasLayer" unique_id=1633758803]
+process_mode = 3
+script = ExtResource("1_78has")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1520274574]
 anchors_preset = 15

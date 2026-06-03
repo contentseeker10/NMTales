@@ -24,6 +24,7 @@ EventBus="*uid://dh3ottjk488rh"
 LocationManager="*uid://hbsiv4ob7m1m"
 DialogueManager="*uid://vdh0fb2awxiy"
 QuestManager="*uid://brmhns4qffobg"
+TestManager="*uid://c4atkmr1ndujn"
 PauseMenu="*uid://cacd54mfk10u2"
 
 [display]
