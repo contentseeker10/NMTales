@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dgudnnaupgsr7" path="res://parts/player/spawn_point/spawn_point.tscn" id="5_e4v2d"]
 [ext_resource type="PackedScene" uid="uid://c8cfoewmx3r6c" path="res://parts/npc/npc.tscn" id="6_b0pkk"]
 [ext_resource type="SpriteFrames" uid="uid://ch2p8b7klomvr" path="res://parts/npc/sprite_frames/2.tres" id="7_gdpg5"]
+[ext_resource type="PackedScene" uid="uid://2g5go513qcbg" path="res://parts/tester/math/math.tscn" id="8_gedrh"]
 [ext_resource type="SpriteFrames" uid="uid://duqi2aml56f2f" path="res://parts/npc/sprite_frames/4.tres" id="8_y5mnx"]
 
 [node name="Test" type="Node2D" unique_id=243513179]
@@ -64,6 +65,11 @@ npc_id = "npc_talker"
 
 [node name="AnimatedSprite2D" parent="NPCs/npc_talker" index="0" unique_id=982053377]
 sprite_frames = ExtResource("8_y5mnx")
+
+[node name="Testers" type="Node2D" parent="." unique_id=2048655019]
+
+[node name="Math" parent="Testers" unique_id=1158934543 instance=ExtResource("8_gedrh")]
+position = Vector2(136, 271)
 
 [editable path="NPCs/npc_quest"]
 [editable path="NPCs/npc_talker"]

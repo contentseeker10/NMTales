@@ -1,0 +1,288 @@
+[gd_scene format=3 uid="uid://d3vk0xpu6mt6e"]
+
+[ext_resource type="Script" uid="uid://ck1qy3n52wdej" path="res://ui/menus/test/lang/lang_ui.gd" id="1_em8th"]
+[ext_resource type="PackedScene" uid="uid://b6v7toodritgx" path="res://ui/components/button/button.tscn" id="2_fllb7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_em8th"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 0.0
+bg_color = Color(0.29803923, 0.22745098, 0.2, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.99607843, 0.7019608, 0.34509805, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fllb7"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 0.0
+bg_color = Color(0.16470589, 0.1254902, 0.10980392, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.99607843, 0.7019608, 0.34509805, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cox0y"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 0.0
+bg_color = Color(0.29803923, 0.22745098, 0.2, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.6, 0.42352942, 0.20784314, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uskav"]
+bg_color = Color(1, 0.78431374, 0.5411765, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.29803923, 0.22745098, 0.2, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ka5d2"]
+bg_color = Color(1, 1, 1, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.99607843, 0.7019608, 0.34509805, 1)
+
+[node name="LangUI" type="CanvasLayer" unique_id=1403595367]
+script = ExtResource("1_em8th")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1240180896]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.39215687)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=704702779]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TestContainer" type="VBoxContainer" parent="CenterContainer" unique_id=348016840]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TopicLabel" type="Label" parent="CenterContainer/TestContainer" unique_id=1580119416]
+layout_mode = 2
+text = "Назва сувою"
+horizontal_alignment = 1
+
+[node name="ElementsContainer" type="HBoxContainer" parent="CenterContainer/TestContainer" unique_id=1768621582]
+layout_mode = 2
+
+[node name="LeftElementsBox" type="HFlowContainer" parent="CenterContainer/TestContainer/ElementsContainer" unique_id=1673165477]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="VariantButton" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox" unique_id=763636606 instance=ExtResource("2_fllb7")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_em8th")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_fllb7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cox0y")
+text = "*"
+
+[node name="VariantButton2" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox" unique_id=890545825 instance=ExtResource("2_fllb7")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_em8th")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_fllb7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cox0y")
+text = "*"
+
+[node name="VariantButton3" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox" unique_id=1192956929 instance=ExtResource("2_fllb7")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_em8th")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_fllb7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cox0y")
+text = "*"
+
+[node name="VariantButton4" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox" unique_id=682577262 instance=ExtResource("2_fllb7")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_em8th")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_fllb7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cox0y")
+text = "*"
+
+[node name="VariantButton5" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox" unique_id=1283132988 instance=ExtResource("2_fllb7")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_em8th")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_fllb7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cox0y")
+text = "*"
+
+[node name="VariantButton6" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox" unique_id=1493172252 instance=ExtResource("2_fllb7")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_em8th")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_fllb7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cox0y")
+text = "*"
+
+[node name="VariantButton7" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox" unique_id=1585109221 instance=ExtResource("2_fllb7")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_em8th")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_fllb7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cox0y")
+text = "*"
+
+[node name="VariantButton8" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox" unique_id=1040939884 instance=ExtResource("2_fllb7")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_em8th")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_fllb7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cox0y")
+text = "*"
+
+[node name="VariantButton9" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox" unique_id=1964976638 instance=ExtResource("2_fllb7")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_em8th")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_fllb7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cox0y")
+text = "*"
+
+[node name="VariantButton10" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox" unique_id=436366390 instance=ExtResource("2_fllb7")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_em8th")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_fllb7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cox0y")
+text = "*"
+
+[node name="VariantButton11" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox" unique_id=1786309560 instance=ExtResource("2_fllb7")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_em8th")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_fllb7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cox0y")
+text = "*"
+
+[node name="VariantButton12" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox" unique_id=1226843620 instance=ExtResource("2_fllb7")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_em8th")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_fllb7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cox0y")
+text = "*"
+
+[node name="ScrollContainer" type="PanelContainer" parent="CenterContainer/TestContainer/ElementsContainer" unique_id=613816329]
+custom_minimum_size = Vector2(300, 200)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_uskav")
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer/TestContainer/ElementsContainer/ScrollContainer" unique_id=118156745]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ka5d2")
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/TestContainer/ElementsContainer/ScrollContainer/PanelContainer" unique_id=853371678]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="Label" type="Label" parent="CenterContainer/TestContainer/ElementsContainer/ScrollContainer/PanelContainer/MarginContainer" unique_id=1075038974]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.16470589, 0.1254902, 0.10980392, 1)
+text = "some text"
+
+[node name="RightElementsBox" type="HFlowContainer" parent="CenterContainer/TestContainer/ElementsContainer" unique_id=450016083]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="VariantButton" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox" unique_id=1730286990 instance=ExtResource("2_fllb7")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_em8th")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_fllb7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cox0y")
+text = "*"
+
+[node name="VariantButton2" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox" unique_id=1463418773 instance=ExtResource("2_fllb7")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_em8th")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_fllb7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cox0y")
+text = "*"
+
+[node name="VariantButton3" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox" unique_id=182425768 instance=ExtResource("2_fllb7")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_em8th")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_fllb7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cox0y")
+text = "*"
+
+[node name="VariantButton4" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox" unique_id=273333635 instance=ExtResource("2_fllb7")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_em8th")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_fllb7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cox0y")
+text = "*"
+
+[node name="VariantButton5" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox" unique_id=427115591 instance=ExtResource("2_fllb7")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_em8th")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_fllb7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cox0y")
+text = "*"
+
+[node name="VariantButton6" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox" unique_id=212468437 instance=ExtResource("2_fllb7")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_em8th")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_fllb7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cox0y")
+text = "*"
+
+[node name="VariantButton7" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox" unique_id=1341977330 instance=ExtResource("2_fllb7")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_em8th")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_fllb7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cox0y")
+text = "*"
+
+[node name="VariantButton8" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox" unique_id=1588570245 instance=ExtResource("2_fllb7")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_em8th")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_fllb7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cox0y")
+text = "*"
+
+[node name="VariantButton9" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox" unique_id=739437503 instance=ExtResource("2_fllb7")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_em8th")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_fllb7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cox0y")
+text = "*"
+
+[node name="VariantButton10" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox" unique_id=945203218 instance=ExtResource("2_fllb7")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_em8th")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_fllb7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cox0y")
+text = "*"
+
+[node name="VariantButton11" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox" unique_id=766280988 instance=ExtResource("2_fllb7")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_em8th")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_fllb7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cox0y")
+text = "*"
+
+[node name="VariantButton12" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox" unique_id=1987663652 instance=ExtResource("2_fllb7")]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_em8th")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_fllb7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cox0y")
+text = "*"
+
+[node name="UseButton" parent="CenterContainer/TestContainer" unique_id=256112512 instance=ExtResource("2_fllb7")]
+layout_mode = 2

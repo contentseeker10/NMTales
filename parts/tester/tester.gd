@@ -1,4 +1,7 @@
+class_name Tester
 extends Node2D
+
+@export var test_type: TestManager.TestType 
 
 var is_available: bool = false
 
@@ -14,4 +17,4 @@ func _on_interaction_area_body_exited(_body: Node2D) -> void:
 func _on_click_area_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if is_available and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT \
 		and event.is_pressed():
-			TestManager.start_test(TestManager.TestType.Math)
+			TestManager.start_test(test_type)
