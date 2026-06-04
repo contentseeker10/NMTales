@@ -1,9 +1,15 @@
 extends Node
 
+#region Signals
+
 signal session_started()
 signal question_loaded(question_data: Dictionary, current_index: int)
 signal answer_checked(is_correct: bool, is_completed: bool, is_failed: bool, remaining_attempts: int)
 signal session_finished(success: bool)
+
+#endregion
+
+#region Maintenance variables
 
 var test_ui: TestUI
 
@@ -11,14 +17,22 @@ var math_ui_scene: PackedScene = preload("res://ui/menus/test/math/math_ui.tscn"
 var lang_ui_scene: PackedScene
 var hstr_ui_scene: PackedScene
 
+#endregion
+
+#region Backend specific variables
+
 var current_session_id: int = 0
 var current_question_index: int = 0
 var current_question_data: Dictionary = {}
+
+#endregion
 
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
+
+#region Starting Test-session
 
 func start_test(test_type: String, test_topic: String) -> void:
 	_init_test_ui(test_type, test_topic)
@@ -54,6 +68,10 @@ func _request_test_session(test_type: String, test_topic: String) -> void:
 	session_started.emit()
 	question_loaded.emit(current_question_data, current_question_index)
 
+#endregion
+
+
+#region Submitting answers to Questions
 
 func submit_answer(answer_id: int) -> void:
 	var req_body: Dictionary = { "sessionId": current_session_id, "answerId": answer_id, "slots": [] }
@@ -75,7 +93,7 @@ func submit_answer(answer_id: int) -> void:
 		
 		answer_checked.emit(is_correct, is_completed, is_failed, remaining_attempts)
 		
-		if is_completed:
+		if is_completed or is_failed:
 			session_finished.emit(is_failed)
 		else:
 			if is_correct:
@@ -90,6 +108,11 @@ func _load_next_question(question_data: Dictionary) -> void:
 	current_question_data = question_data
 	current_question_index += 1
 
+#endregion
+
+
+#region Closing Test
+
 func _unhandled_key_input(event: InputEvent) -> void:
 	if test_ui and is_instance_valid(test_ui) and event.is_action_pressed("ui_cancel"):
 		get_viewport().set_input_as_handled()
@@ -100,3 +123,5 @@ func end_test() -> void:
 		test_ui.queue_free()
 		test_ui = null
 	get_tree().paused = false
+
+#endregion

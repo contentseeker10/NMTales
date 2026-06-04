@@ -62,3 +62,16 @@ func download_pack(pack_type: PackManager.PackType, pack_name: String, target_pa
 	else:
 		DirAccess.remove_absolute(target_path)
 		return false
+
+
+func download_image(image_url: String) -> bool:
+	var target_path: String = "user://assets/downloaded" + image_url
+	
+	var response: Array = await send_get(image_url, AuthManager.token_header, true, target_path)
+	var response_code: int = response[1]
+	
+	if response_code == 200:
+		return true
+	else:
+		DirAccess.remove_absolute(target_path)
+		return false

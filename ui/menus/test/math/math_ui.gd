@@ -1,11 +1,16 @@
 class_name MathUI
 extends TestUI
 
+#region Node imports
+
 @onready var test_topic_label: Label = $CenterContainer/TestContainer/HeaderVBox/TopicNameLabel
 @onready var progress_label: Label = $CenterContainer/TestContainer/HeaderVBox/ProgressLabel
+@onready var attempts_label: Label = $CenterContainer/TestContainer/HeaderVBox/AttemptsLabel
 @onready var question_label: Label = $CenterContainer/TestContainer/TaskPanel/MarginContainer/CenterContainer/VBoxContainer/QuestionLabel
 @onready var question_image: TextureRect = $CenterContainer/TestContainer/TaskPanel/MarginContainer/CenterContainer/VBoxContainer/QuestionImage
 @onready var answers_grid: GridContainer = $CenterContainer/TestContainer/AnswersGrid
+
+#endregion
 
 
 func _ready() -> void:
@@ -19,6 +24,8 @@ func _on_session_started() -> void:
 	pass
 
 
+#region Loading Question
+
 func _on_question_loaded(question_data: Dictionary, current_index: int) -> void:
 	_update_progress(current_index)
 	_update_question(question_data)
@@ -30,11 +37,18 @@ func _update_progress(index: int) -> void:
 func _update_question(question_data: Dictionary) -> void:
 	question_label.text = question_data.get("text", "error")
 	var image_path: String = question_data.get("imagePath", "res://assets/shared/logo.png")
-	_load_question_image(image_path)
+	await _load_question_image(image_path)
 
 func _load_question_image(image_path: String) -> void:
-	# Image to be loaded from http request...
-	question_image.texture = load(image_path)
+	var local_path: String = "user://assets/downloaded" + image_path
+	if FileAccess.file_exists(local_path):
+		question_image.texture = load(local_path)
+	else:
+		if await NetworkManager.download_image(image_path):
+			# FIXME: Downloads, but doen't create directory and can't access even if created
+			question_image.texture = load(local_path)
+		else:
+			question_image.texture = load("res://assets/shared/logo.png")
 
 func _update_answers(question_data: Dictionary) -> void:
 	var answers_pool: Array = question_data.get("answers", [])
@@ -56,10 +70,16 @@ func _connect_answer_button(answer_data: Dictionary, answer_button: Button) -> v
 	answer_button.text = answer_data.get("text", "error")
 	answer_button.show()
 
-
-func _on_answer_checked(is_correct: bool, is_completed: bool, is_failed: bool, remaining_attempts: int) -> void:
-	pass
+#endregion
 
 
-func _on_session_finished(success: bool) -> void:
-	pass
+func _on_answer_checked(is_correct: bool, _is_completed: bool, _is_failed: bool, remaining_attempts: int) -> void:
+	if not is_correct:
+		attempts_label.text = "Неправильно. Залишилось спроб: " + str(remaining_attempts)
+		attempts_label.show()
+	else:
+		attempts_label.hide()
+
+
+func _on_session_finished(_success: bool) -> void:
+	TestManager.end_test()
