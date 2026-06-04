@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://dkgjcua3bpnux"]
+
+[ext_resource type="Script" uid="uid://cv4w0mmuswy46" path="res://ui/components/drag_and_drop/drop_area.gd" id="1_cnbhs"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cnbhs"]
+bg_color = Color(0, 0, 0, 0.39215687)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.3792276, 0.21553504, 0.09329324, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u5mje"]
+bg_color = Color(0, 0, 0, 0.39215687)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.75410426, 0.4783789, 0.14180735, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u4xqv"]
+bg_color = Color(0, 0, 0, 0.19607843)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.38039216, 0.21568628, 0.09411765, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cnbhs"]
+
+[node name="DropArea" type="Button" unique_id=549875040]
+custom_minimum_size = Vector2(28, 28)
+offset_right = 28.0
+offset_bottom = 28.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_cnbhs")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_u5mje")
+theme_override_styles/hover = SubResource("StyleBoxFlat_u4xqv")
+toggle_mode = true
+script = ExtResource("1_cnbhs")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=595849298]
+position = Vector2(1, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1560447134]
+position = Vector2(13, 13)
+shape = SubResource("RectangleShape2D_cnbhs")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=193937696]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 27.0
+offset_bottom = 27.0
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="ActiveContainer" type="CenterContainer" parent="MarginContainer" unique_id=768917550]
+layout_mode = 2
+
+[connection signal="toggled" from="." to="." method="_on_toggled"]
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
+[connection signal="area_exited" from="Area2D" to="." method="_on_area_2d_area_exited"]
