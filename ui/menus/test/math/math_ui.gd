@@ -42,13 +42,20 @@ func _update_question(question_data: Dictionary) -> void:
 func _load_question_image(image_path: String) -> void:
 	var local_path: String = "user://assets/downloaded" + image_path
 	if FileAccess.file_exists(local_path):
-		question_image.texture = load(local_path)
+		_convert_image_to_texture(local_path)
 	else:
 		if await NetworkManager.download_image(image_path):
-			# FIXME: Downloads, but doen't create directory and can't access even if created
-			question_image.texture = load(local_path)
+			_convert_image_to_texture(local_path)
 		else:
 			question_image.texture = load("res://assets/shared/logo.png")
+
+func _convert_image_to_texture(path: String) -> void:
+	var image: Image = Image.load_from_file(path)
+	if image:
+		var texture = ImageTexture.create_from_image(image)
+		question_image.texture = texture
+	else:
+		push_error("Unable to load image " + path)
 
 func _update_answers(question_data: Dictionary) -> void:
 	var answers_pool: Array = question_data.get("answers", [])

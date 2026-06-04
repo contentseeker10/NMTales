@@ -81,8 +81,6 @@ func _complete_active_quest() -> void:
 		if get_completed_quests[1] == 200:
 			var response_data: String = get_completed_quests[3].get_string_from_utf8()
 			completed_quest_ids = JSON.parse_string(response_data)
-	
-	await AuthManager.update_user_info()
 	quest_completed.emit(active_quest)
 	active_quest = null
 

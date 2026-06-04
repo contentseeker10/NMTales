@@ -11,18 +11,19 @@ extends CanvasLayer
 
 func _ready() -> void:
 	_load_user_data()
+	
 	QuestManager.quest_updated.connect(_on_quest_updated)
 	QuestManager.objective_completed.connect(_on_objective_completed)
 	QuestManager.quest_completed.connect(_on_quest_completed)
+	
+	TestManager.session_finished.connect(_on_session_finished)
 	
 	if QuestManager.active_quest:
 		_on_quest_updated(QuestManager.active_quest)
 
 func _load_user_data() -> void:
 	username_label.text = AuthManager.current_user_info.get("username", "Player")
-	level_label.text = "lvl " + str(int(AuthManager.current_user_info.get("level")))
-	level_progress_bar.max_value = (AuthManager.current_user_info.get("level") + 1) * 100.0
-	level_progress_bar.value = AuthManager.current_user_info.get("xp", 0.0)
+	_update_level_progression()
 
 
 func _on_quest_updated(quest: Quest) -> void:
@@ -39,7 +40,16 @@ func _on_objective_completed(quest: Quest) -> void:
 func _on_quest_completed(_quest: Quest) -> void:
 	current_objective_title.text = "Пусто."
 	current_objective_description.text = ""
-	
+	_update_level_progression()
+
+
+func _on_session_finished(success: bool) -> void:
+	if success:
+		_update_level_progression()
+
+
+func _update_level_progression() -> void:
+	await AuthManager.update_user_info()
 	level_label.text = "lvl " + str(int(AuthManager.current_user_info.get("level", 0)))
 	level_progress_bar.max_value = (AuthManager.current_user_info.get("level") + 1) * 100.0
 	level_progress_bar.value = AuthManager.current_user_info.get("xp", 0.0)

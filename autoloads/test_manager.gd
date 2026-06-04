@@ -94,7 +94,7 @@ func submit_answer(answer_id: int) -> void:
 		answer_checked.emit(is_correct, is_completed, is_failed, remaining_attempts)
 		
 		if is_completed or is_failed:
-			session_finished.emit(is_failed)
+			session_finished.emit(not is_failed)
 		else:
 			if is_correct:
 				_load_next_question(body.get("nextQuestion", {}))

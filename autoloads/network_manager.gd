@@ -37,6 +37,14 @@ func send_get(url: String, headers: PackedStringArray = [], \
 	add_child(http_request)
 	
 	if downloading:
+		var parent_dir: String = target_path.get_base_dir()
+		
+		if not DirAccess.dir_exists_absolute(parent_dir):
+			var dir_err: Error = DirAccess.make_dir_recursive_absolute(parent_dir)
+			if dir_err != OK:
+				push_error("Unable to create directory: " + parent_dir)
+				return [HTTPRequest.RESULT_DOWNLOAD_FILE_WRITE_ERROR, 0, PackedStringArray(), PackedByteArray()]
+		
 		http_request.download_file = target_path
 	
 	var err: Error = http_request.request(BASE_URL + url, headers, HTTPClient.METHOD_GET)
