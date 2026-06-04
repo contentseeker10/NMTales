@@ -3,6 +3,10 @@ extends Node
 const BASE_URL: String = "http://localhost:5142"
 
 
+func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+
+
 func send_post(path: String, body: Dictionary, headers: PackedStringArray = []) -> HTTPRequest:
 	var http_request: HTTPRequest = HTTPRequest.new()
 	add_child(http_request)

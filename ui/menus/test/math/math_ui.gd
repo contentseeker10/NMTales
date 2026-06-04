@@ -52,12 +52,12 @@ func _clean_answer_button(answer_button: Button) -> void:
 
 func _connect_answer_button(answer_data: Dictionary, answer_button: Button) -> void:
 	var answer_id: int = answer_data.get("id", -1)
-	answer_button.pressed.connect(func(): TestManager.submit_answer(answer_id))
+	answer_button.pressed.connect(func(): TestManager.submit_answer(answer_id), CONNECT_ONE_SHOT)
 	answer_button.text = answer_data.get("text", "error")
 	answer_button.show()
 
 
-func _on_answer_checked(is_correct: bool, remaining_attempts: int, is_complete: bool) -> void:
+func _on_answer_checked(is_correct: bool, is_completed: bool, is_failed: bool, remaining_attempts: int) -> void:
 	pass
 
 
