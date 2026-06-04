@@ -11,50 +11,6 @@ var math_ui_scene: PackedScene = preload("res://ui/menus/test/math/math_ui.tscn"
 var lang_ui_scene: PackedScene
 var hstr_ui_scene: PackedScene
 
-# Set to false, when backend is ready
-@export var mock_mode: bool = true
-const MOCK_QUESTIONS: Dictionary = {
-		"questions": [
-			{
-				"id": 101,
-				"text": "Знайдіть корінь рівняння log_2(x) = 3:",
-				"imagePath": "res://locations/test/assets/logo.png",
-				"answers": [
-					{"id": 1001, "text": "x = 5"},
-					{"id": 1002, "text": "x = 6"},
-					{"id": 1003, "text": "x = 8"},
-					{"id": 1004, "text": "x = 9"}
-				],
-				"correct_id": 1003
-			},
-			{
-				"id": 102,
-				"text": "Обчисліть значення виразу log_3(9):",
-				"imagePath": "res://locations/test/assets/logo.png",
-				"answers": [
-					{"id": 2001, "text": "1"},
-					{"id": 2002, "text": "2"},
-					{"id": 2003, "text": "3"},
-					{"id": 2004, "text": "4"}
-				],
-				"correct_id": 2002
-			},
-			{
-				"id": 103,
-				"text": "Обчисліть значення виразу x + 2 = 4:",
-				"imagePath": "res://locations/test/assets/logo.png",
-				"answers": [
-					{"id": 3001, "text": "2"},
-					{"id": 3002, "text": "-2"},
-					{"id": 3003, "text": "0"},
-					{"id": 3004, "text": "1"}
-				],
-				"correct_id": 3001
-			}
-		]
-}
-var mock_questions_pool: Array = []
-
 var current_session_id: int = 0
 var current_question_index: int = 0
 var current_question_data: Dictionary = {}
@@ -64,29 +20,39 @@ const TOTAL_QUESTIONS: int = 3
 
 
 func start_test(test_type: String, test_topic: String) -> void:
-	get_tree().paused = true
 	_init_test_ui(test_type, test_topic)
-	_request_test_session()
+	await _request_test_session(test_type, test_topic)
+	get_tree().paused = true
 
 func _init_test_ui(test_type: String, test_topic: String) -> void:
 	var ui: TestUI
-	ui = math_ui_scene.instantiate() if test_type == "math" else lang_ui_scene.instantiate()
+	ui = math_ui_scene.instantiate() if test_type == "Math" else lang_ui_scene.instantiate()
 	get_tree().current_scene.add_child(ui)
 	ui.test_topic_label.text = test_topic
 	test_ui = ui
 
-func _request_test_session() -> void:
-	if mock_mode:
-		_load_mock_session()
+func _request_test_session(test_type: String, test_topic: String) -> void:
+	var req_body: Dictionary = { "subject": test_type, "topic": test_topic }
+	var request: HTTPRequest = NetworkManager.send_post("/api/Test/start", req_body, AuthManager.token_header)
+	if not request:
+		push_error("Error creating request for Test.")
+		return
 	
-	# HTTP Request to Backend...
+	var response: Array = await request.request_completed
+	request.queue_free()
+	
+	if response[1] == 200:
+		var body: Dictionary = JSON.parse_string(response[3].get_string_from_utf8())
+		current_session_id = body.get("sessionId", -1)
+		current_question_index = body.get("currentQuestionIndex", -1)
+		current_question_data = body.get("question", {})
+		print(current_question_data)
+	else:
+		push_error("Error requesting for Test session. Status: " + str(response[1]))
+		return
 	
 	session_started.emit()
 	question_loaded.emit(current_question_data, current_question_index)
-
-func _load_mock_session() -> void:
-	mock_questions_pool = MOCK_QUESTIONS.get("questions")
-	current_question_data = mock_questions_pool[current_question_index]
 
 
 func submit_answer(answer_id: int) -> void:

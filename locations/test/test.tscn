@@ -70,7 +70,7 @@ sprite_frames = ExtResource("8_y5mnx")
 
 [node name="Math" parent="Testers" unique_id=1158934543 instance=ExtResource("8_gedrh")]
 position = Vector2(136, 271)
-test_type = "math"
+test_type = "Math"
 test_topic = "Logarithms"
 
 [editable path="NPCs/npc_quest"]
