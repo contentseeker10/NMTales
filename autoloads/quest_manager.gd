@@ -48,7 +48,7 @@ func accept_quest(npc_id: String, quest_id: String) -> void:
 	if active_quest == null:
 		var post_accept: HTTPRequest = NetworkManager.send_post("/api/Quest/accept/" + npc_id + "/" + quest_id, {}, \
 			AuthManager.token_header)
-		var post_response: Array = await post_accept.request_completed
+		var _post_response: Array = await post_accept.request_completed
 		
 		var response: Array = await NetworkManager.send_get("/api/Quest/active", \
 			AuthManager.token_header)

@@ -11,10 +11,10 @@ func handle_input(event: InputEvent) -> void:
 	if event.is_action_pressed("attack"):
 		state_machine.transition_to("attacking")
 
-func update(delta: float) -> void:
+func update(_delta: float) -> void:
 	pass
 
-func physics_update(delta: float) -> void:
+func physics_update(_delta: float) -> void:
 	var input_direction: Vector2 = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	
 	if input_direction == Vector2.ZERO:
