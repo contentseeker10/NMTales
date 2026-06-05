@@ -17,6 +17,8 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if overlap_button and not overlap_button.button_pressed and not self.button_pressed:
 		_snap_button(overlap_button)
+	if active_container.get_child_count() < 1:
+		_unsnap_button()
 
 
 func _snap_button(parent: DragButton) -> void:
@@ -32,7 +34,9 @@ func _snap_button(parent: DragButton) -> void:
 	overlap_button = null
 
 
-# TODO: func _unsnap_button
+func _unsnap_button() -> void:
+	drag_button = null
+	self.button_pressed = false
 
 
 func _on_area_2d_area_entered(area: Area2D) -> void:
