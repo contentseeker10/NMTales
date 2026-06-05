@@ -62,7 +62,8 @@ func _request_test_session(test_type: String, test_topic: String) -> void:
 		current_question_index = body.get("currentQuestionIndex", -1)
 		current_question_data = body.get("question", {})
 	else:
-		push_error("Error requesting for Test session. Status: " + str(response[1]))
+		push_error("Error requesting for Test session. Status: " + str(response[1]) \
+				+ " " + response[3].get_string_from_utf8())
 		return
 	
 	session_started.emit()

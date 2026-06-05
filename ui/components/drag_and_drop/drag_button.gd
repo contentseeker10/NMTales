@@ -4,6 +4,8 @@ extends Button
 @onready var area: Area2D = $Area2D
 @onready var collision: CollisionShape2D = $Area2D/CollisionShape2D
 
+var id: int
+
 var init_pos: Vector2
 
 

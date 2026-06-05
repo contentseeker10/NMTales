@@ -239,6 +239,7 @@ script = ExtResource("1_tbvu4")
 y_sort_enabled = true
 
 [node name="Tiles" type="Node2D" parent="World" unique_id=2006578243]
+y_sort_enabled = true
 
 [node name="Ground" type="TileMapLayer" parent="World/Tiles" unique_id=1586231083]
 z_index = -1
@@ -263,6 +264,8 @@ y_sort_enabled = true
 
 [node name="LangTester" parent="World/Testers" unique_id=1381456986 instance=ExtResource("8_wgjeb")]
 position = Vector2(-296, -6)
+test_type = "Ukrainian"
+test_topic = "Syntax"
 
 [node name="PlayerSpawnPoints" type="Node2D" parent="." unique_id=2088441605]
 

@@ -1003,7 +1003,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c5j7t"]
-size = Vector2(8, 5)
+size = Vector2(14, 10)
 
 [node name="Player" type="CharacterBody2D" unique_id=803971865]
 collision_layer = 5
@@ -1011,6 +1011,7 @@ collision_mask = 3
 script = ExtResource("1_c5j7t")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=572185247]
+position = Vector2(0, 3)
 sprite_frames = SubResource("SpriteFrames_dy7o0")
 animation = &"idle_up"
 autoplay = "idle_down"
@@ -1018,7 +1019,7 @@ autoplay = "idle_down"
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2092202800]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=804645905]
-position = Vector2(0, 16.5)
+position = Vector2(0, 17)
 shape = SubResource("RectangleShape2D_c5j7t")
 
 [node name="StateMachine" type="Node" parent="." unique_id=1890620424 node_paths=PackedStringArray("initial_state")]
