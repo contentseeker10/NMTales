@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bkeicmjn3cxpf"]
 
-[ext_resource type="Script" uid="uid://ej30t28mqyj1" path="res://locations/test/test.gd" id="1_csja3"]
+[ext_resource type="Script" uid="uid://ej30t28mqyj1" path="res://locations/testing/test/test.gd" id="1_csja3"]
 [ext_resource type="PackedScene" uid="uid://dd17g1dwhtw4w" path="res://parts/teleporter/teleporter.tscn" id="2_csja3"]
 [ext_resource type="PackedScene" uid="uid://dgudnnaupgsr7" path="res://parts/player/spawn_point/spawn_point.tscn" id="5_e4v2d"]
 [ext_resource type="PackedScene" uid="uid://c8cfoewmx3r6c" path="res://parts/npc/npc.tscn" id="6_b0pkk"]
