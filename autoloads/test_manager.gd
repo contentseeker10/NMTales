@@ -14,7 +14,7 @@ signal session_finished(success: bool)
 var test_ui: TestUI
 
 var math_ui_scene: PackedScene = preload("res://ui/menus/test/math/math_ui.tscn")
-var lang_ui_scene: PackedScene
+var lang_ui_scene: PackedScene = preload("res://ui/menus/test/lang/lang_ui.tscn")
 var hstr_ui_scene: PackedScene
 
 #endregion
