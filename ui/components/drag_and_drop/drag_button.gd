@@ -2,12 +2,21 @@ class_name DragButton
 extends Button
 
 @onready var area: Area2D = $Area2D
+@onready var collision: CollisionShape2D = $Area2D/CollisionShape2D
 
 var init_pos: Vector2
 
 
 func _ready() -> void:
+	await get_tree().process_frame
+	_update_collision()
 	init_pos = self.position
+
+func _update_collision() -> void:
+	var new_shape: RectangleShape2D = RectangleShape2D.new()
+	new_shape.size = self.size
+	collision.shape = new_shape
+	collision.position = self.position + (self.size / 2)
 
 
 func _process(_delta: float) -> void:

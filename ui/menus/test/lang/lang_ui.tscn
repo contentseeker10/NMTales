@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://d3vk0xpu6mt6e"]
 
 [ext_resource type="Script" uid="uid://ck1qy3n52wdej" path="res://ui/menus/test/lang/lang_ui.gd" id="1_em8th"]
-[ext_resource type="PackedScene" uid="uid://btkbciytrr5ya" path="res://ui/components/drag_and_drop/drag_button.tscn" id="2_cox0y"]
 [ext_resource type="PackedScene" uid="uid://b6v7toodritgx" path="res://ui/components/button/button.tscn" id="2_fllb7"]
 [ext_resource type="PackedScene" uid="uid://dkgjcua3bpnux" path="res://ui/components/drag_and_drop/drop_area.tscn" id="3_cox0y"]
 
@@ -58,23 +57,39 @@ alignment = 1
 
 [node name="DropArea" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox" unique_id=549875040 instance=ExtResource("3_cox0y")]
 layout_mode = 2
-button_pressed = true
 
-[node name="Area2D" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea" index="0" unique_id=595849298]
+[node name="ActiveArea" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea" index="1" unique_id=595849298]
 collision_mask = 2
 
-[node name="DragButton" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea/MarginContainer/ActiveContainer" parent_id_path=PackedInt32Array(549875040, 768917550) index="0" unique_id=763636606 instance=ExtResource("2_cox0y")]
+[node name="DropArea2" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox" unique_id=1296116732 instance=ExtResource("3_cox0y")]
 layout_mode = 2
 
-[node name="DropArea2" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox" unique_id=1875992270 instance=ExtResource("3_cox0y")]
-layout_mode = 2
-button_pressed = true
-
-[node name="Area2D" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea2" index="0" unique_id=595849298]
+[node name="ActiveArea" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea2" index="1" unique_id=595849298]
 collision_mask = 2
 
-[node name="DragButton" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea2/MarginContainer/ActiveContainer" parent_id_path=PackedInt32Array(1875992270, 768917550) index="0" unique_id=641558709 instance=ExtResource("2_cox0y")]
+[node name="DropArea3" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox" unique_id=1815080524 instance=ExtResource("3_cox0y")]
 layout_mode = 2
+
+[node name="ActiveArea" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea3" index="1" unique_id=595849298]
+collision_mask = 2
+
+[node name="DropArea4" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox" unique_id=317610360 instance=ExtResource("3_cox0y")]
+layout_mode = 2
+
+[node name="ActiveArea" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea4" index="1" unique_id=595849298]
+collision_mask = 2
+
+[node name="DropArea5" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox" unique_id=594903586 instance=ExtResource("3_cox0y")]
+layout_mode = 2
+
+[node name="ActiveArea" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea5" index="1" unique_id=595849298]
+collision_mask = 2
+
+[node name="DropArea6" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox" unique_id=977147337 instance=ExtResource("3_cox0y")]
+layout_mode = 2
+
+[node name="ActiveArea" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea6" index="1" unique_id=595849298]
+collision_mask = 2
 
 [node name="BaseContainer" type="PanelContainer" parent="CenterContainer/TestContainer/ElementsContainer" unique_id=613816329]
 custom_minimum_size = Vector2(300, 200)
@@ -92,16 +107,7 @@ theme_override_constants/margin_top = 6
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 6
 
-[node name="HFlowContainer" type="HFlowContainer" parent="CenterContainer/TestContainer/ElementsContainer/BaseContainer/PanelContainer/MarginContainer" unique_id=673431013]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="CenterContainer/TestContainer/ElementsContainer/BaseContainer/PanelContainer/MarginContainer/HFlowContainer" unique_id=1075038974]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.16470589, 0.1254902, 0.10980392, 1)
-theme_override_font_sizes/font_size = 12
-text = "some text"
-
-[node name="DropArea" parent="CenterContainer/TestContainer/ElementsContainer/BaseContainer/PanelContainer/MarginContainer/HFlowContainer" unique_id=703936051 instance=ExtResource("3_cox0y")]
+[node name="ContentFlowContainer" type="HFlowContainer" parent="CenterContainer/TestContainer/ElementsContainer/BaseContainer/PanelContainer/MarginContainer" unique_id=673431013]
 layout_mode = 2
 
 [node name="RightElementsBox" type="HFlowContainer" parent="CenterContainer/TestContainer/ElementsContainer" unique_id=450016083]
@@ -109,30 +115,54 @@ custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 alignment = 1
 
-[node name="DropArea" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox" unique_id=825367054 instance=ExtResource("3_cox0y")]
+[node name="DropArea" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox" unique_id=775209377 instance=ExtResource("3_cox0y")]
 layout_mode = 2
-button_pressed = true
 
-[node name="Area2D" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox/DropArea" index="0" unique_id=595849298]
+[node name="ActiveArea" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox/DropArea" index="1" unique_id=595849298]
 collision_mask = 2
 
-[node name="DragButton" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox/DropArea/MarginContainer/ActiveContainer" parent_id_path=PackedInt32Array(825367054, 768917550) index="0" unique_id=158965663 instance=ExtResource("2_cox0y")]
+[node name="DropArea2" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox" unique_id=115418088 instance=ExtResource("3_cox0y")]
 layout_mode = 2
 
-[node name="DropArea2" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox" unique_id=839146654 instance=ExtResource("3_cox0y")]
-layout_mode = 2
-button_pressed = true
-
-[node name="Area2D" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox/DropArea2" index="0" unique_id=595849298]
+[node name="ActiveArea" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox/DropArea2" index="1" unique_id=595849298]
 collision_mask = 2
 
-[node name="DragButton" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox/DropArea2/MarginContainer/ActiveContainer" parent_id_path=PackedInt32Array(839146654, 768917550) index="0" unique_id=1280124811 instance=ExtResource("2_cox0y")]
+[node name="DropArea3" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox" unique_id=1260491010 instance=ExtResource("3_cox0y")]
 layout_mode = 2
+
+[node name="ActiveArea" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox/DropArea3" index="1" unique_id=595849298]
+collision_mask = 2
+
+[node name="DropArea4" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox" unique_id=983595131 instance=ExtResource("3_cox0y")]
+layout_mode = 2
+
+[node name="ActiveArea" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox/DropArea4" index="1" unique_id=595849298]
+collision_mask = 2
+
+[node name="DropArea5" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox" unique_id=2008848708 instance=ExtResource("3_cox0y")]
+layout_mode = 2
+
+[node name="ActiveArea" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox/DropArea5" index="1" unique_id=595849298]
+collision_mask = 2
+
+[node name="DropArea6" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox" unique_id=273876874 instance=ExtResource("3_cox0y")]
+layout_mode = 2
+
+[node name="ActiveArea" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox/DropArea6" index="1" unique_id=595849298]
+collision_mask = 2
 
 [node name="UseButton" parent="CenterContainer/TestContainer" unique_id=256112512 instance=ExtResource("2_fllb7")]
 layout_mode = 2
 
 [editable path="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea"]
 [editable path="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea2"]
+[editable path="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea3"]
+[editable path="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea4"]
+[editable path="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea5"]
+[editable path="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea6"]
 [editable path="CenterContainer/TestContainer/ElementsContainer/RightElementsBox/DropArea"]
 [editable path="CenterContainer/TestContainer/ElementsContainer/RightElementsBox/DropArea2"]
+[editable path="CenterContainer/TestContainer/ElementsContainer/RightElementsBox/DropArea3"]
+[editable path="CenterContainer/TestContainer/ElementsContainer/RightElementsBox/DropArea4"]
+[editable path="CenterContainer/TestContainer/ElementsContainer/RightElementsBox/DropArea5"]
+[editable path="CenterContainer/TestContainer/ElementsContainer/RightElementsBox/DropArea6"]

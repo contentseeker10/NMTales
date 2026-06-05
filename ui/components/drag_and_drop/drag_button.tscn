@@ -34,12 +34,13 @@ border_width_bottom = 1
 border_color = Color(0.6, 0.42352942, 0.20784314, 1)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qw5d7"]
-size = Vector2(18, 16)
+size = Vector2(17, 13)
 
 [node name="DragButton" unique_id=763636606 instance=ExtResource("1_mv08s")]
 z_index = 1
-offset_right = 6.0
-offset_bottom = 18.0
+offset_right = 19.0
+offset_bottom = 15.0
+theme_override_font_sizes/font_size = 10
 theme_override_styles/normal = SubResource("StyleBoxFlat_nyion")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_jgsqs")
 theme_override_styles/hover = SubResource("StyleBoxFlat_cnr7b")
@@ -50,5 +51,5 @@ script = ExtResource("2_itmuk")
 [node name="Area2D" type="Area2D" parent="." index="0" unique_id=1892958174]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" index="0" unique_id=1935161265]
-position = Vector2(10, 9)
+position = Vector2(9.5, 7.5)
 shape = SubResource("RectangleShape2D_qw5d7")
