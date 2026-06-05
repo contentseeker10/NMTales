@@ -3,8 +3,10 @@
 [ext_resource type="Texture2D" uid="uid://cagb44xaitivk" path="res://assets/downloaded/Texture/TX Tileset Grass.png" id="1_iv25o"]
 [ext_resource type="Script" uid="uid://bd05skp66ljnv" path="res://locations/main/main.gd" id="1_tbvu4"]
 [ext_resource type="Texture2D" uid="uid://buuvdiy6jphko" path="res://assets/downloaded/Texture/TX Tileset Stone Ground.png" id="2_tbvu4"]
+[ext_resource type="PackedScene" uid="uid://c8cfoewmx3r6c" path="res://parts/npc/npc.tscn" id="3_h8rs0"]
 [ext_resource type="Texture2D" uid="uid://dyoa6idhc7320" path="res://assets/downloaded/Texture/TX Props.png" id="4_kvkw8"]
 [ext_resource type="Texture2D" uid="uid://755dqjovtrqt" path="res://assets/downloaded/Texture/TX Plant.png" id="5_iv25o"]
+[ext_resource type="SpriteFrames" uid="uid://bd3kihp7v04o6" path="res://parts/npc/sprite_frames/3.tres" id="7_vo7tw"]
 [ext_resource type="PackedScene" uid="uid://dgudnnaupgsr7" path="res://parts/player/spawn_point/spawn_point.tscn" id="8_vo7tw"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_h8rs0"]
@@ -145,11 +147,6 @@ texture_region_size = Vector2i(32, 32)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vo7tw"]
 texture = ExtResource("5_iv25o")
-10:1/size_in_atlas = Vector2i(6, 9)
-10:1/0 = 0
-10:1/0/texture_origin = Vector2i(0, 56)
-10:1/0/y_sort_origin = -8
-10:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, 0, -8, 0)
 1:0/size_in_atlas = Vector2i(8, 10)
 1:0/0 = 0
 1:0/0/texture_origin = Vector2i(0, 64)
@@ -220,6 +217,11 @@ texture = ExtResource("5_iv25o")
 6:30/size_in_atlas = Vector2i(2, 2)
 6:30/0 = 0
 6:30/0/y_sort_origin = -16
+10:1/size_in_atlas = Vector2i(6, 9)
+10:1/0 = 0
+10:1/0/texture_origin = Vector2i(0, 56)
+10:1/0/y_sort_origin = -8
+10:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, 0, -8, 0)
 
 [sub_resource type="TileSet" id="TileSet_tbvu4"]
 tile_size = Vector2i(32, 32)
@@ -242,10 +244,18 @@ tile_set = SubResource("TileSet_iv25o")
 
 [node name="Props" type="TileMapLayer" parent="Tiles" unique_id=1162081448]
 y_sort_enabled = true
-tile_map_data = PackedByteArray("AAABAAEAAQALAAgAAAABAP//AQANAAAAAAAEAAEAAQAHAAIAAAD+/wEAAQAHAAIAAAACAP//AQAFAAkAAAAAAP//AQAJAA8AAAADAP//AgABAAAAAAD/////AgAKAAEAAAADAAEAAgAGABgAAAD//wIAAgACABoAAAADAAAAAgAAABwAAAD//wAAAgACAB4AAAAFAP7/AgAAABoAAAAFAAIAAgAEAB4AAAD+/wMAAgAAABgAAAD9/wEAAgACABgAAAD7/wIAAgAEABwAAAAEAAMAAgAAABoAAAAFAP//AgACAB4AAAAFAAEAAgAAAB4AAAD9/wAAAgAEABgAAAA=")
+tile_map_data = PackedByteArray("AAABAAEAAQALAAgAAAABAP//AQANAAAAAAAEAAEAAQAHAAIAAAD+/wEAAQAHAAIAAAAAAP//AQAJAA8AAAADAP//AgABAAAAAAD/////AgAKAAEAAAADAAEAAgAGABgAAAD//wIAAgACABoAAAADAAAAAgAAABwAAAD//wAAAgACAB4AAAAFAP7/AgAAABoAAAAFAAIAAgAEAB4AAAD+/wMAAgAAABgAAAD9/wEAAgACABgAAAD7/wIAAgAEABwAAAAEAAMAAgAAABoAAAAFAP//AgACAB4AAAAFAAEAAgAAAB4AAAD9/wAAAgAEABgAAAACAP//AQAFAAkAAAA=")
 tile_set = SubResource("TileSet_tbvu4")
 
-[node name="NPCs" type="Node2D" parent="." unique_id=854317641]
+[node name="NPCs" type="Node2D" parent="Tiles" unique_id=854317641]
+y_sort_enabled = true
+
+[node name="npc_talker" parent="Tiles/NPCs" unique_id=840380367 instance=ExtResource("3_h8rs0")]
+position = Vector2(104, 7)
+npc_id = "npc_talker"
+skin = ExtResource("7_vo7tw")
+
+[node name="Testers" type="Node2D" parent="Tiles" unique_id=967707884]
 
 [node name="PlayerSpawnPoints" type="Node2D" parent="." unique_id=2088441605]
 

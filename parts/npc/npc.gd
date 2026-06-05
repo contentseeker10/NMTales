@@ -6,11 +6,15 @@ extends StaticBody2D
 
 @export var npc_id: String
 @export var has_quests: bool
+@export var skin: SpriteFrames
+
 var is_available: bool = false
 
 
 func _ready() -> void:
 	action_icon.text = npc_id
+	sprite.sprite_frames = skin
+	sprite.play("idle_down")
 	
 	QuestManager.quest_updated.connect(func(_quest): update_quests_availability())
 	QuestManager.quest_completed.connect(func(_quest): update_quests_availability())
