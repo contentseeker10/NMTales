@@ -3,6 +3,10 @@ extends Node
 const BASE_URL: String = "http://localhost:5142"
 
 
+func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+
+
 func send_post(path: String, body: Dictionary, headers: PackedStringArray = []) -> HTTPRequest:
 	var http_request: HTTPRequest = HTTPRequest.new()
 	add_child(http_request)
@@ -33,6 +37,14 @@ func send_get(url: String, headers: PackedStringArray = [], \
 	add_child(http_request)
 	
 	if downloading:
+		var parent_dir: String = target_path.get_base_dir()
+		
+		if not DirAccess.dir_exists_absolute(parent_dir):
+			var dir_err: Error = DirAccess.make_dir_recursive_absolute(parent_dir)
+			if dir_err != OK:
+				push_error("Unable to create directory: " + parent_dir)
+				return [HTTPRequest.RESULT_DOWNLOAD_FILE_WRITE_ERROR, 0, PackedStringArray(), PackedByteArray()]
+		
 		http_request.download_file = target_path
 	
 	var err: Error = http_request.request(BASE_URL + url, headers, HTTPClient.METHOD_GET)
@@ -51,6 +63,19 @@ func download_pack(pack_type: PackManager.PackType, pack_name: String, target_pa
 	var url: String = "/api/" + PackManager.get_pack_type(pack_type) + "/" + pack_name + "/pack"
 	
 	var response: Array = await send_get(url, AuthManager.token_header, true, target_path)
+	var response_code: int = response[1]
+	
+	if response_code == 200:
+		return true
+	else:
+		DirAccess.remove_absolute(target_path)
+		return false
+
+
+func download_image(image_url: String) -> bool:
+	var target_path: String = "user://assets/downloaded" + image_url
+	
+	var response: Array = await send_get(image_url, AuthManager.token_header, true, target_path)
 	var response_code: int = response[1]
 	
 	if response_code == 200:

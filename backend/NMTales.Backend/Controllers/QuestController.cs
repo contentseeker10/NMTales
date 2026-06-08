@@ -202,17 +202,10 @@ public class QuestController : ControllerBase
             userQuest.IsCompleted = true;
 
             // Award XP on the server only. The client never decides how much XP it gets.
+            // Leveling (next level needs (Level + 1) * 100 XP) lives on the User model so the
+            // quest and test reward paths share one implementation.
             var xpReward = ReadInt(jsonNode["rewards"]?["xp"], 0);
-            user.XP += xpReward;
-
-            // Level-up: the XP needed for the next level is (Level + 1) * 100.
-            var neededXp = (user.Level + 1) * 100;
-            while (user.XP >= neededXp)
-            {
-                user.XP -= neededXp;
-                user.Level += 1;
-                neededXp = (user.Level + 1) * 100;
-            }
+            user.AddXp(xpReward);
 
             await _context.SaveChangesAsync();
 

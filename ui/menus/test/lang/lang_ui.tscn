@@ -1,0 +1,177 @@
+[gd_scene format=3 uid="uid://d3vk0xpu6mt6e"]
+
+[ext_resource type="Script" uid="uid://ck1qy3n52wdej" path="res://ui/menus/test/lang/lang_ui.gd" id="1_em8th"]
+[ext_resource type="PackedScene" uid="uid://b6v7toodritgx" path="res://ui/components/button/button.tscn" id="2_fllb7"]
+[ext_resource type="PackedScene" uid="uid://dkgjcua3bpnux" path="res://ui/components/drag_and_drop/drop_area.tscn" id="3_cox0y"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uskav"]
+bg_color = Color(1, 0.78431374, 0.5411765, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.29803923, 0.22745098, 0.2, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ka5d2"]
+bg_color = Color(1, 1, 1, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.99607843, 0.7019608, 0.34509805, 1)
+
+[node name="LangUI" type="CanvasLayer" unique_id=1403595367]
+process_mode = 3
+script = ExtResource("1_em8th")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1240180896]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.39215687)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=704702779]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TestContainer" type="VBoxContainer" parent="CenterContainer" unique_id=348016840]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TopicLabel" type="Label" parent="CenterContainer/TestContainer" unique_id=1580119416]
+layout_mode = 2
+text = "Назва сувою"
+horizontal_alignment = 1
+
+[node name="ElementsContainer" type="HBoxContainer" parent="CenterContainer/TestContainer" unique_id=1768621582]
+layout_mode = 2
+
+[node name="LeftElementsBox" type="HFlowContainer" parent="CenterContainer/TestContainer/ElementsContainer" unique_id=1673165477]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="DropArea" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox" unique_id=549875040 instance=ExtResource("3_cox0y")]
+layout_mode = 2
+
+[node name="ActiveArea" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea" index="1" unique_id=595849298]
+collision_mask = 2
+
+[node name="DropArea2" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox" unique_id=1296116732 instance=ExtResource("3_cox0y")]
+layout_mode = 2
+
+[node name="ActiveArea" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea2" index="1" unique_id=595849298]
+collision_mask = 2
+
+[node name="DropArea3" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox" unique_id=1815080524 instance=ExtResource("3_cox0y")]
+layout_mode = 2
+
+[node name="ActiveArea" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea3" index="1" unique_id=595849298]
+collision_mask = 2
+
+[node name="DropArea4" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox" unique_id=317610360 instance=ExtResource("3_cox0y")]
+layout_mode = 2
+
+[node name="ActiveArea" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea4" index="1" unique_id=595849298]
+collision_mask = 2
+
+[node name="DropArea5" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox" unique_id=594903586 instance=ExtResource("3_cox0y")]
+layout_mode = 2
+
+[node name="ActiveArea" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea5" index="1" unique_id=595849298]
+collision_mask = 2
+
+[node name="DropArea6" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox" unique_id=977147337 instance=ExtResource("3_cox0y")]
+layout_mode = 2
+
+[node name="ActiveArea" parent="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea6" index="1" unique_id=595849298]
+collision_mask = 2
+
+[node name="BaseContainer" type="PanelContainer" parent="CenterContainer/TestContainer/ElementsContainer" unique_id=613816329]
+custom_minimum_size = Vector2(300, 200)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_uskav")
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer/TestContainer/ElementsContainer/BaseContainer" unique_id=118156745]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ka5d2")
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/TestContainer/ElementsContainer/BaseContainer/PanelContainer" unique_id=853371678]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 6
+
+[node name="ContentFlowContainer" type="HFlowContainer" parent="CenterContainer/TestContainer/ElementsContainer/BaseContainer/PanelContainer/MarginContainer" unique_id=673431013]
+layout_mode = 2
+theme_override_constants/h_separation = 2
+
+[node name="RightElementsBox" type="HFlowContainer" parent="CenterContainer/TestContainer/ElementsContainer" unique_id=450016083]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="DropArea" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox" unique_id=775209377 instance=ExtResource("3_cox0y")]
+layout_mode = 2
+
+[node name="ActiveArea" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox/DropArea" index="1" unique_id=595849298]
+collision_mask = 2
+
+[node name="DropArea2" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox" unique_id=115418088 instance=ExtResource("3_cox0y")]
+layout_mode = 2
+
+[node name="ActiveArea" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox/DropArea2" index="1" unique_id=595849298]
+collision_mask = 2
+
+[node name="DropArea3" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox" unique_id=1260491010 instance=ExtResource("3_cox0y")]
+layout_mode = 2
+
+[node name="ActiveArea" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox/DropArea3" index="1" unique_id=595849298]
+collision_mask = 2
+
+[node name="DropArea4" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox" unique_id=983595131 instance=ExtResource("3_cox0y")]
+layout_mode = 2
+
+[node name="ActiveArea" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox/DropArea4" index="1" unique_id=595849298]
+collision_mask = 2
+
+[node name="DropArea5" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox" unique_id=2008848708 instance=ExtResource("3_cox0y")]
+layout_mode = 2
+
+[node name="ActiveArea" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox/DropArea5" index="1" unique_id=595849298]
+collision_mask = 2
+
+[node name="DropArea6" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox" unique_id=273876874 instance=ExtResource("3_cox0y")]
+layout_mode = 2
+
+[node name="ActiveArea" parent="CenterContainer/TestContainer/ElementsContainer/RightElementsBox/DropArea6" index="1" unique_id=595849298]
+collision_mask = 2
+
+[node name="UseButton" parent="CenterContainer/TestContainer" unique_id=256112512 instance=ExtResource("2_fllb7")]
+layout_mode = 2
+text = "Використати"
+
+[node name="Timer" type="Timer" parent="." unique_id=1512008333]
+wait_time = 2.0
+one_shot = true
+
+[connection signal="pressed" from="CenterContainer/TestContainer/UseButton" to="." method="_on_use_button_pressed"]
+
+[editable path="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea"]
+[editable path="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea2"]
+[editable path="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea3"]
+[editable path="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea4"]
+[editable path="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea5"]
+[editable path="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea6"]
+[editable path="CenterContainer/TestContainer/ElementsContainer/RightElementsBox/DropArea"]
+[editable path="CenterContainer/TestContainer/ElementsContainer/RightElementsBox/DropArea2"]
+[editable path="CenterContainer/TestContainer/ElementsContainer/RightElementsBox/DropArea3"]
+[editable path="CenterContainer/TestContainer/ElementsContainer/RightElementsBox/DropArea4"]
+[editable path="CenterContainer/TestContainer/ElementsContainer/RightElementsBox/DropArea5"]
+[editable path="CenterContainer/TestContainer/ElementsContainer/RightElementsBox/DropArea6"]

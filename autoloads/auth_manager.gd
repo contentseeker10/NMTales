@@ -57,7 +57,7 @@ func register(username: String, password: String) -> void:
 	request.queue_free()
 	
 	var result_code: int = response[1]
-	var response_body: String = response[3].get_string_from_utf8()
+	var _response_body: String = response[3].get_string_from_utf8()
 	
 	if result_code == 200:
 		register_attempted.emit(true, "Registration successful")

@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://dkgjcua3bpnux"]
+
+[ext_resource type="Script" uid="uid://cv4w0mmuswy46" path="res://ui/components/drag_and_drop/drop_area.gd" id="1_cnbhs"]
+[ext_resource type="StyleBox" uid="uid://ci8il4hcjscok" path="res://ui/components/drag_and_drop/styles/drop_area_normal.tres" id="2_4lmly"]
+[ext_resource type="StyleBox" uid="uid://carx7mvva4ieo" path="res://ui/components/drag_and_drop/styles/drop_area_pressed.tres" id="3_d6tpc"]
+[ext_resource type="StyleBox" uid="uid://7mtcd36lfu0v" path="res://ui/components/drag_and_drop/styles/drop_area_hover.tres" id="4_ejktj"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1qufo"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cnbhs"]
+size = Vector2(22, 22)
+
+[node name="DropArea" type="PanelContainer" unique_id=1296116732]
+custom_minimum_size = Vector2(28, 28)
+offset_right = 28.0
+offset_bottom = 28.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_1qufo")
+script = ExtResource("1_cnbhs")
+
+[node name="Switch" type="Button" parent="." unique_id=180151140]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+theme_override_styles/normal = ExtResource("2_4lmly")
+theme_override_styles/pressed = ExtResource("3_d6tpc")
+theme_override_styles/hover = ExtResource("4_ejktj")
+toggle_mode = true
+
+[node name="ActiveArea" type="Area2D" parent="." unique_id=595849298]
+position = Vector2(1, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ActiveArea" unique_id=1560447134]
+position = Vector2(13, 13)
+shape = SubResource("RectangleShape2D_cnbhs")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=193937696]
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="ActiveContainer" type="CenterContainer" parent="MarginContainer" unique_id=768917550]
+layout_mode = 2
+
+[connection signal="toggled" from="Switch" to="." method="_on_switch_toggled"]
+[connection signal="area_entered" from="ActiveArea" to="." method="_on_active_area_area_entered"]
+[connection signal="area_exited" from="ActiveArea" to="." method="_on_active_area_area_exited"]

@@ -14,7 +14,7 @@ extends Control
 @onready var login_password_edit: LineEdit \
 		= $LoginPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/PasswordEdit
 
-@onready var notification: Notification = $Notification
+@warning_ignore("shadowed_variable_base_class") @onready var notification: Notification = $Notification
 
 
 func _ready() -> void:
@@ -22,7 +22,7 @@ func _ready() -> void:
 	AuthManager.login_attempted.connect(_on_login_attempted)
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
 
 
@@ -57,5 +57,5 @@ func _on_try_login_button_pressed() -> void:
 	var password: String = login_password_edit.text
 	AuthManager.login(username, password)
 
-func _on_login_attempted(success: bool, message: String) -> void:
+func _on_login_attempted(_success: bool, message: String) -> void:
 	notification.show_notification(message)

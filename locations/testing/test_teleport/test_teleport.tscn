@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://dd17g1dwhtw4w" path="res://parts/teleporter/teleporter.tscn" id="1_1so17"]
 [ext_resource type="FontFile" uid="uid://gveo56yc8mbo" path="res://assets/shared/fonts/PixelifySans-VariableFont_wght.ttf" id="1_fvc5x"]
-[ext_resource type="Script" uid="uid://uce5degvdu43" path="res://locations/test_teleport/test_teleport.gd" id="1_gusvd"]
+[ext_resource type="Script" uid="uid://uce5degvdu43" path="res://locations/testing/test_teleport/test_teleport.gd" id="1_gusvd"]
 [ext_resource type="PackedScene" uid="uid://dgudnnaupgsr7" path="res://parts/player/spawn_point/spawn_point.tscn" id="4_dp6dn"]
 
 [sub_resource type="FontVariation" id="FontVariation_gusvd"]

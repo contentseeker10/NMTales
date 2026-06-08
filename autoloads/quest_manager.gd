@@ -48,7 +48,7 @@ func accept_quest(npc_id: String, quest_id: String) -> void:
 	if active_quest == null:
 		var post_accept: HTTPRequest = NetworkManager.send_post("/api/Quest/accept/" + npc_id + "/" + quest_id, {}, \
 			AuthManager.token_header)
-		var post_response: Array = await post_accept.request_completed
+		var _post_response: Array = await post_accept.request_completed
 		
 		var response: Array = await NetworkManager.send_get("/api/Quest/active", \
 			AuthManager.token_header)
@@ -81,8 +81,6 @@ func _complete_active_quest() -> void:
 		if get_completed_quests[1] == 200:
 			var response_data: String = get_completed_quests[3].get_string_from_utf8()
 			completed_quest_ids = JSON.parse_string(response_data)
-	
-	await AuthManager.update_user_info()
 	quest_completed.emit(active_quest)
 	active_quest = null
 
