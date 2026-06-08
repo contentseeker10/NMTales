@@ -1,0 +1,86 @@
+[gd_scene format=3 uid="uid://cqperuq2ho80t"]
+
+[ext_resource type="Script" uid="uid://bj25k4n33g87" path="res://ui/menus/notebook/page_container/page_container.gd" id="1_ug0km"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xttrf"]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_a511m"]
+color = Color(0.99607843, 0.7019608, 0.34509805, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_i10qd"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ug0km"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_stxok"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_imxgv"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4uqe5"]
+
+[sub_resource type="Theme" id="Theme_y2cau"]
+VScrollBar/styles/grabber = SubResource("StyleBoxEmpty_i10qd")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxEmpty_ug0km")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxEmpty_stxok")
+VScrollBar/styles/scroll = SubResource("StyleBoxEmpty_imxgv")
+VScrollBar/styles/scroll_focus = SubResource("StyleBoxEmpty_4uqe5")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_a511m"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sltgh"]
+
+[node name="PageContainer" type="MarginContainer" unique_id=589351917]
+size_flags_vertical = 3
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 6
+script = ExtResource("1_ug0km")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=326071605]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="NameEdit" type="LineEdit" parent="VBoxContainer" unique_id=1246155037]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.16470589, 0.1254902, 0.10980392, 1)
+theme_override_colors/font_placeholder_color = Color(0.6, 0.42352942, 0.20784314, 1)
+theme_override_colors/caret_color = Color(0.16470589, 0.1254902, 0.10980392, 1)
+theme_override_colors/selection_color = Color(0.29803923, 0.22745098, 0.2, 1)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_xttrf")
+text = "Page 1"
+placeholder_text = "Page name..."
+flat = true
+
+[node name="Timer" type="Timer" parent="VBoxContainer/NameEdit" unique_id=2033306886]
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer" unique_id=573025032]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_a511m")
+
+[node name="TextEdit" type="TextEdit" parent="VBoxContainer" unique_id=191045020]
+layout_mode = 2
+size_flags_vertical = 3
+theme = SubResource("Theme_y2cau")
+theme_override_colors/caret_color = Color(0.16470589, 0.1254902, 0.10980392, 1)
+theme_override_colors/font_selected_color = Color(1, 1, 1, 1)
+theme_override_colors/selection_color = Color(0.29803923, 0.22745098, 0.2, 1)
+theme_override_colors/font_color = Color(0.16470589, 0.1254902, 0.10980392, 1)
+theme_override_colors/font_placeholder_color = Color(0.6, 0.42352942, 0.20784314, 1)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxEmpty_a511m")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_sltgh")
+text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse luctus vestibulum lacus, sed porta est vulputate vel. Aliquam dictum nec augue a feugiat. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nullam scelerisque vitae ipsum at ullamcorper. Cras ultrices malesuada ipsum, ut ultricies magna rutrum vitae. Morbi a accumsan leo. Proin ut aliquet ligula. Ut dignissim risus elit, sed interdum lectus egestas vel. Proin bibendum iaculis mollis. Nunc a enim accumsan, bibendum ipsum et, iaculis urna. Duis quis urna vel libero blandit lacinia. Donec vitae nunc nec tortor tempus aliquet. Proin libero lorem, vestibulum at libero porta, iaculis semper dolor.
+
+Vestibulum non ultricies arcu. Quisque sed justo ultrices, porttitor mauris sit amet, iaculis mi. Praesent iaculis nulla ac mauris iaculis, ut pulvinar orci interdum. Vivamus eget odio vel libero vehicula vestibulum eu sed enim. Mauris varius dui lorem, eu hendrerit ligula faucibus at. Morbi gravida orci mauris, varius hendrerit elit elementum eget. Interdum et malesuada fames ac ante ipsum primis in faucibus. Aliquam risus lacus, convallis nec metus ultricies, ullamcorper porta dui. In diam libero, tempor pharetra feugiat eget, eleifend sed augue. Integer diam magna, efficitur eu dictum eu, egestas ac felis. Suspendisse nulla justo, ultricies ut suscipit quis, feugiat non risus. Nam vel pulvinar ligula. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+
+Phasellus at lacinia turpis, in auctor arcu. In ut leo ultricies, sagittis nibh in, iaculis est. Mauris aliquet nisl tellus, in gravida nisi pulvinar quis. Duis eget placerat ante. Nulla odio tellus, lacinia nec ornare ut, vestibulum ut arcu. Integer aliquam mi quis ipsum imperdiet elementum. Nunc commodo, velit in ultricies luctus, lacus nulla posuere odio, eu tincidunt mauris dolor ac leo. Suspendisse eget urna molestie, gravida massa ut, eleifend velit. Nulla pellentesque nulla nec justo pellentesque, non malesuada lectus porttitor. Mauris pulvinar eros quis elementum pharetra. Donec at metus ut dolor faucibus hendrerit vel quis tellus. Mauris finibus diam enim, eu convallis ex lacinia nec.
+
+Cras accumsan maximus malesuada. Cras ac ligula quis orci iaculis mollis quis volutpat tellus. Vestibulum id luctus tellus, et pulvinar mi. Nam convallis libero augue, non vehicula ligula molestie at. Nullam at nunc ex. Aenean posuere malesuada tortor, non egestas leo vehicula et. Nullam diam velit, fringilla eu tincidunt at, viverra ac est. Fusce libero sem, sodales id scelerisque ut, suscipit et dolor. Etiam tempus magna massa, et consequat odio mattis a.
+
+Phasellus ac vehicula augue. Nam accumsan laoreet odio et sagittis. In consequat ante sem, eget aliquet sapien lacinia nec. Nam eget cursus massa, at sodales magna. Duis fermentum hendrerit erat, eu porta elit convallis nec. Maecenas congue nunc metus, nec feugiat dolor dictum in. Etiam laoreet mollis massa, quis efficitur enim congue non. Vivamus fringilla purus sed justo aliquam, non ullamcorper libero pharetra. Nulla id dolor vitae mauris fringilla vehicula. Interdum et malesuada fames ac ante ipsum primis in faucibus."
+placeholder_text = "Page text..."
+wrap_mode = 1
+
+[node name="Timer" type="Timer" parent="VBoxContainer/TextEdit" unique_id=1452901367]
+
+[connection signal="text_changed" from="VBoxContainer/NameEdit" to="." method="_on_name_edit_text_changed"]
+[connection signal="text_changed" from="VBoxContainer/TextEdit" to="." method="_on_text_edit_text_changed"]

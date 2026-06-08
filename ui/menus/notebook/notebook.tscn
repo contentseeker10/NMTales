@@ -1,0 +1,95 @@
+[gd_scene format=3 uid="uid://c1pygrhfy18un"]
+
+[ext_resource type="PackedScene" uid="uid://cqperuq2ho80t" path="res://ui/menus/notebook/page_container/page_container.tscn" id="1_sltgh"]
+[ext_resource type="Script" uid="uid://d1yaqki7rqti" path="res://ui/menus/notebook/notebook.gd" id="1_xttrf"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a511m"]
+bg_color = Color(1, 0.78431374, 0.5411765, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.99607843, 0.7019608, 0.34509805, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sltgh"]
+bg_color = Color(1, 0.78431374, 0.5411765, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.6, 0.42352942, 0.20784314, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xttrf"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0.16470589, 0.1254902, 0.10980392, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y8f3r"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0.16470589, 0.1254902, 0.10980392, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bsxe1"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0.29803923, 0.22745098, 0.2, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.16470589, 0.1254902, 0.10980392, 1)
+
+[node name="Notebook" type="CanvasLayer" unique_id=719037409]
+script = ExtResource("1_xttrf")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1387745654]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.39215687)
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=551480166]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 106.0
+offset_top = 34.0
+offset_right = -106.0
+offset_bottom = -34.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_a511m")
+
+[node name="PanelContainer" type="PanelContainer" parent="PanelContainer" unique_id=485114494]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_sltgh")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/PanelContainer" unique_id=914455132]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="TabBar" type="TabBar" parent="PanelContainer/PanelContainer/VBoxContainer" unique_id=1787290985]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 12
+theme_override_styles/tab_unselected = SubResource("StyleBoxFlat_xttrf")
+theme_override_styles/tab_hovered = SubResource("StyleBoxFlat_y8f3r")
+theme_override_styles/tab_selected = SubResource("StyleBoxFlat_bsxe1")
+current_tab = 0
+scrolling_enabled = false
+tab_count = 3
+tab_0/title = "page 1"
+tab_1/title = "page 2"
+tab_2/title = "+"
+
+[node name="PageList" type="Control" parent="PanelContainer/PanelContainer/VBoxContainer" unique_id=1387747405]
+layout_mode = 2
+
+[node name="PageContainer" parent="PanelContainer/PanelContainer/VBoxContainer/PageList" unique_id=589351917 instance=ExtResource("1_sltgh")]
+layout_mode = 0
+offset_top = -262.0
+offset_right = 422.0
+
+[connection signal="tab_selected" from="PanelContainer/PanelContainer/VBoxContainer/TabBar" to="." method="_on_tab_bar_tab_selected"]
