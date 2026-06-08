@@ -15,11 +15,19 @@ public class ApplicationDbContext : DbContext
     public DbSet<Answer> Answers { get; set; }
     public DbSet<UserQuest> UserQuests { get; set; }
     public DbSet<UserTestSession> UserTestSessions { get; set; }
+    public DbSet<NotebookPage> NotebookPages { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>()
             .HasIndex(user => user.Username)
             .IsUnique();
+        
+        modelBuilder.Entity<NotebookPage>()
+            .HasOne(p => p.User)
+            .WithMany()
+            .HasForeignKey(p => p.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
