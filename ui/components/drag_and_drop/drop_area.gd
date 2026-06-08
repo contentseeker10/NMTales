@@ -67,19 +67,27 @@ func _set_area_state(active: bool) -> void:
 
 #region Signals processing
 
-func _on_area_2d_area_entered(area: Area2D) -> void:
+func _on_active_area_area_entered(area: Area2D) -> void:
 	var parent: DragButton = area.get_parent() as DragButton
 	if parent and not switch.button_pressed:
 		overlap_button = parent
 
 
-func _on_area_2d_area_exited(area: Area2D) -> void:
+func _on_active_area_area_exited(area: Area2D) -> void:
 	var parent: DragButton = area.get_parent() as DragButton
 	if parent and parent == overlap_button:
 		overlap_button = null
-
 
 func _on_switch_toggled(toggled_on: bool) -> void:
 	_set_area_state(not toggled_on)
 
 #endregion
+
+
+func mark_correct(is_correct: bool) -> void:
+	var marker: ColorRect = ColorRect.new()
+	if is_correct:
+		marker.color = Color.from_rgba8(0, 200, 60, 100)
+	else:
+		marker.color = Color.from_rgba8(200, 0, 0, 100)
+	self.add_child(marker)

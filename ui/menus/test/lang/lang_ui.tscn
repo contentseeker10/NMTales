@@ -157,6 +157,10 @@ collision_mask = 2
 layout_mode = 2
 text = "Використати"
 
+[node name="Timer" type="Timer" parent="." unique_id=1512008333]
+wait_time = 2.0
+one_shot = true
+
 [connection signal="pressed" from="CenterContainer/TestContainer/UseButton" to="." method="_on_use_button_pressed"]
 
 [editable path="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea"]

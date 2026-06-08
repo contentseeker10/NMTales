@@ -80,7 +80,8 @@ func _connect_answer_button(answer_data: Dictionary, answer_button: Button) -> v
 #endregion
 
 
-func _on_answer_checked(is_correct: bool, _is_completed: bool, _is_failed: bool, remaining_attempts: int) -> void:
+func _on_answer_checked(is_correct: bool, _is_completed: bool, _is_failed: bool, 
+					remaining_attempts: int, _slot_results: Array[Dictionary]) -> void:
 	if not is_correct:
 		attempts_label.text = "Неправильно. Залишилось спроб: " + str(remaining_attempts)
 		attempts_label.show()

@@ -6,7 +6,7 @@ var _test_ui: TestUI
 
 var _math_ui_scene: PackedScene = preload("res://ui/menus/test/math/math_ui.tscn")
 var _lang_ui_scene: PackedScene = preload("res://ui/menus/test/lang/lang_ui.tscn")
-var _hstr_ui_scene: PackedScene
+@warning_ignore("unused_private_class_variable") var _hstr_ui_scene: PackedScene
 
 var _word_regex := RegEx.new()
 
@@ -24,10 +24,13 @@ var current_question_data: Dictionary = {}
 
 signal session_started()
 signal question_loaded(question_data: Dictionary, current_index: int)
-signal answer_checked(is_correct: bool, is_completed: bool, is_failed: bool, remaining_attempts: int)
+signal answer_checked(is_correct: bool, is_completed: bool, is_failed: bool, 
+					remaining_attempts: int, slot_results: Array)
 signal session_finished(success: bool)
 
 #endregion
+
+var is_test_active := false
 
 
 func _ready() -> void:
@@ -38,9 +41,13 @@ func _ready() -> void:
 #region Starting Test-session
 
 func start_test(test_type: String, test_topic: String) -> void:
+	if is_test_active:
+		return
+	is_test_active = true
+	_set_player_active(false)
 	_init_test_ui(test_type, test_topic)
 	await _request_test_session(test_type, test_topic)
-	get_tree().paused = true
+	#get_tree().paused = true
 
 func _init_test_ui(test_type: String, test_topic: String) -> void:
 	var ui: TestUI
@@ -72,8 +79,6 @@ func _request_test_session(test_type: String, test_topic: String) -> void:
 	session_started.emit()
 	question_loaded.emit(current_question_data, current_question_index)
 
-#endregion
-
 
 func parse_text(text: String) -> Array:
 	var parsed: Array
@@ -87,12 +92,13 @@ func parse_text(text: String) -> Array:
 			parsed.append(normal_word)
 	return parsed
 
+#endregion
+
 
 #region Submitting answers to Questions
 
-# TODO: add "slots: Array" to parameter list
-func submit_answer(answer_id: int) -> void:
-	var req_body: Dictionary = { "sessionId": current_session_id, "answerId": answer_id, "slots": [] }
+func submit_answer(answer_id: int, slots: Array[Dictionary] = []) -> void:
+	var req_body: Dictionary = { "sessionId": current_session_id, "answerId": answer_id, "slots": slots }
 	var request: HTTPRequest = NetworkManager.send_post("/api/Test/submit", req_body, AuthManager.token_header)
 	if not request:
 		push_error("Error creating a submition to Test.")
@@ -108,8 +114,9 @@ func submit_answer(answer_id: int) -> void:
 		var is_completed: bool = body.get("completed")
 		var is_failed: bool = body.get("failed", false)
 		var remaining_attempts: int = body.get("remainingAttempts", 2)
+		var slot_results: Array = body.get("slotResults", [])
 		
-		answer_checked.emit(is_correct, is_completed, is_failed, remaining_attempts)
+		answer_checked.emit(is_correct, is_completed, is_failed, remaining_attempts, slot_results)
 		
 		if is_completed or is_failed:
 			session_finished.emit(not is_failed)
@@ -140,6 +147,16 @@ func end_test() -> void:
 	if _test_ui and is_instance_valid(_test_ui):
 		_test_ui.queue_free()
 		_test_ui = null
-	get_tree().paused = false
+	is_test_active = false
+	_set_player_active(true)
 
 #endregion
+
+
+func _set_player_active(active: bool) -> void:
+	var player: Player = get_tree().current_scene.get_node_or_null("Player")
+	if player:
+		if active:
+			player.process_mode = Node.PROCESS_MODE_INHERIT
+		else:
+			player.process_mode = Node.PROCESS_MODE_DISABLED
