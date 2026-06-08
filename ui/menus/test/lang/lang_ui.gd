@@ -67,7 +67,7 @@ func _load_answers(answers: Array) -> void:
 func _fill_elements_box(answers: Array, answer_index: int, container: HFlowContainer) -> void:
 	var areas: Array[DropArea] = []
 	areas.assign(container.get_children())
-	var size: int = min(answers.size(), areas.size())
+	var size: int = min(answers.size() - answer_index, areas.size())
 	for i in range(size):
 		var element: DragButton = _drag_button_scene.instantiate()
 		element.text = answers[i + answer_index].get("text", "error")
@@ -101,10 +101,6 @@ func _add_drop_area(index: int) -> void:
 
 func _on_use_button_pressed() -> void:
 	var user_input := _collect_user_input()
-	
-	# DEBUG:
-	print(user_input)
-	
 	TestManager.submit_answer(0, user_input)
 
 func _collect_user_input() -> Array[Dictionary]:
