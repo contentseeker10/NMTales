@@ -110,6 +110,7 @@ theme_override_constants/margin_bottom = 6
 
 [node name="ContentFlowContainer" type="HFlowContainer" parent="CenterContainer/TestContainer/ElementsContainer/BaseContainer/PanelContainer/MarginContainer" unique_id=673431013]
 layout_mode = 2
+theme_override_constants/h_separation = 2
 
 [node name="RightElementsBox" type="HFlowContainer" parent="CenterContainer/TestContainer/ElementsContainer" unique_id=450016083]
 custom_minimum_size = Vector2(60, 0)
@@ -155,6 +156,8 @@ collision_mask = 2
 [node name="UseButton" parent="CenterContainer/TestContainer" unique_id=256112512 instance=ExtResource("2_fllb7")]
 layout_mode = 2
 text = "Використати"
+
+[connection signal="pressed" from="CenterContainer/TestContainer/UseButton" to="." method="_on_use_button_pressed"]
 
 [editable path="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea"]
 [editable path="CenterContainer/TestContainer/ElementsContainer/LeftElementsBox/DropArea2"]

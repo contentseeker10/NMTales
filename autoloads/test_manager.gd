@@ -1,21 +1,14 @@
 extends Node
 
-#region Signals
-
-signal session_started()
-signal question_loaded(question_data: Dictionary, current_index: int)
-signal answer_checked(is_correct: bool, is_completed: bool, is_failed: bool, remaining_attempts: int)
-signal session_finished(success: bool)
-
-#endregion
-
 #region Maintenance variables
 
-var test_ui: TestUI
+var _test_ui: TestUI
 
-var math_ui_scene: PackedScene = preload("res://ui/menus/test/math/math_ui.tscn")
-var lang_ui_scene: PackedScene = preload("res://ui/menus/test/lang/lang_ui.tscn")
-var hstr_ui_scene: PackedScene
+var _math_ui_scene: PackedScene = preload("res://ui/menus/test/math/math_ui.tscn")
+var _lang_ui_scene: PackedScene = preload("res://ui/menus/test/lang/lang_ui.tscn")
+var _hstr_ui_scene: PackedScene
+
+var _word_regex := RegEx.new()
 
 #endregion
 
@@ -27,8 +20,18 @@ var current_question_data: Dictionary = {}
 
 #endregion
 
+#region Signals
+
+signal session_started()
+signal question_loaded(question_data: Dictionary, current_index: int)
+signal answer_checked(is_correct: bool, is_completed: bool, is_failed: bool, remaining_attempts: int)
+signal session_finished(success: bool)
+
+#endregion
+
 
 func _ready() -> void:
+	_word_regex.compile("(\\[\\d+\\])|(\\S+)")
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
 
@@ -41,10 +44,10 @@ func start_test(test_type: String, test_topic: String) -> void:
 
 func _init_test_ui(test_type: String, test_topic: String) -> void:
 	var ui: TestUI
-	ui = math_ui_scene.instantiate() if test_type == "Math" else lang_ui_scene.instantiate()
+	ui = _math_ui_scene.instantiate() if test_type == "Math" else _lang_ui_scene.instantiate()
 	get_tree().current_scene.add_child(ui)
 	ui.test_topic_label.text = test_topic
-	test_ui = ui
+	_test_ui = ui
 
 func _request_test_session(test_type: String, test_topic: String) -> void:
 	var req_body: Dictionary = { "subject": test_type, "topic": test_topic }
@@ -72,8 +75,22 @@ func _request_test_session(test_type: String, test_topic: String) -> void:
 #endregion
 
 
+func parse_text(text: String) -> Array:
+	var parsed: Array
+	var matches := _word_regex.search_all(text)
+	for m in matches:
+		var placeholder := m.get_string(1).remove_chars("[]")
+		var normal_word := m.get_string(2)
+		if placeholder != "":
+			parsed.append(int(placeholder))
+		elif normal_word != "":
+			parsed.append(normal_word)
+	return parsed
+
+
 #region Submitting answers to Questions
 
+# TODO: add "slots: Array" to parameter list
 func submit_answer(answer_id: int) -> void:
 	var req_body: Dictionary = { "sessionId": current_session_id, "answerId": answer_id, "slots": [] }
 	var request: HTTPRequest = NetworkManager.send_post("/api/Test/submit", req_body, AuthManager.token_header)
@@ -115,14 +132,14 @@ func _load_next_question(question_data: Dictionary) -> void:
 #region Closing Test
 
 func _unhandled_key_input(event: InputEvent) -> void:
-	if test_ui and is_instance_valid(test_ui) and event.is_action_pressed("ui_cancel"):
+	if _test_ui and is_instance_valid(_test_ui) and event.is_action_pressed("ui_cancel"):
 		get_viewport().set_input_as_handled()
 		end_test()
 
 func end_test() -> void:
-	if test_ui and is_instance_valid(test_ui):
-		test_ui.queue_free()
-		test_ui = null
+	if _test_ui and is_instance_valid(_test_ui):
+		_test_ui.queue_free()
+		_test_ui = null
 	get_tree().paused = false
 
 #endregion

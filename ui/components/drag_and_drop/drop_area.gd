@@ -11,6 +11,8 @@ extends PanelContainer
 
 #region Vault-variables
 
+var index: int
+
 var drag_button: DragButton
 var overlap_button: DragButton
 

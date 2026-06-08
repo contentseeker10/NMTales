@@ -8,6 +8,7 @@
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1qufo"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cnbhs"]
+size = Vector2(22, 22)
 
 [node name="DropArea" type="PanelContainer" unique_id=1296116732]
 custom_minimum_size = Vector2(28, 28)
