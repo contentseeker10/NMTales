@@ -51,7 +51,7 @@ public class NotebookControllerTests
     }
 
     [Fact]
-    public async Task CreateWithValidTitleReturnsPageWithEmptyContent()
+    public async Task CreateWithValidTitleReturnsPageWithDefaultContent()
     {
         using var factory = new QuestApiFactory();
         var client = await CreateAuthenticatedClientAsync(factory, "notebook_user2");
@@ -64,7 +64,7 @@ public class NotebookControllerTests
         Assert.NotNull(page);
         Assert.True(page.Id > 0);
         Assert.Equal("Нова сторінка", page.Title);
-        Assert.Equal(string.Empty, page.Content);
+        Assert.Equal("Тут будуть потужні записи...", page.Content);
     }
 
     [Fact]

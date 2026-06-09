@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://vtb0087566yo" path="res://ui/components/panel/background_panel.tscn" id="2_2yiqb"]
 [ext_resource type="PackedScene" uid="uid://dol884wu1y0il" path="res://ui/components/hud/health_bar/health_bar.tscn" id="3_18caq"]
 [ext_resource type="PackedScene" uid="uid://b6v7toodritgx" path="res://ui/components/button/button.tscn" id="4_ncb6q"]
+[ext_resource type="PackedScene" uid="uid://c1pygrhfy18un" path="res://ui/menus/notebook/notebook.tscn" id="6_rdhe8"]
 
 [sub_resource type="FontVariation" id="FontVariation_2yiqb"]
 
@@ -33,6 +34,7 @@ border_width_bottom = 1
 border_color = Color(0.29803923, 0.22745098, 0.2, 1)
 
 [node name="HUD" type="CanvasLayer" unique_id=645566866]
+process_mode = 3
 script = ExtResource("1_io5hu")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1902451765]
@@ -114,10 +116,16 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_io5hu")
 value = 50.0
 show_percentage = false
 
-[node name="NotepadButton" parent="MarginContainer" unique_id=763636606 instance=ExtResource("4_ncb6q")]
+[node name="NotebookButton" parent="MarginContainer" unique_id=763636606 instance=ExtResource("4_ncb6q")]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 text = "Записник"
+
+[node name="Notebook" parent="." unique_id=719037409 instance=ExtResource("6_rdhe8")]
+layer = 2
+visible = false
+
+[connection signal="pressed" from="MarginContainer/NotebookButton" to="." method="_on_notebook_button_pressed"]
 
 [editable path="MarginContainer/VBoxContainer/BackgroundPanel"]

@@ -14,7 +14,7 @@ public class NotebookPage
     public string Title { get; set; } = string.Empty;
 
     [MaxLength(10000)]
-    public string Content { get; set; } = string.Empty;
+    public string Content { get; set; } = "Тут будуть потужні записи...";
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }

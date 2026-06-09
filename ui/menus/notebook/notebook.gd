@@ -35,7 +35,7 @@ func _on_tab_bar_tab_selected(tab: int) -> void:
 		_change_page_to(tab + 1)
 
 func _create_new_page() -> void:
-	var page_data: Dictionary = await NotebookManager.create_page("Page " + str(tab_bar.tab_count))
+	var page_data: Dictionary = await NotebookManager.create_page("Сторінка " + str(tab_bar.tab_count))
 	if page_data.is_empty():
 		return
 	_init_page(page_data)
@@ -93,3 +93,8 @@ func _recount_indexes(from: int) -> void:
 				page.index -= 1
 
 #endregion
+
+
+func _on_notebook_button_pressed() -> void:
+	self.hide()
+	get_tree().paused = false

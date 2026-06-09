@@ -14,7 +14,7 @@ namespace NMTales.Backend.Controllers;
 public class NotebookController : ControllerBase
 {
     private const int MaxPagesPerUser = 10;
-    private const string PageLimitMessage = "Reached the maximum number of pages (max. 10)";
+    private const string PageLimitMessage = "Досягнуто ліміту сторінок блокнота (макс. 10)";
 
     private readonly ApplicationDbContext _context;
     private readonly IValidator<CreateNotebookPageDto> _createValidator;
@@ -64,7 +64,7 @@ public class NotebookController : ControllerBase
         {
             UserId = userId,
             Title = dto.Title,
-            Content = string.Empty,
+            Content = "Тут будуть потужні записи...",
             CreatedAt = DateTime.UtcNow
         };
 
