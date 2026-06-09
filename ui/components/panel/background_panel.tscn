@@ -1,10 +1,5 @@
 [gd_scene format=3 uid="uid://vtb0087566yo"]
 
-[ext_resource type="FontFile" uid="uid://gveo56yc8mbo" path="res://assets/shared/fonts/PixelifySans-VariableFont_wght.ttf" id="1_66rt3"]
-
-[sub_resource type="FontVariation" id="FontVariation_ucljh"]
-base_font = ExtResource("1_66rt3")
-
 [node name="BackgroundPanel" type="Control" unique_id=971939153]
 custom_minimum_size = Vector2(100, 160)
 layout_mode = 3
@@ -90,7 +85,6 @@ theme_override_constants/separation = 4
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.8745098, 0.8745098, 0.8745098, 1)
-theme_override_fonts/font = SubResource("FontVariation_ucljh")
 theme_override_font_sizes/font_size = 12
 text = "Name of menu"
 

@@ -21,6 +21,7 @@ func _ready() -> void:
 func _load_pages() -> void:
 	var pages_data: Array = await NotebookManager.load_pages()
 	for data in pages_data:
+		print(data)
 		_init_page(data)
 
 
@@ -42,15 +43,17 @@ func _create_new_page() -> void:
 	_change_page_to(tab_bar.tab_count - 1)
 
 func _init_page(page_data: Dictionary) -> void:
-	_add_new_tab(tab_bar.tab_count)
 	var page: PageContainer = _page_container_scene.instantiate()
 	page.page_id = page_data.get("id", -1)
 	page.page_name = page_data.get("title", "error")
 	page.page_text = page_data.get("content", "error")
+	page.index = tab_bar.tab_count
 	page_list.add_child(page)
+	page.delete_button.pressed.connect(_on_delete_button_pressed.bind(page))
+	_add_new_tab(page.page_name)
 
-func _add_new_tab(index: int) -> void:
-	tab_bar.add_tab("Page " + str(index))
+func _add_new_tab(title: String) -> void:
+	tab_bar.add_tab(title)
 	tab_bar.move_tab(tab_bar.tab_count - 1, tab_bar.tab_count - 2)
 	tab_bar.current_tab = tab_bar.tab_count - 2
 	if tab_bar.tab_count == 10:
@@ -59,9 +62,23 @@ func _add_new_tab(index: int) -> void:
 func _change_page_to(index: int) -> void:
 	for page in page_list.get_children():
 		if page and page is PageContainer:
-			if page.page_id == index:
+			if page.index == index:
 				page.show()
 			else:
 				page.hide()
 
 #endregion
+
+
+func _on_delete_button_pressed(page: PageContainer) -> void:
+	NotebookManager.delete_page(page.page_id)
+	_recount_indexes(page.index)
+	tab_bar.remove_tab(page.index - 1)
+	tab_bar.current_tab = -1
+	page.queue_free()
+
+func _recount_indexes(from: int) -> void:
+	for page in page_list.get_children():
+		if page and page is PageContainer:
+			if page.index > from:
+				page.index -= 1

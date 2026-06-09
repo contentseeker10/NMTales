@@ -76,8 +76,8 @@ theme_override_font_sizes/font_size = 12
 theme_override_styles/tab_unselected = SubResource("StyleBoxFlat_xttrf")
 theme_override_styles/tab_hovered = SubResource("StyleBoxFlat_y8f3r")
 theme_override_styles/tab_selected = SubResource("StyleBoxFlat_bsxe1")
-current_tab = 0
 scrolling_enabled = false
+deselect_enabled = true
 tab_count = 1
 tab_0/title = "+"
 

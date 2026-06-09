@@ -1,17 +1,13 @@
 [gd_scene format=3 uid="uid://cd4dlux2r57rx"]
 
-[ext_resource type="FontFile" uid="uid://gveo56yc8mbo" path="res://assets/shared/fonts/PixelifySans-VariableFont_wght.ttf" id="1_meqsl"]
-
-[sub_resource type="FontVariation" id="FontVariation_bf25i"]
-base_font = ExtResource("1_meqsl")
+[ext_resource type="FontFile" uid="uid://byj182ba31yax" path="res://assets/shared/fonts/Pixeloid/PixeloidSansBold-1jpBg.ttf" id="1_meqsl"]
 
 [node name="NPCText" type="RichTextLabel" unique_id=1077512254]
 offset_right = 1.0
 theme_override_colors/default_color = Color(0.16470589, 0.1254902, 0.10980392, 1)
-theme_override_fonts/normal_font = SubResource("FontVariation_bf25i")
 theme_override_fonts/bold_font = ExtResource("1_meqsl")
 theme_override_font_sizes/normal_font_size = 12
-theme_override_font_sizes/bold_font_size = 10
+theme_override_font_sizes/bold_font_size = 8
 bbcode_enabled = true
 fit_content = true
 scroll_active = false

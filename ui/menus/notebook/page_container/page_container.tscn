@@ -1,28 +1,14 @@
 [gd_scene format=3 uid="uid://cqperuq2ho80t"]
 
 [ext_resource type="Script" uid="uid://bj25k4n33g87" path="res://ui/menus/notebook/page_container/page_container.gd" id="1_ug0km"]
+[ext_resource type="FontFile" uid="uid://byj182ba31yax" path="res://assets/shared/fonts/Pixeloid/PixeloidSansBold-1jpBg.ttf" id="2_imxgv"]
+[ext_resource type="PackedScene" uid="uid://b6v7toodritgx" path="res://ui/components/button/button.tscn" id="2_stxok"]
+[ext_resource type="Theme" uid="uid://c36m5pjbgk850" path="res://ui/menus/notebook/page_container/inner_text.tres" id="3_imxgv"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xttrf"]
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_a511m"]
 color = Color(0.99607843, 0.7019608, 0.34509805, 1)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_i10qd"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ug0km"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_stxok"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_imxgv"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4uqe5"]
-
-[sub_resource type="Theme" id="Theme_y2cau"]
-VScrollBar/styles/grabber = SubResource("StyleBoxEmpty_i10qd")
-VScrollBar/styles/grabber_highlight = SubResource("StyleBoxEmpty_ug0km")
-VScrollBar/styles/grabber_pressed = SubResource("StyleBoxEmpty_stxok")
-VScrollBar/styles/scroll = SubResource("StyleBoxEmpty_imxgv")
-VScrollBar/styles/scroll_focus = SubResource("StyleBoxEmpty_4uqe5")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_a511m"]
 
@@ -39,26 +25,35 @@ script = ExtResource("1_ug0km")
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="NameEdit" type="LineEdit" parent="VBoxContainer" unique_id=1246155037]
+[node name="HFlowContainer" type="HFlowContainer" parent="VBoxContainer" unique_id=1665222572]
 layout_mode = 2
+
+[node name="NameEdit" type="LineEdit" parent="VBoxContainer/HFlowContainer" unique_id=1246155037]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.16470589, 0.1254902, 0.10980392, 1)
 theme_override_colors/font_placeholder_color = Color(0.6, 0.42352942, 0.20784314, 1)
 theme_override_colors/caret_color = Color(0.16470589, 0.1254902, 0.10980392, 1)
 theme_override_colors/selection_color = Color(0.29803923, 0.22745098, 0.2, 1)
 theme_override_styles/focus = SubResource("StyleBoxEmpty_xttrf")
-placeholder_text = "Page name..."
+placeholder_text = "Назва..."
 flat = true
 
-[node name="Timer" type="Timer" parent="VBoxContainer/NameEdit" unique_id=2033306886]
+[node name="Timer" type="Timer" parent="VBoxContainer/HFlowContainer/NameEdit" unique_id=2033306886]
+
+[node name="DeleteButton" parent="VBoxContainer/HFlowContainer" unique_id=763636606 instance=ExtResource("2_stxok")]
+layout_mode = 2
+text = "Видалити"
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer" unique_id=573025032]
 layout_mode = 2
 theme_override_styles/separator = SubResource("StyleBoxLine_a511m")
 
 [node name="TextEdit" type="TextEdit" parent="VBoxContainer" unique_id=191045020]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
-theme = SubResource("Theme_y2cau")
+theme = ExtResource("3_imxgv")
 theme_override_colors/caret_color = Color(0.16470589, 0.1254902, 0.10980392, 1)
 theme_override_colors/font_selected_color = Color(1, 1, 1, 1)
 theme_override_colors/selection_color = Color(0.29803923, 0.22745098, 0.2, 1)
@@ -67,10 +62,25 @@ theme_override_colors/font_placeholder_color = Color(0.6, 0.42352942, 0.20784314
 theme_override_font_sizes/font_size = 10
 theme_override_styles/normal = SubResource("StyleBoxEmpty_a511m")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_sltgh")
-placeholder_text = "Page text..."
+placeholder_text = "Текст сторінки..."
 wrap_mode = 1
 
 [node name="Timer" type="Timer" parent="VBoxContainer/TextEdit" unique_id=1452901367]
 
-[connection signal="text_changed" from="VBoxContainer/NameEdit" to="." method="_on_name_edit_text_changed"]
+[node name="FormattedText" type="RichTextLabel" parent="VBoxContainer" unique_id=1989350590]
+layout_mode = 2
+theme = ExtResource("3_imxgv")
+theme_override_colors/default_color = Color(0.16470589, 0.1254902, 0.10980392, 1)
+theme_override_fonts/bold_font = ExtResource("2_imxgv")
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
+theme_override_font_sizes/bold_italics_font_size = 10
+theme_override_font_sizes/italics_font_size = 10
+theme_override_font_sizes/mono_font_size = 12
+bbcode_enabled = true
+fit_content = true
+
+[connection signal="text_changed" from="VBoxContainer/HFlowContainer/NameEdit" to="." method="_on_name_edit_text_changed"]
+[connection signal="focus_exited" from="VBoxContainer/TextEdit" to="." method="_on_text_edit_focus_exited"]
 [connection signal="text_changed" from="VBoxContainer/TextEdit" to="." method="_on_text_edit_text_changed"]
+[connection signal="gui_input" from="VBoxContainer/FormattedText" to="." method="_on_formatted_text_gui_input"]

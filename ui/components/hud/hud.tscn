@@ -7,15 +7,11 @@
 [ext_resource type="PackedScene" uid="uid://b6v7toodritgx" path="res://ui/components/button/button.tscn" id="4_ncb6q"]
 
 [sub_resource type="FontVariation" id="FontVariation_2yiqb"]
-base_font = ExtResource("1_s1e36")
 
 [sub_resource type="FontVariation" id="FontVariation_io5hu"]
 base_font = ExtResource("1_s1e36")
 
 [sub_resource type="FontVariation" id="FontVariation_rdhe8"]
-base_font = ExtResource("1_s1e36")
-
-[sub_resource type="FontVariation" id="FontVariation_18caq"]
 base_font = ExtResource("1_s1e36")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ncb6q"]
@@ -107,7 +103,6 @@ size_flags_vertical = 8
 
 [node name="LevelLabel" type="Label" parent="MarginContainer/LevelProgression" unique_id=1203919759]
 layout_mode = 2
-theme_override_fonts/font = SubResource("FontVariation_18caq")
 theme_override_font_sizes/font_size = 12
 text = "lvl"
 

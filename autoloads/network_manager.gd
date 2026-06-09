@@ -31,6 +31,45 @@ func send_post(path: String, body: Dictionary, headers: PackedStringArray = []) 
 	return http_request
 
 
+func send_put(url: String, body: Dictionary, headers: PackedStringArray = []) -> Array:
+	var http_request: HTTPRequest = HTTPRequest.new()
+	add_child(http_request)
+	
+	var json_body = JSON.stringify(body, "\t")
+	var default_headers: PackedStringArray = ["Content-Type: application/json"]
+	default_headers.append_array(headers)
+	
+	var err: Error = http_request.request(BASE_URL + url, default_headers, HTTPClient.METHOD_PUT, json_body)
+	if err != OK:
+		push_error("HTTP Request PUT failed for " + url)
+		http_request.queue_free()
+		return [HTTPRequest.RESULT_CANT_CONNECT, 0, PackedStringArray(), PackedByteArray()]
+	
+	var response: Array = await http_request.request_completed
+	http_request.queue_free()
+	
+	return response
+
+
+func send_delete(url: String, headers: PackedStringArray = []) -> Array:
+	var http_request: HTTPRequest = HTTPRequest.new()
+	add_child(http_request)
+	
+	var default_headers: PackedStringArray = ["Content-Type: application/json"]
+	default_headers.append_array(headers)
+	
+	var err: Error = http_request.request(BASE_URL + url, default_headers, HTTPClient.METHOD_DELETE)
+	if err != OK:
+		push_error("HTTP Request DELETE failed for " + url)
+		http_request.queue_free()
+		return [HTTPRequest.RESULT_CANT_CONNECT, 0, PackedStringArray(), PackedByteArray()]
+	
+	var response: Array = await http_request.request_completed
+	http_request.queue_free()
+	
+	return response
+
+
 func send_get(url: String, headers: PackedStringArray = [], \
 			downloading: bool = false, target_path: String = "") -> Array:
 	var http_request: HTTPRequest = HTTPRequest.new()

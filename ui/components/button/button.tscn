@@ -1,11 +1,7 @@
 [gd_scene format=3 uid="uid://b6v7toodritgx"]
 
-[ext_resource type="FontFile" uid="uid://gveo56yc8mbo" path="res://assets/shared/fonts/PixelifySans-VariableFont_wght.ttf" id="1_kikxg"]
 [ext_resource type="StyleBox" uid="uid://dp0mf03bae4sp" path="res://assets/shared/styles/button-pressed.tres" id="3_5gork"]
 [ext_resource type="StyleBox" uid="uid://b0a48wmywpuci" path="res://assets/shared/styles/button-hover.tres" id="3_ku18h"]
-
-[sub_resource type="FontVariation" id="FontVariation_wk0pr"]
-base_font = ExtResource("1_kikxg")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_284bb"]
 content_margin_left = 16.0
@@ -26,7 +22,6 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_colors/font_pressed_color = Color(0.63529414, 0.63529414, 0.63529414, 1)
 theme_override_colors/font_hover_color = Color(0.63529414, 0.63529414, 0.63529414, 1)
-theme_override_fonts/font = SubResource("FontVariation_wk0pr")
 theme_override_font_sizes/font_size = 12
 theme_override_styles/normal = SubResource("StyleBoxFlat_284bb")
 theme_override_styles/pressed = ExtResource("3_5gork")
