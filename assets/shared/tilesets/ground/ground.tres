@@ -2505,6 +2505,22 @@ texture = ExtResource("1_eh2rm")
 15:13/0/terrains_peering_bit/top_left_corner = 1
 15:13/0/terrains_peering_bit/top_side = 1
 15:13/0/terrains_peering_bit/top_right_corner = 1
+12:14/0 = 0
+12:14/0/terrain_set = 0
+12:15/0 = 0
+12:15/0/terrain_set = 0
+13:14/0 = 0
+13:14/0/terrain_set = 0
+13:15/0 = 0
+13:15/0/terrain_set = 0
+14:14/0 = 0
+14:14/0/terrain_set = 0
+14:15/0 = 0
+14:15/0/terrain_set = 0
+15:14/0 = 0
+15:14/0/terrain_set = 0
+15:15/0 = 0
+15:15/0/terrain_set = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kvkw8"]
 texture = ExtResource("2_tpgm5")
