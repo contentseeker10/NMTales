@@ -1,0 +1,17 @@
+[gd_resource type="TileSet" format=3 uid="uid://bkml31vw48sj5"]
+
+[ext_resource type="Texture2D" uid="uid://cbowcn18ja4ld" path="res://assets/shared/tilesets/shadows/resources/TX Shadow Plant.png" id="1_hsv7e"]
+[ext_resource type="Texture2D" uid="uid://cfm4u7qcgl7as" path="res://assets/shared/tilesets/shadows/resources/TX Shadow.png" id="2_tftdq"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_oxuw3"]
+texture = ExtResource("1_hsv7e")
+texture_region_size = Vector2i(32, 32)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wuygd"]
+texture = ExtResource("2_tftdq")
+texture_region_size = Vector2i(32, 32)
+
+[resource]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_oxuw3")
+sources/1 = SubResource("TileSetAtlasSource_wuygd")

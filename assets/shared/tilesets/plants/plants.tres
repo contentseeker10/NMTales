@@ -1,0 +1,29 @@
+[gd_resource type="TileSet" format=3 uid="uid://hw6c8qs6egiy"]
+
+[ext_resource type="Texture2D" uid="uid://dixn05265hvc4" path="res://assets/shared/tilesets/plants/resources/FlowerAndGrass.png" id="1_b8jwh"]
+[ext_resource type="Texture2D" uid="uid://cwrlgiggltdg3" path="res://assets/shared/tilesets/plants/resources/Giant_Tree.png" id="2_v6k3g"]
+[ext_resource type="Texture2D" uid="uid://ce5uyu655x0ui" path="res://assets/shared/tilesets/plants/resources/stone and bush.png" id="3_1piwi"]
+[ext_resource type="Texture2D" uid="uid://755dqjovtrqt" path="res://assets/shared/tilesets/plants/resources/TX Plant.png" id="4_m8a4j"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yd04c"]
+texture = ExtResource("1_b8jwh")
+texture_region_size = Vector2i(32, 32)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bwjbf"]
+texture = ExtResource("2_v6k3g")
+texture_region_size = Vector2i(32, 32)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_onfr5"]
+texture = ExtResource("3_1piwi")
+texture_region_size = Vector2i(32, 32)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kyyg1"]
+texture = ExtResource("4_m8a4j")
+texture_region_size = Vector2i(32, 32)
+
+[resource]
+tile_size = Vector2i(32, 32)
+sources/4 = SubResource("TileSetAtlasSource_yd04c")
+sources/5 = SubResource("TileSetAtlasSource_bwjbf")
+sources/6 = SubResource("TileSetAtlasSource_onfr5")
+sources/7 = SubResource("TileSetAtlasSource_kyyg1")

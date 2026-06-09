@@ -1,0 +1,62 @@
+[gd_resource type="TileSet" format=3 uid="uid://ca6hw2wsaqyqx"]
+
+[ext_resource type="Texture2D" uid="uid://cagb44xaitivk" path="res://assets/shared/tilesets/ground/resources/TX Tileset Grass.png" id="1_eh2rm"]
+[ext_resource type="Texture2D" uid="uid://buuvdiy6jphko" path="res://assets/shared/tilesets/ground/resources/TX Tileset Stone Ground.png" id="2_tpgm5"]
+[ext_resource type="Texture2D" uid="uid://cw2cdorid106s" path="res://assets/shared/tilesets/ground/resources/Dungeon_FloorsA2.png" id="3_oveix"]
+[ext_resource type="Texture2D" uid="uid://cc3cgbeqwk6p" path="res://assets/shared/tilesets/ground/resources/Dungeon_FloorsWallsA5.png" id="4_hakoj"]
+[ext_resource type="Texture2D" uid="uid://c8m1wq53h3h5h" path="res://assets/shared/tilesets/ground/resources/GrassTile.png" id="5_ldk2i"]
+[ext_resource type="Texture2D" uid="uid://bsvkbkmi245al" path="res://assets/shared/tilesets/ground/resources/GrassWall.png" id="6_10y4c"]
+[ext_resource type="Texture2D" uid="uid://cvxv5q240526i" path="res://assets/shared/tilesets/ground/resources/RockWall.png" id="7_2tlqn"]
+[ext_resource type="Texture2D" uid="uid://dlectigdvu4wq" path="res://assets/shared/tilesets/ground/resources/SandTile.png" id="8_l5khw"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_h8rs0"]
+texture = ExtResource("1_eh2rm")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+1:1/0 = 0
+3:0/0 = 0
+0:1/0 = 0
+0:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kvkw8"]
+texture = ExtResource("2_tpgm5")
+texture_region_size = Vector2i(32, 32)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_cvfbn"]
+texture = ExtResource("3_oveix")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_sggcp"]
+texture = ExtResource("4_hakoj")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lhxl4"]
+texture = ExtResource("5_ldk2i")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_33h2h"]
+texture = ExtResource("6_10y4c")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_klflp"]
+texture = ExtResource("7_2tlqn")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ghysg"]
+texture = ExtResource("8_l5khw")
+
+[resource]
+sources/1 = SubResource("TileSetAtlasSource_kvkw8")
+sources/0 = SubResource("TileSetAtlasSource_h8rs0")
+sources/16 = SubResource("TileSetAtlasSource_cvfbn")
+sources/17 = SubResource("TileSetAtlasSource_sggcp")
+sources/18 = SubResource("TileSetAtlasSource_lhxl4")
+sources/19 = SubResource("TileSetAtlasSource_33h2h")
+sources/20 = SubResource("TileSetAtlasSource_klflp")
+sources/21 = SubResource("TileSetAtlasSource_ghysg")

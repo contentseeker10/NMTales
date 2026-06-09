@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://q1co8x2qobyg"]
 
 [ext_resource type="Script" uid="uid://chu2r2oe11m2y" path="res://parts/tester/lang/lang_tester.gd" id="1_1063t"]
-[ext_resource type="TileSet" uid="uid://dqyjsutugwysi" path="res://assets/shared/tilesets/custom/custom.tres" id="2_m6cr6"]
+[ext_resource type="TileSet" uid="uid://dqyjsutugwysi" path="res://assets/shared/tilesets/ancient_scroll/ancient_scroll.tres" id="2_m6cr6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m6cr6"]
 size = Vector2(158, 83)
