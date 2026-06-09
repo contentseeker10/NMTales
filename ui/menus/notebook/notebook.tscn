@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://c1pygrhfy18un"]
 
-[ext_resource type="PackedScene" uid="uid://cqperuq2ho80t" path="res://ui/menus/notebook/page_container/page_container.tscn" id="1_sltgh"]
 [ext_resource type="Script" uid="uid://d1yaqki7rqti" path="res://ui/menus/notebook/notebook.gd" id="1_xttrf"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a511m"]
@@ -66,11 +65,11 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_a511m")
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_sltgh")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/PanelContainer" unique_id=914455132]
+[node name="PageListContainer" type="VBoxContainer" parent="PanelContainer/PanelContainer" unique_id=914455132]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="TabBar" type="TabBar" parent="PanelContainer/PanelContainer/VBoxContainer" unique_id=1787290985]
+[node name="TabBar" type="TabBar" parent="PanelContainer/PanelContainer/PageListContainer" unique_id=1787290985]
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_font_sizes/font_size = 12
@@ -79,17 +78,7 @@ theme_override_styles/tab_hovered = SubResource("StyleBoxFlat_y8f3r")
 theme_override_styles/tab_selected = SubResource("StyleBoxFlat_bsxe1")
 current_tab = 0
 scrolling_enabled = false
-tab_count = 3
-tab_0/title = "page 1"
-tab_1/title = "page 2"
-tab_2/title = "+"
+tab_count = 1
+tab_0/title = "+"
 
-[node name="PageList" type="Control" parent="PanelContainer/PanelContainer/VBoxContainer" unique_id=1387747405]
-layout_mode = 2
-
-[node name="PageContainer" parent="PanelContainer/PanelContainer/VBoxContainer/PageList" unique_id=589351917 instance=ExtResource("1_sltgh")]
-layout_mode = 0
-offset_top = -262.0
-offset_right = 422.0
-
-[connection signal="tab_selected" from="PanelContainer/PanelContainer/VBoxContainer/TabBar" to="." method="_on_tab_bar_tab_selected"]
+[connection signal="tab_selected" from="PanelContainer/PanelContainer/PageListContainer/TabBar" to="." method="_on_tab_bar_tab_selected"]

@@ -3,6 +3,8 @@ extends MarginContainer
 
 #region Node imports
 
+@onready var name_edit: LineEdit = $VBoxContainer/NameEdit
+@onready var text_edit: TextEdit = $VBoxContainer/TextEdit
 @onready var name_edit_timer: Timer = $VBoxContainer/NameEdit/Timer
 @onready var text_edit_timer: Timer = $VBoxContainer/TextEdit/Timer
 
@@ -15,6 +17,11 @@ var page_name: String
 var page_text: String
 
 #endregion
+
+
+func _ready() -> void:
+	name_edit.text = page_name
+	text_edit.text = page_text
 
 
 #region Signals processing

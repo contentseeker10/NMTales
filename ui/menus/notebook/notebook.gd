@@ -9,30 +9,59 @@ var _page_container_scene: PackedScene = preload("res://ui/menus/notebook/page_c
 
 #region Node imports
 
-@onready var tab_bar: TabBar = $PanelContainer/PanelContainer/VBoxContainer/TabBar
-@onready var page_list: Control = $PanelContainer/PanelContainer/VBoxContainer/PageList
+@onready var page_list: VBoxContainer = $PanelContainer/PanelContainer/PageListContainer
+@onready var tab_bar: TabBar = $PanelContainer/PanelContainer/PageListContainer/TabBar
 
 #endregion
+
+
+func _ready() -> void:
+	_load_pages()
+
+func _load_pages() -> void:
+	var pages_data: Array = await NotebookManager.load_pages()
+	for data in pages_data:
+		_init_page(data)
 
 
 #region Page add/change handler
 
 func _on_tab_bar_tab_selected(tab: int) -> void:
-	if tab == -1:
+	if tab == tab_bar.tab_count - 1:
+		if tab_bar.tab_count == 10:
+			return
 		_create_new_page()
 	else:
-		_change_page_to(tab)
+		_change_page_to(tab + 1)
 
 func _create_new_page() -> void:
-	_add_new_tab()
-	# TODO: Instantiating new page from scene...
+	var page_data: Dictionary = await NotebookManager.create_page("Page " + str(tab_bar.tab_count))
+	if page_data.is_empty():
+		return
+	_init_page(page_data)
+	_change_page_to(tab_bar.tab_count - 1)
 
-func _add_new_tab() -> void:
-	# TODO: Adds new tab to TabBar right before "add"...
-	pass
+func _init_page(page_data: Dictionary) -> void:
+	_add_new_tab(tab_bar.tab_count)
+	var page: PageContainer = _page_container_scene.instantiate()
+	page.page_id = page_data.get("id", -1)
+	page.page_name = page_data.get("title", "error")
+	page.page_text = page_data.get("content", "error")
+	page_list.add_child(page)
+
+func _add_new_tab(index: int) -> void:
+	tab_bar.add_tab("Page " + str(index))
+	tab_bar.move_tab(tab_bar.tab_count - 1, tab_bar.tab_count - 2)
+	tab_bar.current_tab = tab_bar.tab_count - 2
+	if tab_bar.tab_count == 10:
+		tab_bar.set_tab_disabled(tab_bar.tab_count - 1, true)
 
 func _change_page_to(index: int) -> void:
-	# TODO: Hides last page container and shows selected one...
-	pass
+	for page in page_list.get_children():
+		if page and page is PageContainer:
+			if page.page_id == index:
+				page.show()
+			else:
+				page.hide()
 
 #endregion

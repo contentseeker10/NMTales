@@ -46,7 +46,6 @@ theme_override_colors/font_placeholder_color = Color(0.6, 0.42352942, 0.20784314
 theme_override_colors/caret_color = Color(0.16470589, 0.1254902, 0.10980392, 1)
 theme_override_colors/selection_color = Color(0.29803923, 0.22745098, 0.2, 1)
 theme_override_styles/focus = SubResource("StyleBoxEmpty_xttrf")
-text = "Page 1"
 placeholder_text = "Page name..."
 flat = true
 
@@ -68,15 +67,6 @@ theme_override_colors/font_placeholder_color = Color(0.6, 0.42352942, 0.20784314
 theme_override_font_sizes/font_size = 10
 theme_override_styles/normal = SubResource("StyleBoxEmpty_a511m")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_sltgh")
-text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse luctus vestibulum lacus, sed porta est vulputate vel. Aliquam dictum nec augue a feugiat. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nullam scelerisque vitae ipsum at ullamcorper. Cras ultrices malesuada ipsum, ut ultricies magna rutrum vitae. Morbi a accumsan leo. Proin ut aliquet ligula. Ut dignissim risus elit, sed interdum lectus egestas vel. Proin bibendum iaculis mollis. Nunc a enim accumsan, bibendum ipsum et, iaculis urna. Duis quis urna vel libero blandit lacinia. Donec vitae nunc nec tortor tempus aliquet. Proin libero lorem, vestibulum at libero porta, iaculis semper dolor.
-
-Vestibulum non ultricies arcu. Quisque sed justo ultrices, porttitor mauris sit amet, iaculis mi. Praesent iaculis nulla ac mauris iaculis, ut pulvinar orci interdum. Vivamus eget odio vel libero vehicula vestibulum eu sed enim. Mauris varius dui lorem, eu hendrerit ligula faucibus at. Morbi gravida orci mauris, varius hendrerit elit elementum eget. Interdum et malesuada fames ac ante ipsum primis in faucibus. Aliquam risus lacus, convallis nec metus ultricies, ullamcorper porta dui. In diam libero, tempor pharetra feugiat eget, eleifend sed augue. Integer diam magna, efficitur eu dictum eu, egestas ac felis. Suspendisse nulla justo, ultricies ut suscipit quis, feugiat non risus. Nam vel pulvinar ligula. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
-
-Phasellus at lacinia turpis, in auctor arcu. In ut leo ultricies, sagittis nibh in, iaculis est. Mauris aliquet nisl tellus, in gravida nisi pulvinar quis. Duis eget placerat ante. Nulla odio tellus, lacinia nec ornare ut, vestibulum ut arcu. Integer aliquam mi quis ipsum imperdiet elementum. Nunc commodo, velit in ultricies luctus, lacus nulla posuere odio, eu tincidunt mauris dolor ac leo. Suspendisse eget urna molestie, gravida massa ut, eleifend velit. Nulla pellentesque nulla nec justo pellentesque, non malesuada lectus porttitor. Mauris pulvinar eros quis elementum pharetra. Donec at metus ut dolor faucibus hendrerit vel quis tellus. Mauris finibus diam enim, eu convallis ex lacinia nec.
-
-Cras accumsan maximus malesuada. Cras ac ligula quis orci iaculis mollis quis volutpat tellus. Vestibulum id luctus tellus, et pulvinar mi. Nam convallis libero augue, non vehicula ligula molestie at. Nullam at nunc ex. Aenean posuere malesuada tortor, non egestas leo vehicula et. Nullam diam velit, fringilla eu tincidunt at, viverra ac est. Fusce libero sem, sodales id scelerisque ut, suscipit et dolor. Etiam tempus magna massa, et consequat odio mattis a.
-
-Phasellus ac vehicula augue. Nam accumsan laoreet odio et sagittis. In consequat ante sem, eget aliquet sapien lacinia nec. Nam eget cursus massa, at sodales magna. Duis fermentum hendrerit erat, eu porta elit convallis nec. Maecenas congue nunc metus, nec feugiat dolor dictum in. Etiam laoreet mollis massa, quis efficitur enim congue non. Vivamus fringilla purus sed justo aliquam, non ullamcorper libero pharetra. Nulla id dolor vitae mauris fringilla vehicula. Interdum et malesuada fames ac ante ipsum primis in faucibus."
 placeholder_text = "Page text..."
 wrap_mode = 1
 
