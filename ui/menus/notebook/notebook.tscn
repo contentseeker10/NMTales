@@ -1,0 +1,106 @@
+[gd_scene format=3 uid="uid://c1pygrhfy18un"]
+
+[ext_resource type="Script" uid="uid://d1yaqki7rqti" path="res://ui/menus/notebook/notebook.gd" id="1_xttrf"]
+[ext_resource type="PackedScene" uid="uid://b6v7toodritgx" path="res://ui/components/button/button.tscn" id="2_xttrf"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a511m"]
+bg_color = Color(1, 0.78431374, 0.5411765, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.99607843, 0.7019608, 0.34509805, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sltgh"]
+bg_color = Color(1, 0.78431374, 0.5411765, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.6, 0.42352942, 0.20784314, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xttrf"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0.16470589, 0.1254902, 0.10980392, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y8f3r"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0.16470589, 0.1254902, 0.10980392, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bsxe1"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0.29803923, 0.22745098, 0.2, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.16470589, 0.1254902, 0.10980392, 1)
+
+[node name="Notebook" type="CanvasLayer" unique_id=719037409]
+process_mode = 3
+script = ExtResource("1_xttrf")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1387745654]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.39215687)
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=551480166]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 120.0
+offset_top = 40.0
+offset_right = -120.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_a511m")
+
+[node name="PanelContainer" type="PanelContainer" parent="PanelContainer" unique_id=485114494]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_sltgh")
+
+[node name="PageListContainer" type="VBoxContainer" parent="PanelContainer/PanelContainer" unique_id=914455132]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="TabBar" type="TabBar" parent="PanelContainer/PanelContainer/PageListContainer" unique_id=1787290985]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 12
+theme_override_styles/tab_unselected = SubResource("StyleBoxFlat_xttrf")
+theme_override_styles/tab_hovered = SubResource("StyleBoxFlat_y8f3r")
+theme_override_styles/tab_selected = SubResource("StyleBoxFlat_bsxe1")
+scrolling_enabled = false
+deselect_enabled = true
+tab_count = 1
+tab_0/title = "+"
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1231584572]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -112.0
+offset_top = -33.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 10
+
+[node name="NotebookButton" parent="MarginContainer" unique_id=763636606 instance=ExtResource("2_xttrf")]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "Записник"
+
+[connection signal="tab_selected" from="PanelContainer/PanelContainer/PageListContainer/TabBar" to="." method="_on_tab_bar_tab_selected"]
+[connection signal="pressed" from="MarginContainer/NotebookButton" to="." method="_on_notebook_button_pressed"]

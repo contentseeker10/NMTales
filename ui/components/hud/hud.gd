@@ -1,12 +1,15 @@
 extends CanvasLayer
 
-@onready var username_label: Label = $MarginContainer/VBoxContainer/UsernameLabel
+#region Node imports
 
+@onready var username_label: Label = $MarginContainer/VBoxContainer/UsernameLabel
 @onready var current_objective_title: Label = $MarginContainer/VBoxContainer/BackgroundPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/CurrentObjectiveTitle
 @onready var current_objective_description: Label = $MarginContainer/VBoxContainer/BackgroundPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/CurrentObjectiveDescription
-
 @onready var level_label: Label = $MarginContainer/LevelProgression/LevelLabel
 @onready var level_progress_bar: ProgressBar = $MarginContainer/LevelProgression/LevelProgressBar
+@onready var notebook: NotebookScreen = $Notebook
+
+#endregion
 
 
 func _ready() -> void:
@@ -53,3 +56,13 @@ func _update_level_progression() -> void:
 	level_label.text = "lvl " + str(int(AuthManager.current_user_info.get("level", 0)))
 	level_progress_bar.max_value = (AuthManager.current_user_info.get("level") + 1) * 100.0
 	level_progress_bar.value = AuthManager.current_user_info.get("xp", 0.0)
+
+
+func _on_notebook_button_pressed() -> void:
+	get_tree().paused = true
+	notebook.show()
+
+func _unhandled_key_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		notebook.hide()
+		get_tree().paused = false
