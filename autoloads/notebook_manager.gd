@@ -1,9 +1,6 @@
 extends Node
 
-# TODO: Change to AuthManager.token_header
-var _auth_header: PackedStringArray = [
-	'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoic3RyaW5nIiwiZXhwIjoxNzgxNTk2Mzc1fQ.ZhIJWhU1FobnIHdVe8EBXBqD6Mgd1PouLKgQYW1Iygs'
-]
+var _auth_header: PackedStringArray = AuthManager.token_header
 
 
 func load_pages() -> Array:
@@ -37,11 +34,11 @@ func update_page(id: int, title: String, content: String) -> void:
 		"content": content
 	}
 	var resp_body: Array = await NetworkManager.send_put("/api/Notebook/" + str(id), body, _auth_header)
-	if resp_body[1] != 204:
+	if resp_body[1] != 200 and resp_body[1] != 204:
 		push_error("Error updating page. Status: " + str(resp_body[1]) + resp_body[3].get_string_from_utf8())
 
 
 func delete_page(id: int) -> void:
 	var resp_body: Array = await NetworkManager.send_delete("/api/Notebook/" + str(id), _auth_header)
-	if resp_body[1] != 200 or resp_body[1] != 204:
+	if resp_body[1] != 200 and resp_body[1] != 204:
 		push_error("Error deleting page. Status: " + str(resp_body[1]) + resp_body[3].get_string_from_utf8())

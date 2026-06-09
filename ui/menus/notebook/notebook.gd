@@ -21,7 +21,6 @@ func _ready() -> void:
 func _load_pages() -> void:
 	var pages_data: Array = await NotebookManager.load_pages()
 	for data in pages_data:
-		print(data)
 		_init_page(data)
 
 
@@ -49,6 +48,8 @@ func _init_page(page_data: Dictionary) -> void:
 	page.page_text = page_data.get("content", "error")
 	page.index = tab_bar.tab_count
 	page_list.add_child(page)
+	page.title_changed.connect(func(new_title): 
+		tab_bar.set_tab_title(page.index - 1, new_title))
 	page.delete_button.pressed.connect(_on_delete_button_pressed.bind(page))
 	_add_new_tab(page.page_name)
 
@@ -70,11 +71,19 @@ func _change_page_to(index: int) -> void:
 #endregion
 
 
+#region Page deletion
+
 func _on_delete_button_pressed(page: PageContainer) -> void:
 	NotebookManager.delete_page(page.page_id)
 	_recount_indexes(page.index)
 	tab_bar.remove_tab(page.index - 1)
-	tab_bar.current_tab = -1
+	if tab_bar.tab_count > 1:
+		tab_bar.current_tab = 0
+		_change_page_to(1)
+	else:
+		tab_bar.current_tab = -1
+	if tab_bar.tab_count < 10:
+		tab_bar.set_tab_disabled(tab_bar.tab_count - 1, false)
 	page.queue_free()
 
 func _recount_indexes(from: int) -> void:
@@ -82,3 +91,5 @@ func _recount_indexes(from: int) -> void:
 		if page and page is PageContainer:
 			if page.index > from:
 				page.index -= 1
+
+#endregion
