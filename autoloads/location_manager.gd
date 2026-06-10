@@ -9,7 +9,7 @@ func entry_location(location_name: String) -> void:
 	print("Loading location " + location_name + "...")
 	
 	var local_pack_path: String = "user://" + location_name.to_lower() + ".pck"
-	var scene_path: String = "res://locations/" + location_name.to_lower() + "/" + location_name.to_lower() + ".tscn"
+	var scene_path: String = "res://locations/" + location_name.to_lower() + "/" + location_name.to_lower() + ".scn"
 	
 	if ResourceLoader.exists(scene_path):
 		get_tree().change_scene_to_file(scene_path)
