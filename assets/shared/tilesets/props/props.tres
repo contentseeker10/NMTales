@@ -10,10 +10,6 @@ texture_region_size = Vector2i(32, 32)
 11:8/size_in_atlas = Vector2i(3, 3)
 11:8/0 = 0
 11:8/0/y_sort_origin = -40
-11:8/0/physics_layer_0/polygon_0/points = PackedVector2Array(-9.6, -35.2, -9.6, -22.4, 9.6, -22.4, 9.6, -35.2)
-11:8/0/physics_layer_0/polygon_1/points = PackedVector2Array(35.2, -9.6, 35.2, 9.6, 48, 9.6, 48, -9.6)
-11:8/0/physics_layer_0/polygon_2/points = PackedVector2Array(-9.6, 22.400002, -9.6, 35.2, 9.6, 35.2, 9.6, 22.400002)
-11:8/0/physics_layer_0/polygon_3/points = PackedVector2Array(-48, -9.6, -35.2, -9.6, -35.2, 9.6, -48, 9.6)
 13:11/size_in_atlas = Vector2i(2, 2)
 13:11/0 = 0
 13:11/0/texture_origin = Vector2i(0, 16)
@@ -172,6 +168,14 @@ texture_region_size = Vector2i(32, 32)
 5:10/0 = 0
 5:10/0/texture_origin = Vector2i(0, 16)
 5:10/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, 12, 4, 12, 9.6, -3.1999998, -9.6, -3.1999998)
+8:3/size_in_atlas = Vector2i(1, 2)
+8:3/0 = 0
+8:3/0/texture_origin = Vector2i(0, 8)
+8:3/0/y_sort_origin = 16
+8:0/size_in_atlas = Vector2i(1, 2)
+8:0/0 = 0
+8:0/0/texture_origin = Vector2i(0, 8)
+8:0/0/y_sort_origin = 16
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gshra"]
 texture = ExtResource("2_s4ljt")
