@@ -47,7 +47,7 @@ shape = SubResource("RectangleShape2D_ekbtl")
 
 [node name="ActionIcon" type="Label" parent="." unique_id=1526744255]
 visible = false
-z_index = 1
+z_index = 2
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
