@@ -24,6 +24,8 @@ script = ExtResource("1_ekbtl")
 sprite_frames = ExtResource("1_u6las")
 animation = &"idle_down"
 autoplay = "idle_down"
+frame = 3
+frame_progress = 0.1387743
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1794124557]
 position = Vector2(0, 8.5)
@@ -45,6 +47,7 @@ shape = SubResource("RectangleShape2D_ekbtl")
 
 [node name="ActionIcon" type="Label" parent="." unique_id=1526744255]
 visible = false
+z_index = 2
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
