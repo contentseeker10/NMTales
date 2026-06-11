@@ -1,30 +1,51 @@
-[gd_scene format=4 uid="uid://2g5go513qcbg"]
+[gd_scene format=3 uid="uid://2g5go513qcbg"]
 
 [ext_resource type="Script" uid="uid://brfiqbvj2bp3p" path="res://parts/tester/math/math_tester.gd" id="1_05tpv"]
-[ext_resource type="TileSet" uid="uid://c437wjhtdx4ri" path="res://assets/shared/tilesets/valley_ruin.tres" id="1_s1ri7"]
+[ext_resource type="Texture2D" uid="uid://deb4bo6f3frrr" path="res://assets/shared/tilesets/magic_runes/magic_runes.png" id="2_q57vu"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_s1ri7"]
-size = Vector2(50, 72)
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_q57vu"]
+texture = ExtResource("2_q57vu")
+texture_region_size = Vector2i(222, 154)
+0:0/animation_speed = 2.5
+0:0/animation_frame_0/duration = 1.0
+0:0/animation_frame_1/duration = 1.0
+0:0/animation_frame_2/duration = 1.0
+0:0/animation_frame_3/duration = 1.0
+0:0/animation_frame_4/duration = 1.0
+0:0/animation_frame_5/duration = 1.0
+0:0/animation_frame_6/duration = 1.0
+0:0/animation_frame_7/duration = 1.0
+0:0/0 = 0
+0:0/0/y_sort_origin = 80
+
+[sub_resource type="TileSet" id="TileSet_h7r1x"]
+sources/0 = SubResource("TileSetAtlasSource_q57vu")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q57vu"]
+size = Vector2(144, 96)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_05tpv"]
-radius = 79.19
+radius = 88.0
 
 [node name="MathTester" type="Node2D" unique_id=1158934543]
+y_sort_enabled = true
 script = ExtResource("1_05tpv")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=682596428]
-tile_map_data = PackedByteArray("AAD+//7/CQAKAAEAAAD+////CQAKAAIAAAD+/wAACQAKAAMAAAD+/wEACQAKAAQAAAD///3/CQALAAAAAAD///7/CQALAAEAAAD/////CQALAAIAAAD//wAACQALAAMAAAD//wEACQALAAQAAAAAAP3/CQAMAAAAAAAAAP7/CQAMAAEAAAAAAP//CQAMAAIAAAAAAAAACQAMAAMAAAAAAAEACQAMAAQAAAABAP7/CQANAAEAAAABAP//CQANAAIAAAABAAAACQANAAMAAAABAAEACQANAAQAAAA=")
-tile_set = ExtResource("1_s1ri7")
+y_sort_enabled = true
+tile_map_data = PackedByteArray(0, 0, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+tile_set = SubResource("TileSet_h7r1x")
 
 [node name="ClickArea" type="Area2D" parent="." unique_id=619847487]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ClickArea" unique_id=2029333956]
-position = Vector2(0, -7)
-shape = SubResource("RectangleShape2D_s1ri7")
+position = Vector2(-9, 16)
+shape = SubResource("RectangleShape2D_q57vu")
 
 [node name="InteractionArea" type="Area2D" parent="." unique_id=103320472]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=305890411]
+position = Vector2(-10, 14)
 shape = SubResource("CircleShape2D_05tpv")
 
 [connection signal="input_event" from="ClickArea" to="." method="_on_click_area_input_event"]
