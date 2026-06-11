@@ -19,9 +19,11 @@ namespace NMTales.Backend
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddControllers();
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseInMemoryDatabase("NMTaleDb"));
+            /*builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseInMemoryDatabase("NMTaleDb"));*/
             builder.Services.AddScoped<JwtService>();
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             var jwtKey = builder.Configuration["Jwt:Key"]
                 ?? throw new InvalidOperationException("Jwt:Key is not configured.");
