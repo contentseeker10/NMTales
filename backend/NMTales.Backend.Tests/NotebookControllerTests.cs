@@ -82,7 +82,7 @@ public class NotebookControllerTests
         var limitResponse = await client.PostAsJsonAsync("/api/notebook", new { title = "Page 11" });
 
         Assert.Equal(HttpStatusCode.BadRequest, limitResponse.StatusCode);
-        Assert.Equal("Досягнуто ліміту сторінок блокнота (макс. 10)",
+        Assert.Equal("Reached the maximum number of pages (max. 10)",
             await limitResponse.Content.ReadAsStringAsync());
     }
 

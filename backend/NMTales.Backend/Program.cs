@@ -7,7 +7,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NMTales.Backend.Data;
+using NMTales.Backend.Repositories;
+using NMTales.Backend.Repositories.Location;
+using NMTales.Backend.Repositories.Notebook;
+using NMTales.Backend.Repositories.User;
 using NMTales.Backend.Services;
+using NMTales.Backend.Services.Auth;
+using NMTales.Backend.Services.Location;
+using NMTales.Backend.Services.Player;
 using NMTales.Backend.Validators;
 
 namespace NMTales.Backend
@@ -24,6 +31,19 @@ namespace NMTales.Backend
             builder.Services.AddScoped<JwtService>();
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+            
+            builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
+            
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IPlayerService, PlayerService>();
+            
+            builder.Services.AddScoped<INotebookRepository, NotebookRepository>();
+            builder.Services.AddScoped<INotebookService, NotebookService>();
+            
+            builder.Services.AddScoped<ILocationRepository, LocationRepository>();
+            builder.Services.AddScoped<ILocationService, LocationService>();
 
             var jwtKey = builder.Configuration["Jwt:Key"]
                 ?? throw new InvalidOperationException("Jwt:Key is not configured.");
