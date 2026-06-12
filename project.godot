@@ -40,6 +40,10 @@ window/stretch/aspect="expand"
 
 project/assembly_name="NMTales"
 
+[global_group]
+
+player=""
+
 [gui]
 
 theme/custom_font="uid://bui2mm2rclk58"

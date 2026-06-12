@@ -2,8 +2,12 @@
 class_name Enemy
 extends CharacterBody2D
 
+var _player: Player
+
 enum State { CHASE, ATTACK, DEAD }
 var current_state: State = State.CHASE
+
+@export var speed: int = 150
 
 
 func _ready() -> void:
@@ -23,7 +27,14 @@ func _physics_process(delta: float) -> void:
 #region State processing
 
 func _process_chase(delta: float) -> void:
-	pass
+	if not is_instance_valid(_player):
+		_player = get_tree().get_first_node_in_group("player") as Player
+		if not is_instance_valid(_player):
+			return
+	var direction := (_player.global_position - global_position).normalized()
+	velocity = direction * speed
+	move_and_slide()
+	_sprite.play("walk_" + _get_direction_name(velocity))
 
 
 func _process_attack(delta: float) -> void:
@@ -31,11 +42,19 @@ func _process_attack(delta: float) -> void:
 
 
 func _process_dead() -> void:
+	_sprite.play("death_down")
+	await _sprite.animation_finished
 	queue_free()
 
 
 func _get_direction_name(vel: Vector2) -> String:
-	return ""
+	if vel.length_squared() < 10.0:
+		return "down"
+	var norm := vel.normalized()
+	if abs(norm.x) > abs(norm.y):
+		return "right" if norm.x > 0 else "left"
+	else:
+		return "down" if norm.y > 0 else "up"
 
 #endregion
 
