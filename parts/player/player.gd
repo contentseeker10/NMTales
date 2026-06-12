@@ -10,7 +10,6 @@ extends CharacterBody2D
 #endregion
 
 var can_attack: bool = true
-var enemies_attacking: bool = true
 
 @export var speed: float = 150.0
 
@@ -32,13 +31,9 @@ func _ready() -> void:
 
 
 func _on_attack_area_body_entered(body: Node2D) -> void:
-	if enemies_attacking:
-		enemies_attacking = false
-		if body is Enemy:
-			body.set_dead()
-			EventBus.mob_killed.emit("vampire")
-			await body.sprite.animation_finished
-			enemies_attacking = true
+	if body is Enemy:
+		body.set_dead()
+		EventBus.mob_killed.emit("vampire")
 
 
 func _on_revive_button_pressed() -> void:

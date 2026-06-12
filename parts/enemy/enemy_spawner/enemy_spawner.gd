@@ -11,8 +11,6 @@ var shape: Shape2D
 @export var amount: int = 10
 @export var player_detecting: bool = true
 
-var _used: bool = false
-
 
 func _ready() -> void:
 	TestManager.session_finished.connect(_on_session_finished)
@@ -20,19 +18,19 @@ func _ready() -> void:
 
 
 func spawn() -> void:
-	if not _used:
-		for i in range(amount):
-			var x := _rng.randf_range(-shape.size.x / 2, shape.size.x / 2)
-			var y := _rng.randf_range(-shape.size.y / 2, shape.size.y / 2)
-			var pos := Vector2(x, y)
-			_init_enemy(pos)
-		_used = true
+	for i in range(amount):
+		var x := _rng.randf_range(-shape.size.x / 2, shape.size.x / 2)
+		var y := _rng.randf_range(-shape.size.y / 2, shape.size.y / 2)
+		var pos := Vector2(x, y)
+		_init_enemy(pos)
+	if player_detecting:
+		queue_free()
 
 func _init_enemy(pos: Vector2) -> void:
 	var enemy: Enemy = _enemy_scene.instantiate()
 	enemy.skin = _get_random_skin()
-	add_child(enemy)
-	enemy.position = pos
+	get_parent().add_child(enemy)
+	enemy.global_position = global_position + pos
 
 func _get_random_skin() -> Enemy.EnemySkin:
 	var skin: Enemy.EnemySkin

@@ -2,8 +2,13 @@
 class_name Enemy
 extends CharacterBody2D
 
+#region Node imports
+
 @onready var _attack_area: Area2D = $AttackArea
 @onready var _nav_agent: NavigationAgent2D = $NavigationAgent2D
+@onready var _path_timer: Timer = $PathTimer
+
+#endregion
 
 var _player: Player
 
@@ -14,6 +19,7 @@ var current_state: State = State.CHASE
 @export_range(0.0, 80.0, 5.0) var damage: int = 10
 
 func _ready() -> void:
+	_path_timer.timeout.connect(_on_path_timer_timeout)
 	_update_skin()
 
 
@@ -23,8 +29,6 @@ func _physics_process(_delta: float) -> void:
 		_player = get_tree().get_first_node_in_group("player") as Player
 		if not is_instance_valid(_player):
 			return
-	
-	_nav_agent.target_position = _player.global_position
 	
 	match current_state:
 		State.CHASE:
@@ -36,21 +40,25 @@ func _physics_process(_delta: float) -> void:
 #region State processing
 
 func _process_chase() -> void:
-	if _attack_area.has_overlapping_bodies():
-		_start_attack()
-		return
+	for body in _attack_area.get_overlapping_bodies():
+		if body is Player:
+			_start_attack()
+			return
 	
 	if _nav_agent.is_navigation_finished():
 		velocity = Vector2.ZERO
 		return
 	
 	var next_position := _nav_agent.get_next_path_position()
-	
 	var direction := (next_position - global_position).normalized()
 	velocity = direction * speed
 	move_and_slide()
 	
 	sprite.play("walk_" + _get_direction_name(velocity))
+
+func _on_path_timer_timeout() -> void:
+	if is_instance_valid(_player):
+		_nav_agent.target_position = _player.global_position
 
 
 func _start_attack() -> void:
@@ -65,7 +73,7 @@ func _start_attack() -> void:
 	if current_state != State.ATTACK:
 		return
 	
-	if _attack_area.has_overlapping_bodies():
+	if _player in _attack_area.get_overlapping_bodies():
 		_player.health_points -= damage
 	
 	current_state = State.CHASE
@@ -73,6 +81,13 @@ func _start_attack() -> void:
 
 func set_dead() -> void:
 	current_state = State.DEAD
+	
+	collision_layer = 0
+	collision_mask = 0
+	
+	_attack_area.monitoring = false
+	_attack_area.monitorable = false
+	
 	sprite.play("death_down")
 	await sprite.animation_finished
 	queue_free()

@@ -1006,7 +1006,7 @@ animations = [{
 size = Vector2(14, 10)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_40i4h"]
-size = Vector2(16.5, 12)
+size = Vector2(28.1875, 16)
 
 [node name="Player" type="CharacterBody2D" unique_id=803971865 groups=["player"]]
 y_sort_enabled = true
@@ -1033,7 +1033,7 @@ monitoring = false
 monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea" unique_id=1709456741]
-position = Vector2(15.75, 5)
+position = Vector2(13.90625, 0)
 shape = SubResource("RectangleShape2D_40i4h")
 
 [node name="StateMachine" type="Node" parent="." unique_id=1890620424 node_paths=PackedStringArray("initial_state")]
