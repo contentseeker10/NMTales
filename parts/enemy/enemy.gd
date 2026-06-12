@@ -3,6 +3,7 @@ class_name Enemy
 extends CharacterBody2D
 
 @onready var _attack_area: Area2D = $AttackArea
+@onready var _nav_agent: NavigationAgent2D = $NavigationAgent2D
 
 var _player: Player
 
@@ -17,10 +18,13 @@ func _ready() -> void:
 
 
 func _physics_process(_delta: float) -> void:
+	
 	if not is_instance_valid(_player):
 		_player = get_tree().get_first_node_in_group("player") as Player
 		if not is_instance_valid(_player):
 			return
+	
+	_nav_agent.target_position = _player.global_position
 	
 	match current_state:
 		State.CHASE:
@@ -36,7 +40,13 @@ func _process_chase() -> void:
 		_start_attack()
 		return
 	
-	var direction := (_player.global_position - global_position).normalized()
+	if _nav_agent.is_navigation_finished():
+		velocity = Vector2.ZERO
+		return
+	
+	var next_position := _nav_agent.get_next_path_position()
+	
+	var direction := (next_position - global_position).normalized()
 	velocity = direction * speed
 	move_and_slide()
 	

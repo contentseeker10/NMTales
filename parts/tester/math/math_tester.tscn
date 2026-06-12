@@ -37,12 +37,14 @@ tile_map_data = PackedByteArray(0, 0, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 tile_set = SubResource("TileSet_h7r1x")
 
 [node name="ClickArea" type="Area2D" parent="." unique_id=619847487]
+collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ClickArea" unique_id=2029333956]
 position = Vector2(-9, 16)
 shape = SubResource("RectangleShape2D_q57vu")
 
 [node name="InteractionArea" type="Area2D" parent="." unique_id=103320472]
+collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=305890411]
 position = Vector2(-10, 14)

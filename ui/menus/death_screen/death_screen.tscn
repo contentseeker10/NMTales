@@ -46,4 +46,5 @@ text = "Повернутися"
 layout_mode = 2
 text = "Вийти"
 
+[connection signal="pressed" from="CenterContainer/VBoxContainer/ReviveButton" to="." method="_on_revive_button_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
