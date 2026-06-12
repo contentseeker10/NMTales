@@ -2,48 +2,69 @@
 class_name Enemy
 extends CharacterBody2D
 
+@onready var _attack_area: Area2D = $AttackArea
+
 var _player: Player
 
 enum State { CHASE, ATTACK, DEAD }
 var current_state: State = State.CHASE
 
 @export var speed: int = 150
-
+@export_range(0.0, 80.0, 5.0) var damage: int = 10
 
 func _ready() -> void:
 	_update_skin()
 
 
-func _physics_process(delta: float) -> void:
-	match current_state:
-		State.CHASE:
-			_process_chase(delta)
-		State.ATTACK:
-			_process_attack(delta)
-		State.DEAD:
-			_process_dead()
-
-
-#region State processing
-
-func _process_chase(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if not is_instance_valid(_player):
 		_player = get_tree().get_first_node_in_group("player") as Player
 		if not is_instance_valid(_player):
 			return
+	
+	match current_state:
+		State.CHASE:
+			_process_chase()
+		State.ATTACK, State.DEAD:
+			pass
+
+
+#region State processing
+
+func _process_chase() -> void:
+	if _attack_area.has_overlapping_bodies():
+		_start_attack()
+		return
+	
 	var direction := (_player.global_position - global_position).normalized()
 	velocity = direction * speed
 	move_and_slide()
-	_sprite.play("walk_" + _get_direction_name(velocity))
+	
+	sprite.play("walk_" + _get_direction_name(velocity))
 
 
-func _process_attack(delta: float) -> void:
-	pass
+func _start_attack() -> void:
+	current_state = State.ATTACK
+	velocity = Vector2.ZERO
+	
+	var dir_to_player := _player.global_position - global_position
+	sprite.play("attack_" + _get_direction_name(dir_to_player))
+	
+	await sprite.animation_finished
+	
+	if current_state != State.ATTACK:
+		return
+	
+	if _attack_area.has_overlapping_bodies():
+		_player.health_points -= damage
+	
+	current_state = State.CHASE
 
 
-func _process_dead() -> void:
-	_sprite.play("death_down")
-	await _sprite.animation_finished
+func set_dead() -> void:
+	current_state = State.DEAD
+	sprite.play("death_down")
+	await sprite.animation_finished
 	queue_free()
 
 
@@ -61,7 +82,7 @@ func _get_direction_name(vel: Vector2) -> String:
 
 #region Skin changer
 
-@onready var _sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 enum EnemySkin { VampireGreen, VampireBlue, VampireRed }
 const SKIN_TEXTURES = {
@@ -78,8 +99,8 @@ const SKIN_TEXTURES = {
 func _update_skin() -> void:
 	if not is_node_ready() and Engine.is_editor_hint():
 		await ready
-	if _sprite and SKIN_TEXTURES.has(skin):
-		_sprite.sprite_frames = SKIN_TEXTURES[skin]
-		_sprite.play("idle_down")
+	if sprite and SKIN_TEXTURES.has(skin):
+		sprite.sprite_frames = SKIN_TEXTURES[skin]
+		sprite.play("idle_down")
 
 #endregion

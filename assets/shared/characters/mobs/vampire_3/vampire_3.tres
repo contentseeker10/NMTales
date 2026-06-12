@@ -574,7 +574,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"attack_down",
-"speed": 12.0
+"speed": 7.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -615,7 +615,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"attack_left",
-"speed": 12.0
+"speed": 7.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -656,7 +656,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"attack_right",
-"speed": 12.0
+"speed": 7.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -697,7 +697,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"attack_up",
-"speed": 12.0
+"speed": 7.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -735,7 +735,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"death_down",
-"speed": 11.0
+"speed": 6.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -773,7 +773,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"death_left",
-"speed": 11.0
+"speed": 6.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -811,7 +811,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"death_right",
-"speed": 11.0
+"speed": 6.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -849,7 +849,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"death_up",
-"speed": 11.0
+"speed": 6.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -866,7 +866,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"idle_down",
-"speed": 2.0
+"speed": 4.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -883,7 +883,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"idle_left",
-"speed": 2.0
+"speed": 4.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -900,7 +900,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"idle_right",
-"speed": 2.0
+"speed": 4.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -917,7 +917,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"idle_up",
-"speed": 2.0
+"speed": 4.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -940,7 +940,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"walk_down",
-"speed": 6.0
+"speed": 7.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -963,7 +963,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"walk_left",
-"speed": 6.0
+"speed": 7.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -986,7 +986,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"walk_right",
-"speed": 6.0
+"speed": 7.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -1009,5 +1009,5 @@ animations = [{
 }],
 "loop": true,
 "name": &"walk_up",
-"speed": 6.0
+"speed": 7.0
 }]

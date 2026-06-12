@@ -1,25 +1,13 @@
 [gd_scene format=3 uid="uid://dcfsyw5b83bki"]
 
 [ext_resource type="Texture2D" uid="uid://he1boyitqylm" path="res://assets/shared/icons/heart.png" id="1_wtphh"]
+[ext_resource type="Script" uid="uid://d36yu5hysts5n" path="res://ui/components/hud/health_bar/heart_icon.gd" id="2_pdghv"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wtphh"]
 atlas = ExtResource("1_wtphh")
 region = Rect2(0, 0, 16, 16)
 
-[sub_resource type="GDScript" id="GDScript_wtphh"]
-script/source = "extends TextureRect
-
-func make_full() -> void:
-	self.texture.region = Rect2(0, 0, 16, 16)
-
-func make_half_full() -> void:
-	self.texture.region = Rect2(16, 0, 16, 16)
-
-func make_empty() -> void:
-	self.texture.region = Rect2(32, 0, 16, 16)
-"
-
-[node name="TextureRect" type="TextureRect" unique_id=118117640]
+[node name="HeartIcon" type="TextureRect" unique_id=118117640]
 custom_minimum_size = Vector2(16, 16)
 texture = SubResource("AtlasTexture_wtphh")
-script = SubResource("GDScript_wtphh")
+script = ExtResource("2_pdghv")

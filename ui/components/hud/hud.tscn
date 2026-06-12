@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dol884wu1y0il" path="res://ui/components/hud/health_bar/health_bar.tscn" id="3_18caq"]
 [ext_resource type="PackedScene" uid="uid://b6v7toodritgx" path="res://ui/components/button/button.tscn" id="4_ncb6q"]
 [ext_resource type="PackedScene" uid="uid://c1pygrhfy18un" path="res://ui/menus/notebook/notebook.tscn" id="6_rdhe8"]
+[ext_resource type="PackedScene" uid="uid://b5hw6edxcp3pv" path="res://ui/menus/death_screen/death_screen.tscn" id="7_up30f"]
 
 [sub_resource type="FontVariation" id="FontVariation_2yiqb"]
 
@@ -124,6 +125,9 @@ text = "Записник"
 
 [node name="Notebook" parent="." unique_id=719037409 instance=ExtResource("6_rdhe8")]
 layer = 2
+visible = false
+
+[node name="DeathScreen" parent="." unique_id=428604488 instance=ExtResource("7_up30f")]
 visible = false
 
 [connection signal="pressed" from="MarginContainer/NotebookButton" to="." method="_on_notebook_button_pressed"]
