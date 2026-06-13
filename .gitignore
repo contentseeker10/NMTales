@@ -101,3 +101,7 @@ Desktop.ini
 
 # Crash dumps
 *.dmp
+
+# Art
+
+*.pxo

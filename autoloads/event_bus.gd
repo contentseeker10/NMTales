@@ -7,3 +7,5 @@ extends Node
 @warning_ignore("unused_signal") signal menu_opened(menu_name: String)
 @warning_ignore("unused_signal") signal quiz_completed(quiz_id: String)
 @warning_ignore("unused_signal") signal mob_killed(mob_id: String)
+
+@warning_ignore("unused_signal") signal player_died()

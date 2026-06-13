@@ -564,7 +564,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"attack_1_down",
-"speed": 10.0
+"speed": 14.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -593,7 +593,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"attack_1_left",
-"speed": 10.0
+"speed": 14.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -622,7 +622,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"attack_1_right",
-"speed": 10.0
+"speed": 14.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -651,7 +651,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"attack_1_up",
-"speed": 10.0
+"speed": 14.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -680,7 +680,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"attack_2_down",
-"speed": 10.0
+"speed": 14.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -709,7 +709,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"attack_2_left",
-"speed": 10.0
+"speed": 14.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -738,7 +738,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"attack_2_right",
-"speed": 10.0
+"speed": 14.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -767,7 +767,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"attack_2_up",
-"speed": 10.0
+"speed": 14.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -796,7 +796,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"idle_down",
-"speed": 5.0
+"speed": 7.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -825,7 +825,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"idle_left",
-"speed": 5.0
+"speed": 7.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -854,7 +854,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"idle_right",
-"speed": 5.0
+"speed": 7.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -883,7 +883,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"idle_up",
-"speed": 5.0
+"speed": 7.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -912,7 +912,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"run_down",
-"speed": 10.0
+"speed": 14.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -941,7 +941,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"run_left",
-"speed": 10.0
+"speed": 14.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -970,7 +970,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"run_right",
-"speed": 10.0
+"speed": 14.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -999,22 +999,25 @@ animations = [{
 }],
 "loop": true,
 "name": &"run_up",
-"speed": 10.0
+"speed": 14.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c5j7t"]
 size = Vector2(14, 10)
 
-[node name="Player" type="CharacterBody2D" unique_id=803971865]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_40i4h"]
+size = Vector2(28.1875, 16)
+
+[node name="Player" type="CharacterBody2D" unique_id=803971865 groups=["player"]]
 y_sort_enabled = true
-collision_layer = 5
-collision_mask = 3
+collision_layer = 2
+collision_mask = 41
 script = ExtResource("1_c5j7t")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=572185247]
 position = Vector2(0, 3)
 sprite_frames = SubResource("SpriteFrames_dy7o0")
-animation = &"idle_up"
+animation = &"idle_down"
 autoplay = "idle_down"
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2092202800]
@@ -1022,6 +1025,16 @@ autoplay = "idle_down"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=804645905]
 position = Vector2(0, 17)
 shape = SubResource("RectangleShape2D_c5j7t")
+
+[node name="AttackArea" type="Area2D" parent="." unique_id=2025311115]
+collision_layer = 4
+collision_mask = 40
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea" unique_id=1709456741]
+position = Vector2(13.90625, 0)
+shape = SubResource("RectangleShape2D_40i4h")
 
 [node name="StateMachine" type="Node" parent="." unique_id=1890620424 node_paths=PackedStringArray("initial_state")]
 script = ExtResource("18_jl01s")
@@ -1038,3 +1051,5 @@ script = ExtResource("21_2xmso")
 
 [node name="HUD" parent="." unique_id=645566866 instance=ExtResource("18_40i4h")]
 visible = false
+
+[connection signal="body_entered" from="AttackArea" to="." method="_on_attack_area_body_entered"]

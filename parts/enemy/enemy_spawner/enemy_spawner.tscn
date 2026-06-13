@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://cmui1tdhadfx8"]
+
+[ext_resource type="Script" uid="uid://cxvv14qi32u5r" path="res://parts/enemy/enemy_spawner/enemy_spawner.gd" id="1_7fyrq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7fyrq"]
+size = Vector2(384, 192)
+
+[node name="EnemySpawner" type="Area2D" unique_id=806674009]
+process_mode = 3
+y_sort_enabled = true
+collision_mask = 2
+script = ExtResource("1_7fyrq")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1624978056]
+shape = SubResource("RectangleShape2D_7fyrq")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

@@ -120,12 +120,6 @@ func _collect_user_input() -> Array[Dictionary]:
 func _on_answer_checked(is_correct: bool, _is_completed: bool, _is_failed: bool, 
 					_remaining_attempts: int, slot_results: Array) -> void:
 	_show_results(slot_results)
-	if is_correct:
-		# Some Gate Unlocking
-		pass
-	else:
-		# Enemies Spawn
-		pass
 
 func _show_results(results: Array) -> void:
 	for i in range(results.size()):

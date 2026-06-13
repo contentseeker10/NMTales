@@ -7,14 +7,16 @@ extends Node2D
 var is_available: bool = false
 
 
-func _on_interaction_area_body_entered(body: Player) -> void:
-	body.can_attack = false
-	is_available = true
+func _on_interaction_area_body_entered(body: Node2D) -> void:
+	if body and body is Player:
+		body.can_attack = false
+		is_available = true
 
 
-func _on_interaction_area_body_exited(body: Player) -> void:
-	body.can_attack = true
-	is_available = false
+func _on_interaction_area_body_exited(body: Node2D) -> void:
+	if body and body is Player:
+		body.can_attack = true
+		is_available = false
 
 
 func _on_click_area_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:

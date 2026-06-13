@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://tlt86n2x441e"]
+
+[ext_resource type="SpriteFrames" uid="uid://q7g5rppwj20f" path="res://assets/shared/characters/mobs/vampire_1/vampire_1.tres" id="1_jh6j7"]
+[ext_resource type="Script" uid="uid://b6670iqywh1p7" path="res://parts/enemy/enemy.gd" id="1_klfcx"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_klfcx"]
+size = Vector2(20, 28)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_klfcx"]
+radius = 20.024984
+
+[node name="Enemy" type="CharacterBody2D" unique_id=1303098856]
+y_sort_enabled = true
+collision_layer = 8
+collision_mask = 11
+script = ExtResource("1_klfcx")
+speed = 40
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=443048407]
+sprite_frames = ExtResource("1_jh6j7")
+animation = &"idle_down"
+autoplay = "idle_down"
+frame_progress = 0.060996648
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=521888138]
+position = Vector2(0, -1)
+shape = SubResource("RectangleShape2D_klfcx")
+
+[node name="AttackArea" type="Area2D" parent="." unique_id=570070634]
+collision_layer = 16
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea" unique_id=1513679853]
+shape = SubResource("CircleShape2D_klfcx")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=573975062]
+
+[node name="PathTimer" type="Timer" parent="." unique_id=1955110017]
+process_callback = 0
+wait_time = 0.5
+autostart = true

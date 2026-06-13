@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dol884wu1y0il"]
 
 [ext_resource type="PackedScene" uid="uid://dcfsyw5b83bki" path="res://ui/components/hud/health_bar/heart_icon.tscn" id="1_f6f4i"]
+[ext_resource type="Script" uid="uid://c5hfgm26swylp" path="res://ui/components/hud/health_bar/health_bar.gd" id="1_kfugc"]
 
 [node name="HealthBar" type="MarginContainer" unique_id=999230568]
 anchors_preset = -1
@@ -10,34 +11,35 @@ anchor_bottom = 0.055555556
 grow_horizontal = 0
 size_flags_horizontal = 8
 theme_override_constants/margin_top = 4
+script = ExtResource("1_kfugc")
 metadata/_edit_use_anchors_ = true
 
-[node name="MarginContainer" type="HBoxContainer" parent="." unique_id=12563276]
+[node name="IconsList" type="HBoxContainer" parent="." unique_id=12563276]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 theme_override_constants/separation = 2
 
-[node name="TextureRect" parent="MarginContainer" unique_id=118117640 instance=ExtResource("1_f6f4i")]
+[node name="HeartIcon" parent="IconsList" unique_id=118117640 instance=ExtResource("1_f6f4i")]
 layout_mode = 2
 
-[node name="TextureRect2" parent="MarginContainer" unique_id=69549582 instance=ExtResource("1_f6f4i")]
+[node name="HeartIcon2" parent="IconsList" unique_id=69549582 instance=ExtResource("1_f6f4i")]
 layout_mode = 2
 
-[node name="TextureRect3" parent="MarginContainer" unique_id=1347388051 instance=ExtResource("1_f6f4i")]
+[node name="HeartIcon3" parent="IconsList" unique_id=1347388051 instance=ExtResource("1_f6f4i")]
 layout_mode = 2
 
-[node name="TextureRect4" parent="MarginContainer" unique_id=403064459 instance=ExtResource("1_f6f4i")]
+[node name="HeartIcon4" parent="IconsList" unique_id=403064459 instance=ExtResource("1_f6f4i")]
 layout_mode = 2
 
-[node name="TextureRect5" parent="MarginContainer" unique_id=1208401471 instance=ExtResource("1_f6f4i")]
+[node name="HeartIcon5" parent="IconsList" unique_id=1208401471 instance=ExtResource("1_f6f4i")]
 layout_mode = 2
 
-[node name="TextureRect6" parent="MarginContainer" unique_id=618883131 instance=ExtResource("1_f6f4i")]
+[node name="HeartIcon6" parent="IconsList" unique_id=618883131 instance=ExtResource("1_f6f4i")]
 layout_mode = 2
 
-[node name="TextureRect7" parent="MarginContainer" unique_id=1282647090 instance=ExtResource("1_f6f4i")]
+[node name="HeartIcon7" parent="IconsList" unique_id=1282647090 instance=ExtResource("1_f6f4i")]
 layout_mode = 2
 
-[node name="TextureRect8" parent="MarginContainer" unique_id=2010688238 instance=ExtResource("1_f6f4i")]
+[node name="HeartIcon8" parent="IconsList" unique_id=2010688238 instance=ExtResource("1_f6f4i")]
 layout_mode = 2

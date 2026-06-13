@@ -17,29 +17,27 @@ size = Vector2(50, 48)
 base_font = ExtResource("2_0jfv6")
 
 [node name="NPC" type="StaticBody2D" unique_id=840380367]
-collision_layer = 2
+collision_mask = 2
 script = ExtResource("1_ekbtl")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=982053377]
 sprite_frames = ExtResource("1_u6las")
 animation = &"idle_down"
 autoplay = "idle_down"
-frame = 3
-frame_progress = 0.1387743
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1794124557]
 position = Vector2(0, 8.5)
 shape = SubResource("RectangleShape2D_0jfv6")
 
 [node name="QuestAvailableArea" type="Area2D" parent="." unique_id=1410247360]
-collision_mask = 4
+collision_mask = 2
 
 [node name="Zone" type="CollisionShape2D" parent="QuestAvailableArea" unique_id=1498592719]
 shape = SubResource("CircleShape2D_ekbtl")
 debug_color = Color(0, 0.6, 0.69803923, 0)
 
 [node name="InteractionArea" type="Area2D" parent="." unique_id=319606430]
-collision_mask = 4
+collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=1444913455]
 position = Vector2(0, 16)

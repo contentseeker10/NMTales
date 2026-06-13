@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://b5hw6edxcp3pv"]
+
+[ext_resource type="Texture2D" uid="uid://bc0k4qltmpwsd" path="res://assets/shared/logo.png" id="1_het5n"]
+[ext_resource type="Script" uid="uid://b1qs6ubknwbiw" path="res://ui/menus/death_screen/death_screen.gd" id="1_orcx8"]
+[ext_resource type="PackedScene" uid="uid://b6v7toodritgx" path="res://ui/components/button/button.tscn" id="2_o10ml"]
+
+[node name="DeathScreen" type="CanvasLayer" unique_id=428604488]
+process_mode = 3
+script = ExtResource("1_orcx8")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1565677743]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.39215687)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1288145704]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=114460133]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TextureRect" type="TextureRect" parent="CenterContainer/VBoxContainer" unique_id=1167691207]
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("1_het5n")
+expand_mode = 5
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1125497892]
+layout_mode = 2
+text = "Ви заснули на ЗНО 2021"
+
+[node name="ReviveButton" parent="CenterContainer/VBoxContainer" unique_id=763636606 instance=ExtResource("2_o10ml")]
+layout_mode = 2
+text = "Повернутися"
+
+[node name="ExitButton" parent="CenterContainer/VBoxContainer" unique_id=1492235404 instance=ExtResource("2_o10ml")]
+layout_mode = 2
+text = "Вийти"
+
+[connection signal="pressed" from="CenterContainer/VBoxContainer/ReviveButton" to="." method="_on_revive_button_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
