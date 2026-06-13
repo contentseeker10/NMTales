@@ -13,11 +13,17 @@ extends StaticBody2D
 
 @export var npc_id: String
 @export var npc_name: String
-@export var has_quests: bool
+@export var quest_giver: bool
+@export var assistant: bool
+@export_enum("Math", "Language", "History") var assistant_type: String
 
 #endregion
 
-var is_available: bool = false
+#region Private vars
+
+var _is_available: bool = false
+
+#endregion
 
 
 func _ready() -> void:
@@ -31,7 +37,7 @@ func _ready() -> void:
 #region Quest availability
 
 func update_quests_availability() -> void:
-	has_quests = _check_available_quests()
+	quest_giver = _check_available_quests()
 
 func _check_available_quests() -> bool:
 	if QuestManager.active_quest and QuestManager.active_quest.giver == npc_id:
@@ -56,27 +62,27 @@ func _check_available_quests() -> bool:
 #region Action label handler
 
 func _on_quest_available_area_body_entered(_body: Node2D) -> void:
-	if has_quests:
+	if quest_giver:
 		action_icon.global_position.y -= 10
 		action_icon.text = npc_id + "\nМаю квест!"
 	action_icon.show()
 
 
 func _on_quest_available_area_body_exited(_body: Node2D) -> void:
-	if has_quests:
+	if quest_giver:
 		action_icon.global_position.y += 10
 	action_icon.hide()
 
 
 func _on_interaction_area_body_entered(body: Node2D) -> void:
 	action_icon.add_theme_color_override("font_color", Color.YELLOW)
-	is_available = true
+	_is_available = true
 	body.can_attack = false
 
 
 func _on_interaction_area_body_exited(body: Node2D) -> void:
 	action_icon.add_theme_color_override("font_color", Color.WHITE)
-	is_available = false
+	_is_available = false
 	body.can_attack = true
 
 #endregion
@@ -85,9 +91,14 @@ func _on_interaction_area_body_exited(body: Node2D) -> void:
 #region Dialogue start
 
 func _on_interaction_area_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-	if is_available and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT \
+	if _is_available and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT \
 		and event.is_pressed():
-		DialogueManager.start_dialogue(self)
+		
+		if assistant:
+			AssistantManager.start_chat(assistant_type, npc_name)
+		else:
+			DialogueManager.start_dialogue(self)
+		
 		get_viewport().set_input_as_handled()
 
 #endregion

@@ -13,11 +13,14 @@ var _last_answer: RichTextLabel
 
 #region Node imports
 
+@onready var assistant_name_label: Label = $VBoxContainer/AssistantNameLabel
 @onready var line_edit: LineEdit = $VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/LineEdit
 @onready var chat_box: VBoxContainer = $VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/ChatBox
 
 #endregion
 
+
+#region Chatting handler
 
 func _on_send_button_pressed() -> void:
 	var prompt := line_edit.text
@@ -56,3 +59,10 @@ func _load_answer(data: Dictionary) -> void:
 	_last_answer.text = "[b]Асистент:[/b]\n"
 	# TODO: Loading LLM response (ensure API correctness)
 	_last_answer.text += data.get("answer", "error")
+
+#endregion
+
+
+func _on_exit_button_pressed() -> void:
+	AssistantManager.end_chat()
+	queue_free()

@@ -23,6 +23,7 @@ border_width_bottom = 2
 border_color = Color(0.29803923, 0.22745098, 0.2, 1)
 
 [node name="AssistantChat" type="CanvasLayer" unique_id=1247296956]
+process_mode = 3
 script = ExtResource("1_y4yaf")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=877932151]
@@ -99,4 +100,19 @@ max_length = 300
 layout_mode = 2
 text = ">"
 
+[node name="ExitButton" parent="." unique_id=63254880 instance=ExtResource("5_upobg")]
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.14400001
+anchor_right = 0.5
+anchor_bottom = 0.14400001
+offset_left = 201.0
+offset_top = 0.15999603
+offset_right = 276.0
+offset_bottom = 24.159996
+grow_horizontal = 2
+grow_vertical = 2
+text = "x"
+
 [connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/SendButton" to="." method="_on_send_button_pressed"]
+[connection signal="pressed" from="ExitButton" to="." method="_on_exit_button_pressed"]
