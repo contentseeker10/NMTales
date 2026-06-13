@@ -12,9 +12,12 @@ func entry_location(location_name: String) -> void:
 	var scene_path: String = "res://locations/" + location_name.to_lower() + "/" + location_name.to_lower() + ".scn"
 	
 	if ResourceLoader.exists(scene_path):
+		print("Location exists. Loading.")
 		get_tree().change_scene_to_file(scene_path)
 		current_location = location_name
 		return
+	
+	print("Downloading location from server...")
 	
 	if FileAccess.file_exists(local_pack_path):
 		if PackManager.mount_pack(local_pack_path):
