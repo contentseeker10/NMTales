@@ -95,12 +95,13 @@ func _on_interaction_area_input_event(_viewport: Node, event: InputEvent, _shape
 
 #region Skin changer
 
-enum NPCSkin { FemaleHumanBrown, MaleElfWhite, FemaleElfGreen, MaleDemonBlack }
+enum NPCSkin { FemaleHumanBrown, MaleElfWhite, FemaleElfGreen, MaleDemonBlack, ElderBook }
 const SKIN_TEXTURES := {
 	NPCSkin.FemaleHumanBrown: preload("res://parts/npc/sprite_frames/1.tres"),
 	NPCSkin.MaleElfWhite: preload("res://parts/npc/sprite_frames/2.tres"),
 	NPCSkin.FemaleElfGreen: preload("res://parts/npc/sprite_frames/3.tres"),
-	NPCSkin.MaleDemonBlack: preload("res://parts/npc/sprite_frames/4.tres")
+	NPCSkin.MaleDemonBlack: preload("res://parts/npc/sprite_frames/4.tres"),
+	NPCSkin.ElderBook: preload("res://parts/npc/sprite_frames/elder_book.tres")
 }
 
 @export var skin: NPCSkin = NPCSkin.FemaleHumanBrown:
