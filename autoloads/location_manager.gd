@@ -42,7 +42,12 @@ func update_player_location(location_name: String, player_coords: Vector2) -> vo
 		"currentPositionX": player_coords.x,
 		"currentPositionY": player_coords.y
 	}
-	NetworkManager.send_post("/api/Player/location", body, AuthManager.token_header)
+	_send_coords(body)
+
+func _send_coords(body: Dictionary) -> void:
+	var http_request := NetworkManager.send_post("/api/Player/location", body, AuthManager.token_header)
+	await http_request.request_completed
+	http_request.queue_free()
 
 
 func spawn_player() -> Player:
