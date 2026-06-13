@@ -21,11 +21,14 @@ texture_region_size = Vector2i(222, 154)
 [sub_resource type="TileSet" id="TileSet_h7r1x"]
 sources/0 = SubResource("TileSetAtlasSource_q57vu")
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_q57vu"]
-size = Vector2(144, 96)
+[sub_resource type="CircleShape2D" id="CircleShape2D_q57vu"]
+radius = 200.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_05tpv"]
 radius = 88.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q57vu"]
+size = Vector2(144, 96)
 
 [node name="MathTester" type="Node2D" unique_id=1158934543]
 y_sort_enabled = true
@@ -36,12 +39,13 @@ y_sort_enabled = true
 tile_map_data = PackedByteArray(0, 0, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 tile_set = SubResource("TileSet_h7r1x")
 
-[node name="ClickArea" type="Area2D" parent="." unique_id=619847487]
+[node name="LabelArea" type="Area2D" parent="." unique_id=1112248027]
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ClickArea" unique_id=2029333956]
-position = Vector2(-9, 16)
-shape = SubResource("RectangleShape2D_q57vu")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LabelArea" unique_id=352769116]
+position = Vector2(-13, 15)
+shape = SubResource("CircleShape2D_q57vu")
+debug_color = Color(0, 0.6, 0.69803923, 0)
 
 [node name="InteractionArea" type="Area2D" parent="." unique_id=103320472]
 collision_mask = 2
@@ -50,6 +54,31 @@ collision_mask = 2
 position = Vector2(-10, 14)
 shape = SubResource("CircleShape2D_05tpv")
 
-[connection signal="input_event" from="ClickArea" to="." method="_on_click_area_input_event"]
+[node name="ClickArea" type="Area2D" parent="." unique_id=619847487]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClickArea" unique_id=2029333956]
+position = Vector2(-9, 16)
+shape = SubResource("RectangleShape2D_q57vu")
+
+[node name="ActionIcon" type="Label" parent="." unique_id=59165766]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -28.0
+offset_top = -79.0
+offset_right = 12.0
+offset_bottom = -59.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Test Topic"
+horizontal_alignment = 1
+
+[connection signal="body_entered" from="LabelArea" to="." method="_on_label_area_body_entered"]
+[connection signal="body_exited" from="LabelArea" to="." method="_on_label_area_body_exited"]
 [connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]
 [connection signal="body_exited" from="InteractionArea" to="." method="_on_interaction_area_body_exited"]
+[connection signal="input_event" from="ClickArea" to="." method="_on_click_area_input_event"]
