@@ -16,7 +16,7 @@ var npc_sprite_frames: SpriteFrames
 
 
 func _ready() -> void:
-	npc_name_label.text = npc.npc_id
+	npc_name_label.text = npc.npc_name
 	if npc_sprite_frames:
 		npc_sprite.sprite_frames = npc_sprite_frames
 		npc_sprite.play("idle_down")

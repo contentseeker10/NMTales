@@ -18,6 +18,7 @@ var current_state: State = State.CHASE
 @export var speed: int = 150
 @export_range(0.0, 80.0, 5.0) var damage: int = 10
 
+
 func _ready() -> void:
 	_path_timer.timeout.connect(_on_path_timer_timeout)
 	_update_skin()
@@ -110,7 +111,7 @@ func _get_direction_name(vel: Vector2) -> String:
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 enum EnemySkin { VampireGreen, VampireBlue, VampireRed }
-const SKIN_TEXTURES = {
+const SKIN_TEXTURES := {
 	EnemySkin.VampireGreen: preload("res://assets/shared/characters/mobs/vampire_1/vampire_1.tres"),
 	EnemySkin.VampireBlue: preload("res://assets/shared/characters/mobs/vampire_2/vampire_2.tres"),
 	EnemySkin.VampireRed: preload("res://assets/shared/characters/mobs/vampire_3/vampire_3.tres")

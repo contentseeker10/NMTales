@@ -1,26 +1,34 @@
+@tool
 class_name NPC
 extends StaticBody2D
+
+#region Node imports
 
 @onready var action_icon: Label = $ActionIcon
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
+#endregion
+
+#region Properties
+
 @export var npc_id: String
+@export var npc_name: String
 @export var has_quests: bool
-@export var skin: SpriteFrames
+
+#endregion
 
 var is_available: bool = false
 
 
 func _ready() -> void:
-	action_icon.text = npc_id
-	sprite.sprite_frames = skin
-	sprite.play("idle_down")
-	
+	action_icon.text = npc_name
 	QuestManager.quest_updated.connect(func(_quest): update_quests_availability())
 	QuestManager.quest_completed.connect(func(_quest): update_quests_availability())
-	
 	update_quests_availability()
+	_update_skin()
 
+
+#region Quest availability
 
 func update_quests_availability() -> void:
 	has_quests = _check_available_quests()
@@ -42,6 +50,10 @@ func _check_available_quests() -> bool:
 		
 	return false
 
+#endregion
+
+
+#region Action label handler
 
 func _on_quest_available_area_body_entered(_body: Node2D) -> void:
 	if has_quests:
@@ -67,9 +79,40 @@ func _on_interaction_area_body_exited(body: Node2D) -> void:
 	is_available = false
 	body.can_attack = true
 
+#endregion
+
+
+#region Dialogue start
 
 func _on_interaction_area_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if is_available and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT \
 		and event.is_pressed():
 		DialogueManager.start_dialogue(self)
 		get_viewport().set_input_as_handled()
+
+#endregion
+
+
+#region Skin changer
+
+enum NPCSkin { FemaleHumanBrown, MaleElfWhite, FemaleElfGreen, MaleDemonBlack }
+const SKIN_TEXTURES := {
+	NPCSkin.FemaleHumanBrown: preload("res://parts/npc/sprite_frames/1.tres"),
+	NPCSkin.MaleElfWhite: preload("res://parts/npc/sprite_frames/2.tres"),
+	NPCSkin.FemaleElfGreen: preload("res://parts/npc/sprite_frames/3.tres"),
+	NPCSkin.MaleDemonBlack: preload("res://parts/npc/sprite_frames/4.tres")
+}
+
+@export var skin: NPCSkin = NPCSkin.FemaleHumanBrown:
+	set(value):
+		skin = value
+		_update_skin()
+
+func _update_skin() -> void:
+	if not is_node_ready() and Engine.is_editor_hint():
+		await ready
+	if sprite and SKIN_TEXTURES.has(skin):
+		sprite.sprite_frames = SKIN_TEXTURES[skin]
+		sprite.play("idle_down")
+
+#endregion
