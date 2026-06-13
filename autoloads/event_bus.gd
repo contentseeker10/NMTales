@@ -9,3 +9,5 @@ extends Node
 @warning_ignore("unused_signal") signal mob_killed(mob_id: String)
 
 @warning_ignore("unused_signal") signal player_died()
+
+@warning_ignore("unused_signal") signal page_title_changed(index: int, new_title: String)

@@ -16,6 +16,7 @@ var _page_container_scene: PackedScene = preload("res://ui/menus/notebook/page_c
 
 
 func _ready() -> void:
+	EventBus.page_title_changed.connect(_on_page_title_changed)
 	_load_pages()
 
 func _load_pages() -> void:
@@ -48,8 +49,6 @@ func _init_page(page_data: Dictionary) -> void:
 	page.page_text = page_data.get("content", "error")
 	page.index = tab_bar.tab_count
 	page_list.add_child(page)
-	page.title_changed.connect(func(new_title): 
-		tab_bar.set_tab_title(page.index - 1, new_title))
 	page.delete_button.pressed.connect(_on_delete_button_pressed.bind(page))
 	_add_new_tab(page.page_name)
 
@@ -67,6 +66,10 @@ func _change_page_to(index: int) -> void:
 				page.show()
 			else:
 				page.hide()
+
+
+func _on_page_title_changed(index: int, new_title: String) -> void:
+	tab_bar.set_tab_title(index - 1, new_title)
 
 #endregion
 
