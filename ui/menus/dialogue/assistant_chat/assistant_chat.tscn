@@ -1,0 +1,102 @@
+[gd_scene format=3 uid="uid://i0kgn5kuh1n6"]
+
+[ext_resource type="Script" uid="uid://dmc3ep3d45jb4" path="res://ui/menus/dialogue/assistant_chat/assistant_chat.gd" id="1_y4yaf"]
+[ext_resource type="PackedScene" uid="uid://cd4dlux2r57rx" path="res://ui/menus/dialogue/answers/npc_text.tscn" id="2_7lu72"]
+[ext_resource type="Theme" uid="uid://i1xtwecrye0x" path="res://ui/menus/dialogue/scroll_theme.tres" id="2_gka7b"]
+[ext_resource type="PackedScene" uid="uid://cmp3dqb0gaqip" path="res://ui/components/line_edit/line_edit.tscn" id="4_byg5s"]
+[ext_resource type="PackedScene" uid="uid://b6v7toodritgx" path="res://ui/components/button/button.tscn" id="5_upobg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7lu72"]
+bg_color = Color(1, 0.78431374, 0.5411765, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.99607843, 0.7019608, 0.34509805, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gka7b"]
+bg_color = Color(1, 0.78431374, 0.5411765, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.29803923, 0.22745098, 0.2, 1)
+
+[node name="AssistantChat" type="CanvasLayer" unique_id=1247296956]
+script = ExtResource("1_y4yaf")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=877932151]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.39215687)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=2025657281]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -192.0
+offset_top = -156.0
+offset_right = 192.0
+offset_bottom = 156.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+
+[node name="AssistantNameLabel" type="Label" parent="VBoxContainer" unique_id=2000729738]
+layout_mode = 2
+text = "Assistant Name"
+horizontal_alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer" unique_id=793284523]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_7lu72")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer" unique_id=380220498]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/PanelContainer/VBoxContainer" unique_id=1715175097]
+custom_minimum_size = Vector2(0, 253)
+layout_mode = 2
+theme = ExtResource("2_gka7b")
+theme_override_styles/panel = SubResource("StyleBoxFlat_gka7b")
+vertical_scroll_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer" unique_id=671750391]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 4
+
+[node name="ChatBox" type="VBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/MarginContainer" unique_id=1665822206]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="NPCText" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/ChatBox" unique_id=1077512254 instance=ExtResource("2_7lu72")]
+layout_mode = 2
+text = "[b]Асистент:[/b]
+Привіт! Я тут щоб допомогти тобі з вивченням ..."
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer" unique_id=695551755]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="LineEdit" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" unique_id=1504955661 instance=ExtResource("4_byg5s")]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Ваша відповідь..."
+max_length = 300
+
+[node name="SendButton" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" unique_id=763636606 instance=ExtResource("5_upobg")]
+layout_mode = 2
+text = ">"
+
+[connection signal="pressed" from="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/SendButton" to="." method="_on_send_button_pressed"]
