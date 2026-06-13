@@ -117,7 +117,7 @@ func _collect_user_input() -> Array[Dictionary]:
 	return input
 
 
-func _on_answer_checked(is_correct: bool, _is_completed: bool, _is_failed: bool, 
+func _on_answer_checked(_is_correct: bool, _is_completed: bool, _is_failed: bool, 
 					_remaining_attempts: int, slot_results: Array) -> void:
 	_show_results(slot_results)
 

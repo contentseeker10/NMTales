@@ -2,7 +2,7 @@ extends CanvasLayer
 
 
 func _unhandled_key_input(event: InputEvent) -> void:
-	if event.is_action_pressed("pause"):
+	if event.is_action_pressed("ui_cancel"):
 		_toggle_pause()
 
 func _on_continue_button_pressed() -> void:
@@ -15,7 +15,11 @@ func _on_exit_button_pressed() -> void:
 	
 func _toggle_pause() -> void:
 	var current_scene: Node = get_tree().current_scene
-	if current_scene is Main:
+	if current_scene is MainMenu:
 		return
-	get_tree().paused = !get_tree().paused
-	self.visible = get_tree().paused
+	if not self.visible:
+		get_tree().paused = true
+		self.visible = true
+	else:
+		get_tree().paused = false
+		self.visible = false

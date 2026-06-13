@@ -1,3 +1,4 @@
+class_name MainLocation
 extends Node2D
 
 var player: Player

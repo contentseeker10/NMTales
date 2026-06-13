@@ -1,4 +1,4 @@
-class_name Main
+class_name MainMenu
 extends Control
 
 @onready var login_panel: Control = $LoginPanel
