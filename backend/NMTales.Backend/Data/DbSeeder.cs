@@ -101,40 +101,40 @@ namespace NMTales.Backend.Data
             yield return new Achievement
             {
                 Code = "talk_all_assistants",
-                Title = "Polymath",
-                Description = "Speak to all three AI tutors (Math, Language, History)",
+                Title = "Ерудит",
+                Description = "Поговорити з усіма трьома асистентами (Математика, Мова, Історія)",
                 XpReward = 150
             };
 
             yield return new Achievement
             {
                 Code = "complete_all_quests",
-                Title = "Hero of NMTales",
-                Description = "Complete all quests in the game",
+                Title = "Герой NMTales",
+                Description = "Виконати всі квести в грі",
                 XpReward = 300
             };
 
             yield return new Achievement
             {
                 Code = "kill_100_vampires",
-                Title = "Vampire Slayer",
-                Description = "Defeat 100 vampires",
+                Title = "Винищувач вампірів",
+                Description = "Перемогти 100 вампірів",
                 XpReward = 250
             };
 
             yield return new Achievement
             {
                 Code = "unlock_all_spawns",
-                Title = "Explorer",
-                Description = "Discover all vampire spawn points",
+                Title = "Дослідник",
+                Description = "Відкрити всі точки спавну вампірів",
                 XpReward = 200
             };
 
             yield return new Achievement
             {
                 Code = "flawless_run",
-                Title = "Immortal Scholar",
-                Description = "Complete the game without test failures or deaths",
+                Title = "Безсмертний вчений",
+                Description = "Пройти гру без помилок у тестах та смертей",
                 XpReward = 500
             };
         }

@@ -2,11 +2,13 @@
 
 [ext_resource type="Script" uid="uid://t5naj7x4kg0e" path="res://ui/menus/achievements/achievements.gd" id="1_771im"]
 [ext_resource type="PackedScene" uid="uid://cwuqpwk2j3equ" path="res://ui/components/achievement_plate/achivement_plate.tscn" id="2_p8h0d"]
+[ext_resource type="PackedScene" uid="uid://b6v7toodritgx" path="res://ui/components/button/button.tscn" id="3_feasd"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_771im"]
 bg_color = Color(0.16470589, 0.1254902, 0.10980392, 1)
 
 [node name="Achievements" type="CanvasLayer" unique_id=1015489028]
+layer = 101
 script = ExtResource("1_771im")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=952990423]
@@ -65,3 +67,16 @@ unlocked = true
 
 [node name="AchivementPlate2" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/GridContainer" unique_id=1820044861 instance=ExtResource("2_p8h0d")]
 layout_mode = 2
+
+[node name="ExitButton" parent="." unique_id=763636606 instance=ExtResource("3_feasd")]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 190.0
+offset_top = -154.0
+offset_right = 265.0
+offset_bottom = -130.0
+text = "X"
+

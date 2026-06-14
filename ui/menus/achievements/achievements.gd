@@ -8,6 +8,9 @@ func _ready() -> void:
 	# Close on background click
 	$ColorRect.gui_input.connect(_on_color_rect_gui_input)
 	
+	# Close on Exit Button click
+	$ExitButton.pressed.connect(_close_menu)
+	
 	# Clear default plate elements
 	var grid: GridContainer = $VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/GridContainer
 	for child in grid.get_children():
@@ -18,10 +21,16 @@ func _ready() -> void:
 	var plate_scene: PackedScene = preload("res://ui/components/achievement_plate/achivement_plate.tscn")
 	
 	for ach in achievements:
+		var code: String = ach.get("code", "")
+		var title: String = AchievementsManager.get_translated_title(code, ach.get("title", ""))
+		var desc: String = AchievementsManager.get_translated_description(code, ach.get("description", ""))
+		var current_progress: int = int(ach.get("currentProgress", 0))
+		var target_progress: int = int(ach.get("targetProgress", 0))
+		
 		var plate = plate_scene.instantiate()
 		grid.add_child(plate)
-		plate.title_label.text = ach.get("title", "")
-		plate.description_label.text = ach.get("description", "") + " (" + str(ach.get("currentProgress", 0)) + "/" + str(ach.get("targetProgress", 0)) + ")"
+		plate.title_label.text = title
+		plate.description_label.text = desc + " (" + str(current_progress) + "/" + str(target_progress) + ")"
 		plate.unlocked = ach.get("isUnlocked", false)
 
 

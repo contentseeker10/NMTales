@@ -2,6 +2,39 @@ extends Node
 
 const NOTIFICATION_SCENE: PackedScene = preload("res://ui/components/notification/notification.tscn")
 
+const TRANSLATIONS: Dictionary = {
+	"talk_all_assistants": {
+		"title": "Ерудит",
+		"description": "Поговорити з усіма трьома асистентами (Математика, Мова, Історія)"
+	},
+	"complete_all_quests": {
+		"title": "Герой NMTales",
+		"description": "Виконати всі квести в грі"
+	},
+	"kill_100_vampires": {
+		"title": "Винищувач вампірів",
+		"description": "Перемогти 100 вампірів"
+	},
+	"unlock_all_spawns": {
+		"title": "Дослідник",
+		"description": "Відкрити всі точки спавну вампірів"
+	},
+	"flawless_run": {
+		"title": "Безсмертний вчений",
+		"description": "Пройти гру без помилок у тестах та смертей"
+	}
+}
+
+func get_translated_title(code: String, default_title: String) -> String:
+	if TRANSLATIONS.has(code):
+		return TRANSLATIONS[code]["title"]
+	return default_title
+
+func get_translated_description(code: String, default_desc: String) -> String:
+	if TRANSLATIONS.has(code):
+		return TRANSLATIONS[code]["description"]
+	return default_desc
+
 func _ready() -> void:
 	EventBus.mob_killed.connect(_on_mob_killed)
 	EventBus.player_died.connect(_on_player_died)
@@ -72,11 +105,12 @@ func _handle_new_unlocks(new_unlocks: Array) -> void:
 		return
 		
 	for ach in new_unlocks:
-		var title = ach.get("title", "")
+		var code = ach.get("code", "")
+		var title = get_translated_title(code, ach.get("title", ""))
 		var xpReward = ach.get("xpReward", 0)
 		var notif: Notification = NOTIFICATION_SCENE.instantiate()
 		target_parent.add_child(notif)
-		await notif.show_notification("Досягнення отримано: " + title + "! (+" + str(xpReward) + " XP)")
+		await notif.show_notification("Досягнення отримано: " + title + "! (+" + str(int(xpReward)) + " XP)")
 		notif.queue_free()
 		
 	# Trigger HUD level and XP progression update
