@@ -7,6 +7,9 @@ using NMTales.Backend.DTO;
 using NMTales.Backend.enums;
 using NMTales.Backend.Models;
 using NMTales.Backend.Services;
+using NMTales.Backend.Services.Test;
+using NMTales.Backend.Repositories;
+using NMTales.Backend.Repositories.PlayerStats;
 
 namespace NMTales.Backend.Controllers;
 
@@ -31,13 +34,18 @@ public class TestController : ControllerBase
     // anti-cheat gate; for a multi-instance relational deployment add a concurrency token.
     private static readonly ConcurrentDictionary<int, SemaphoreSlim> UserGates = new();
 
-    private readonly ApplicationDbContext _context;
+    private readonly ITestService _testService;
     private readonly IAchievementService _achievementService;
+    private readonly IPlayerStatsRepository _playerStatsRepository;
 
-    public TestController(ApplicationDbContext context, IAchievementService achievementService)
+    public TestController(
+        ITestService testService, 
+        IAchievementService achievementService,
+        IPlayerStatsRepository playerStatsRepository)
     {
-        _context = context;
+        _testService = testService;
         _achievementService = achievementService;
+        _playerStatsRepository = playerStatsRepository;
     }
 
     /// <summary>
@@ -60,24 +68,19 @@ public class TestController : ControllerBase
             return BadRequest("Topic is required.");
         }
 
-        // Math altar draws 3 questions; a Ukrainian scroll is a single question.
         var requiredCount = subject == Subject.Math ? 3 : 1;
 
         var gate = GateFor(userId);
         await gate.WaitAsync();
         try
         {
-            // Drop any unfinished session for this user (in-progress or failed) so the player
-            // always starts clean. Completed sessions are kept as answer history.
-            var stale = await _context.UserTestSessions
-                .Where(s => s.UserId == userId && !s.IsCompleted)
-                .ToListAsync();
+            var stale = await _testService.GetStaleSessionsAsync(userId);
             if (stale.Count > 0)
             {
-                _context.UserTestSessions.RemoveRange(stale);
+                _testService.RemoveSessions(stale);
             }
 
-            var questionIds = await SelectQuestionIdsAsync(userId, subject, topic, requiredCount);
+            var questionIds = await _testService.SelectQuestionIdsAsync(userId, subject, topic, requiredCount);
             if (questionIds.Count < requiredCount)
             {
                 return BadRequest("Not enough questions available for this topic.");
@@ -95,8 +98,8 @@ public class TestController : ControllerBase
                 IsFailed = false
             };
 
-            _context.UserTestSessions.Add(session);
-            await _context.SaveChangesAsync();
+            _testService.AddSession(session);
+            await _testService.SaveChangesAsync();
 
             var firstQuestion = await LoadQuestionDtoAsync(questionIds[0]);
             if (firstQuestion == null)
@@ -133,8 +136,7 @@ public class TestController : ControllerBase
         await gate.WaitAsync();
         try
         {
-            var session = await _context.UserTestSessions
-                .FirstOrDefaultAsync(s => s.Id == dto.SessionId);
+            var session = await _testService.GetSessionByIdAsync(dto.SessionId);
 
             // Treat "not yours" as "not found" so sessions can't be enumerated across users.
             if (session == null || session.UserId != userId)
@@ -152,13 +154,11 @@ public class TestController : ControllerBase
                 return BadRequest("Test session is in an invalid state.");
             }
 
-            var user = await _context.Users.FindAsync(userId);
+            var user = await _testService.GetUserByIdAsync(userId);
             if (user == null) return Unauthorized();
 
             var currentQuestionId = session.QuestionIds[session.CurrentQuestionIndex];
-            var question = await _context.Questions
-                .Include(q => q.Answers)
-                .FirstOrDefaultAsync(q => q.Id == currentQuestionId);
+            var question = await _testService.GetQuestionWithAnswersAsync(currentQuestionId);
 
             if (question == null)
             {
@@ -201,7 +201,7 @@ public class TestController : ControllerBase
                 session.RemainingAttempts = MathAttempts;
                 session.IsCompleted = true;
                 user.AddXp(XpReward);
-                await _context.SaveChangesAsync();
+                await _testService.SaveChangesAsync();
                 return Ok(new { correct = true, completed = true });
             }
 
@@ -215,7 +215,7 @@ public class TestController : ControllerBase
 
             session.CurrentQuestionIndex++;
             session.RemainingAttempts = MathAttempts;
-            await _context.SaveChangesAsync();
+            await _testService.SaveChangesAsync();
             return Ok(new { correct = true, completed = false, nextQuestion });
         }
 
@@ -223,24 +223,23 @@ public class TestController : ControllerBase
         if (session.RemainingAttempts <= 0)
         {
             session.IsFailed = true;
-
-            var stats = await _context.PlayerStats.FirstOrDefaultAsync(ps => ps.UserId == user.Id);
+            var stats = await _playerStatsRepository.GetByUserIdAsync(user.Id);
             if (stats == null)
             {
                 stats = new PlayerStats { UserId = user.Id };
-                _context.PlayerStats.Add(stats);
+                await _playerStatsRepository.AddAsync(stats);
             }
             stats.FailedTestsCount++;
             stats.HasFailedTest = true;
+            await _playerStatsRepository.SaveChangesAsync();
 
-            await _context.SaveChangesAsync();
+            await _testService.SaveChangesAsync();
 
             await _achievementService.EvaluateAndUnlockAchievementsAsync(user.Id);
-
             return Ok(new { correct = false, completed = false, failed = true });
         }
 
-        await _context.SaveChangesAsync();
+        await _testService.SaveChangesAsync();
         return Ok(new
         {
             correct = false,
@@ -297,70 +296,30 @@ public class TestController : ControllerBase
         {
             session.IsCompleted = true;
             user.AddXp(XpReward);
-            await _context.SaveChangesAsync();
+            await _testService.SaveChangesAsync();
             return Ok(new { correct = true, completed = true, failed = false, slotResults });
         }
 
         session.IsFailed = true;
-
-        var stats = await _context.PlayerStats.FirstOrDefaultAsync(ps => ps.UserId == user.Id);
+        var stats = await _playerStatsRepository.GetByUserIdAsync(user.Id);
         if (stats == null)
         {
             stats = new PlayerStats { UserId = user.Id };
-            _context.PlayerStats.Add(stats);
+            await _playerStatsRepository.AddAsync(stats);
         }
         stats.FailedTestsCount++;
         stats.HasFailedTest = true;
+        await _playerStatsRepository.SaveChangesAsync();
 
-        await _context.SaveChangesAsync();
+        await _testService.SaveChangesAsync();
 
         await _achievementService.EvaluateAndUnlockAchievementsAsync(user.Id);
-
         return Ok(new { correct = false, completed = false, failed = true, slotResults });
     }
-
-    /// <summary>
-    /// Choose unique random question ids for a topic, preferring questions the player has not
-    /// yet answered correctly (questions inside their completed sessions), then falling back to
-    /// already-seen ones if the fresh pool is too small.
-    /// </summary>
-    private async Task<List<int>> SelectQuestionIdsAsync(int userId, Subject subject, string topic, int count)
-    {
-        var candidateIds = await _context.Questions
-            .Where(q => q.Subject == subject && q.Topic == topic)
-            .Select(q => q.Id)
-            .ToListAsync();
-
-        if (candidateIds.Count < count)
-        {
-            return candidateIds; // Caller detects the shortfall.
-        }
-
-        var completedSessions = await _context.UserTestSessions
-            .Where(s => s.UserId == userId && s.IsCompleted)
-            .ToListAsync();
-        var answeredCorrectly = completedSessions
-            .SelectMany(s => s.QuestionIds)
-            .ToHashSet();
-
-        var fresh = candidateIds
-            .Where(id => !answeredCorrectly.Contains(id))
-            .OrderBy(_ => Random.Shared.Next())
-            .ToList();
-        var seen = candidateIds
-            .Where(id => answeredCorrectly.Contains(id))
-            .OrderBy(_ => Random.Shared.Next())
-            .ToList();
-
-        return fresh.Concat(seen).Take(count).ToList();
-    }
-
+    
     private async Task<TestQuestionDto?> LoadQuestionDtoAsync(int questionId)
     {
-        var question = await _context.Questions
-            .Include(q => q.Answers)
-            .FirstOrDefaultAsync(q => q.Id == questionId);
-
+        var question = await _testService.GetQuestionWithAnswersAsync(questionId);
         return question == null ? null : TestQuestionDto.FromModel(question);
     }
 

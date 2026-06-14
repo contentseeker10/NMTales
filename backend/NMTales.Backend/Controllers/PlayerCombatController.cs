@@ -6,6 +6,8 @@ using NMTales.Backend.DTO;
 using NMTales.Backend.Filters;
 using NMTales.Backend.Models;
 using NMTales.Backend.Services;
+using NMTales.Backend.Repositories.User;
+using NMTales.Backend.Repositories.PlayerStats;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -17,12 +19,17 @@ namespace NMTales.Backend.Controllers
     [Authorize]
     public class PlayerCombatController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IUserRepository _userRepository;
+        private readonly IPlayerStatsRepository _playerStatsRepository;
         private readonly IAchievementService _achievementService;
 
-        public PlayerCombatController(ApplicationDbContext context, IAchievementService achievementService)
+        public PlayerCombatController(
+            IUserRepository userRepository, 
+            IPlayerStatsRepository playerStatsRepository,
+            IAchievementService achievementService)
         {
-            _context = context;
+            _userRepository = userRepository;
+            _playerStatsRepository = playerStatsRepository;
             _achievementService = achievementService;
         }
 
@@ -31,7 +38,7 @@ namespace NMTales.Backend.Controllers
         {
             if (!TryGetUserId(out var userId)) return Unauthorized();
 
-            var user = await _context.Users.FindAsync(userId);
+            var user = await _userRepository.GetByIdAsync(userId);
             if (user == null) return NotFound("User not found");
 
             if (user.IsDead)
@@ -47,7 +54,7 @@ namespace NMTales.Backend.Controllers
             }
 
             user.LastAttackTimeUtc = now;
-            await _context.SaveChangesAsync();
+            await _userRepository.SaveChangesAsync();
             return Ok(new { success = true });
         }
 
@@ -62,7 +69,7 @@ namespace NMTales.Backend.Controllers
 
             if (!TryGetUserId(out var userId)) return Unauthorized();
 
-            var user = await _context.Users.FindAsync(userId);
+            var user = await _userRepository.GetByIdAsync(userId);
             if (user == null) return NotFound("User not found");
 
             if (user.IsDead)
@@ -76,21 +83,21 @@ namespace NMTales.Backend.Controllers
                 user.CurrentHp = 0;
                 user.IsDead = true;
 
-                var stats = await _context.PlayerStats.FirstOrDefaultAsync(ps => ps.UserId == userId);
+                var stats = await _playerStatsRepository.GetByUserIdAsync(userId);
                 if (stats == null)
                 {
                     stats = new PlayerStats { UserId = userId };
-                    _context.PlayerStats.Add(stats);
+                    await _playerStatsRepository.AddAsync(stats);
                 }
                 stats.DeathsCount++;
                 stats.HasDied = true;
-                await _context.SaveChangesAsync();
+                await _playerStatsRepository.SaveChangesAsync();
 
                 await _achievementService.EvaluateAndUnlockAchievementsAsync(userId);
             }
             else
             {
-                await _context.SaveChangesAsync();
+                await _userRepository.SaveChangesAsync();
             }
 
             return Ok(new { currentHp = user.CurrentHp, isDead = user.IsDead });
@@ -106,7 +113,7 @@ namespace NMTales.Backend.Controllers
 
             if (!TryGetUserId(out var userId)) return Unauthorized();
 
-            var user = await _context.Users.FindAsync(userId);
+            var user = await _userRepository.GetByIdAsync(userId);
             if (user == null) return NotFound("User not found");
 
             if (user.IsDead)
@@ -124,7 +131,7 @@ namespace NMTales.Backend.Controllers
             }
 
             user.CurrentHp = Math.Min(user.MaxHp, user.CurrentHp + 10);
-            await _context.SaveChangesAsync();
+            await _userRepository.SaveChangesAsync();
 
             return Ok(new { currentHp = user.CurrentHp });
         }
@@ -135,14 +142,14 @@ namespace NMTales.Backend.Controllers
         {
             if (!TryGetUserId(out var userId)) return Unauthorized();
 
-            var user = await _context.Users.FindAsync(userId);
+            var user = await _userRepository.GetByIdAsync(userId);
             if (user == null) return NotFound("User not found");
 
             user.IsDead = false;
             user.CurrentHp = 20;
             user.CurrentPositionX = 0.0;
             user.CurrentPositionY = 0.0;
-            await _context.SaveChangesAsync();
+            await _userRepository.SaveChangesAsync();
 
             return Ok(new
             {
