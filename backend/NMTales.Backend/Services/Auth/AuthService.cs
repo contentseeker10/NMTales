@@ -24,7 +24,7 @@ public class AuthService : IAuthService
         }
 
         // 2. Create the user
-        var user = new User
+        var user = new Models.User
         {
             Username = dto.Username,
             Password = BCrypt.Net.BCrypt.HashPassword(dto.Password),

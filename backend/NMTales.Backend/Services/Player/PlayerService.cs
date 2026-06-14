@@ -12,12 +12,12 @@ public class PlayerService : IPlayerService
         _userRepo = userRepo;
     }
 
-    public async Task<User?> GetPlayerAsync(int userId)
+    public async Task<Models.User?> GetPlayerAsync(int userId)
     {
         return await _userRepo.GetByIdAsync(userId);
     }
 
-    public async Task<User?> UpdateLocationAsync(int userId, string location, double x, double y)
+    public async Task<Models.User?> UpdateLocationAsync(int userId, string location, double x, double y)
     {
         var user = await _userRepo.GetByIdAsync(userId);
         

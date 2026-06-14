@@ -20,7 +20,13 @@ public class NotebookRepository : Repository<NotebookPage>, INotebookRepository
 
     public async Task<bool> DeletePageAsync(int id, int userId)
     {
-        var rowsAffected = await _dbSet.Where(n => n.Id == id && n.UserId == userId).ExecuteDeleteAsync<NotebookPage>();
+        var page = await _dbSet.FirstOrDefaultAsync(n => n.Id == id && n.UserId == userId);
+    
+        if (page == null) return false;
+
+        _dbSet.Remove(page);
+        var rowsAffected = await _context.SaveChangesAsync(); 
+    
         return rowsAffected > 0;
     }
 

@@ -9,6 +9,9 @@ using System.IO;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
+using NMTales.Backend.Services.Auth;
+using NMTales.Backend.Services.Player;
+using NMTales.Backend.Services.UserQuest;
 
 namespace NMTales.Backend.Controllers;
 
@@ -32,12 +35,15 @@ public class QuestController : ControllerBase
     // filtered unique index (UserId WHERE IsCompleted = 0).
     private static readonly ConcurrentDictionary<int, SemaphoreSlim> UserGates = new();
 
-    private readonly ApplicationDbContext _context;
+    // private readonly ApplicationDbContext _context;
+    private readonly IUserQuestService _questService;
+    private readonly IPlayerService _userService;
     private readonly IWebHostEnvironment _env;
 
-    public QuestController(ApplicationDbContext context, IWebHostEnvironment env)
+    public QuestController(IUserQuestService questService, IPlayerService userService, IWebHostEnvironment env)
     {
-        _context = context;
+        _questService = questService;
+        _userService = userService;
         _env = env;
     }
 
@@ -49,9 +55,8 @@ public class QuestController : ControllerBase
     {
         if (!TryGetUserId(out var userId)) return Unauthorized();
 
-        var userQuest = await _context.UserQuests
-            .FirstOrDefaultAsync(uq => uq.UserId == userId && !uq.IsCompleted);
-
+        var userQuest = await _questService.GetUncompletedQuestAsync(userId);
+        
         if (userQuest == null)
         {
             return NoContent(); // No active quest.
@@ -83,10 +88,7 @@ public class QuestController : ControllerBase
     public async Task<IActionResult> GetCompletedQuests()
     {
         if (!TryGetUserId(out var userId)) return Unauthorized();
-        var completedIds = await _context.UserQuests
-            .Where(uq => uq.UserId == userId && uq.IsCompleted)
-            .Select(uq => $"{uq.NpcId}:{uq.QuestId}") // Склеиваем в формат "npcId:questId"
-            .ToListAsync();
+        var completedIds = await _questService.GetCompletedQuestsIdsAsync(userId);
         return Ok(completedIds);
     }
 
@@ -121,7 +123,7 @@ public class QuestController : ControllerBase
         try
         {
             // Only one active quest at a time.
-            var hasActive = await _context.UserQuests.AnyAsync(uq => uq.UserId == userId && !uq.IsCompleted);
+            var hasActive = await _questService.HasAnyUncompletedQuestAsync(userId);
             if (hasActive)
             {
                 return BadRequest("You already have an active quest.");
@@ -135,14 +137,14 @@ public class QuestController : ControllerBase
 
             if (!repeatable)
             {
-                var alreadyCompleted = await _context.UserQuests.AnyAsync(uq => uq.UserId == userId && uq.NpcId == npcId && uq.QuestId == questId && uq.IsCompleted);
+                var alreadyCompleted = await _questService.HasCompletedQuestAsync(userId, npcId, questId);
                 if (alreadyCompleted)
                 {
                     return BadRequest("This quest is not repeatable.");
                 }
             }
 
-            _context.UserQuests.Add(new UserQuest
+            await _questService.AddQuestAsync(new UserQuest
             {
                 UserId = userId,
                 QuestId = questId,
@@ -150,7 +152,6 @@ public class QuestController : ControllerBase
                 CurrentAmount = 0,
                 IsCompleted = false
             });
-            await _context.SaveChangesAsync();
         }
         finally
         {
@@ -172,8 +173,7 @@ public class QuestController : ControllerBase
         await gate.WaitAsync();
         try
         {
-            var userQuest = await _context.UserQuests
-                .FirstOrDefaultAsync(uq => uq.UserId == userId && !uq.IsCompleted);
+            var userQuest = await _questService.GetUncompletedQuestAsync(userId);
 
             if (userQuest == null) return BadRequest("No active quest to complete.");
 
@@ -196,7 +196,7 @@ public class QuestController : ControllerBase
             }
 
             // Load the rewarded user before mutating state so a missing user can't burn the quest.
-            var user = await _context.Users.FindAsync(userId);
+            var user = await _userService.GetPlayerAsync(userId);
             if (user == null) return Unauthorized();
 
             userQuest.IsCompleted = true;
@@ -207,7 +207,7 @@ public class QuestController : ControllerBase
             var xpReward = ReadInt(jsonNode["rewards"]?["xp"], 0);
             user.AddXp(xpReward);
 
-            await _context.SaveChangesAsync();
+            await _questService.SaveChangesAsync();
 
             return Ok(new
             {
@@ -240,8 +240,7 @@ public class QuestController : ControllerBase
         await gate.WaitAsync();
         try
         {
-            var userQuest = await _context.UserQuests
-                .FirstOrDefaultAsync(uq => uq.UserId == userId && !uq.IsCompleted);
+            var userQuest = await _questService.GetUncompletedQuestAsync(userId);
 
             if (userQuest == null)
             {
@@ -275,7 +274,7 @@ public class QuestController : ControllerBase
                 if (userQuest.CurrentAmount < requiredAmount)
                 {
                     userQuest.CurrentAmount++;
-                    await _context.SaveChangesAsync();
+                    await _questService.SaveChangesAsync();
                 }
             }
 
