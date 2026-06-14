@@ -1,4 +1,5 @@
 using System.Text;
+using DotNetEnv;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -23,6 +24,8 @@ namespace NMTales.Backend
     {
         public static void Main(string[] args)
         {
+            Env.Load();
+            
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddControllers();
@@ -30,7 +33,15 @@ namespace NMTales.Backend
                 options.UseInMemoryDatabase("NMTaleDb"));*/
             builder.Services.AddScoped<JwtService>();
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(
+                    builder.Configuration.GetConnectionString("DefaultConnection"),
+                    npgsqlOptionsAction: npgsqlOptions =>
+                    {
+                        npgsqlOptions.EnableRetryOnFailure(
+                            maxRetryCount: 3, // Try 3 times before actually failing
+                            maxRetryDelay: TimeSpan.FromSeconds(5), // Wait up to 5 seconds between retries
+                            errorCodesToAdd: null); 
+                    }));
             
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
@@ -63,6 +74,9 @@ namespace NMTales.Backend
                         ClockSkew = TimeSpan.Zero
                     };
                 });
+            
+
+            builder.Configuration.AddEnvironmentVariables();
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>
