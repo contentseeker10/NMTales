@@ -16,6 +16,8 @@ var _active_subject: String = ""
 func start_chat(assistant_type: String, npc_name: String) -> void:
 	get_tree().paused = true
 	_active_subject = assistant_type
+	# Report speaking to assistant (e.g. "Math", "Language", "History")
+	AchievementsManager.submit_telemetry("AssistantTalked", assistant_type)
 	var ui: AssistantChat = _init_ui(npc_name)
 	await _restore_conversation(ui)
 

@@ -10,7 +10,9 @@ func _on_continue_button_pressed() -> void:
 
 
 func _on_achievements_button_pressed() -> void:
-	pass # Replace with function body.
+	var scene: PackedScene = preload("res://ui/menus/achievements/achievements.tscn")
+	var ui = scene.instantiate()
+	add_child(ui)
 
 
 func _on_exit_button_pressed() -> void:

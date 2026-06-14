@@ -56,7 +56,13 @@ func _send_coords(body: Dictionary) -> void:
 func spawn_player() -> Player:
 	var player: Player = preload("res://parts/player/player.tscn").instantiate()
 	get_tree().current_scene.add_child(player)
-	player.global_position = _get_spawn_point().global_position
+	var spawn_pt = _get_spawn_point()
+	player.global_position = spawn_pt.global_position
+	
+	# Submit telemetry if spawning at a checkpoint/teleport point
+	if spawn_pt.spawn_point_id != "start":
+		AchievementsManager.submit_telemetry("SpawnPointUnlocked", spawn_pt.spawn_point_id)
+		
 	target_spawn_point_id = "start"
 	return player
 

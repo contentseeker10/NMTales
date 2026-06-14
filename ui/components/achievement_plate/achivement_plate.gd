@@ -10,7 +10,7 @@ extends Control
 @export var unlocked: bool = false:
 	set(value):
 		unlocked = value
-		if is_node_ready() and Engine.is_editor_hint():
+		if is_node_ready():
 			toggle_state()
 
 
