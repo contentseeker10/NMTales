@@ -50,21 +50,12 @@ public class NotebookController : ControllerBase
             return BadRequest(validationResult.Errors);
         }
 
-        var pageCount = await _notebookService.GetPagesCountByUserIdAsync(userId);
-        if (pageCount >= MaxPagesPerUser)
+        var page = await _notebookService.CreatePageAsync(userId, dto.Title);
+        if (page == null)
         {
             return BadRequest(PageLimitMessage);
         }
 
-        var page = new NotebookPage
-        {
-            UserId = userId,
-            Title = dto.Title,
-            Content = "",
-            CreatedAt = DateTime.UtcNow
-        };
-
-        await _notebookService.AddNotebookPageAsync(page);
         return Ok(NotebookPageDto.FromModel(page));
     }
 
@@ -79,11 +70,18 @@ public class NotebookController : ControllerBase
             return BadRequest(validationResult.Errors);
         }
 
-        var pageUpdated = await _notebookService.UpdatePageAsync(id, userId, dto.Title, dto.Content);
-        if (pageUpdated == false)
-            return NotFound();
+        try
+        {
+            var pageUpdated = await _notebookService.UpdatePageAsync(id, userId, dto.Title, dto.Content);
+            if (pageUpdated == false)
+                return NotFound();
 
-        return NoContent();
+            return NoContent();
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return NotFound();
+        }
     }
 
     [HttpDelete("{id}")]

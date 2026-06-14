@@ -42,7 +42,10 @@ public class NotebookService : INotebookService
     {
         var page = await _notebookPageRepository.GetByIdAsync(id);
         if (page == null) return false;
-        if (page.UserId != userId) return false;
+        if (page.UserId != userId)
+        {
+            throw new UnauthorizedAccessException("Forbidden: You do not own this page.");
+        }
         
         page.Title = title;
         page.Content = content;

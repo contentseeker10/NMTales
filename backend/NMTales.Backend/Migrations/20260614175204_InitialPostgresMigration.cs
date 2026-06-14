@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -7,12 +7,61 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace NMTales.Backend.Migrations
 {
-  
-    public partial class InitialCreate : Migration
+    /// <inheritdoc />
+    public partial class InitialPostgresMigration : Migration
     {
-      
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Achievements",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Code = table.Column<string>(type: "text", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    XpReward = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Achievements", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AssistantMessages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    Subject = table.Column<int>(type: "integer", nullable: false),
+                    Role = table.Column<string>(type: "text", nullable: false),
+                    Content = table.Column<string>(type: "text", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AssistantMessages", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Locations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    RequiredLevel = table.Column<int>(type: "integer", nullable: false),
+                    Subject = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Locations", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Questions",
                 columns: table => new
@@ -58,7 +107,11 @@ namespace NMTales.Backend.Migrations
                     Level = table.Column<int>(type: "integer", nullable: false),
                     CurrentLocation = table.Column<string>(type: "text", nullable: false),
                     CurrentPositionX = table.Column<double>(type: "double precision", nullable: false),
-                    CurrentPositionY = table.Column<double>(type: "double precision", nullable: false)
+                    CurrentPositionY = table.Column<double>(type: "double precision", nullable: false),
+                    CurrentHp = table.Column<int>(type: "integer", nullable: false),
+                    MaxHp = table.Column<int>(type: "integer", nullable: false),
+                    IsDead = table.Column<bool>(type: "boolean", nullable: false),
+                    LastAttackTimeUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -110,6 +163,60 @@ namespace NMTales.Backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PlayerStats",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    VampireKills = table.Column<int>(type: "integer", nullable: false),
+                    CompletedQuestsCount = table.Column<int>(type: "integer", nullable: false),
+                    DeathsCount = table.Column<int>(type: "integer", nullable: false),
+                    FailedTestsCount = table.Column<int>(type: "integer", nullable: false),
+                    UnlockedSpawnPoints = table.Column<string>(type: "text", nullable: false),
+                    TalkedAssistants = table.Column<string>(type: "text", nullable: false),
+                    HasFailedTest = table.Column<bool>(type: "boolean", nullable: false),
+                    HasDied = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlayerStats", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PlayerStats_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserAchievements",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    AchievementId = table.Column<int>(type: "integer", nullable: false),
+                    UnlockedAtUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserAchievements", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserAchievements_Achievements_AchievementId",
+                        column: x => x.AchievementId,
+                        principalTable: "Achievements",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserAchievements_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserTestSessions",
                 columns: table => new
                 {
@@ -136,6 +243,12 @@ namespace NMTales.Backend.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Achievements_Code",
+                table: "Achievements",
+                column: "Code",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Answers_QuestionId",
                 table: "Answers",
                 column: "QuestionId");
@@ -143,6 +256,22 @@ namespace NMTales.Backend.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_NotebookPages_UserId",
                 table: "NotebookPages",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayerStats_UserId",
+                table: "PlayerStats",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserAchievements_AchievementId",
+                table: "UserAchievements",
+                column: "AchievementId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserAchievements_UserId",
+                table: "UserAchievements",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -157,13 +286,26 @@ namespace NMTales.Backend.Migrations
                 column: "UserId");
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "Answers");
 
             migrationBuilder.DropTable(
+                name: "AssistantMessages");
+
+            migrationBuilder.DropTable(
+                name: "Locations");
+
+            migrationBuilder.DropTable(
                 name: "NotebookPages");
+
+            migrationBuilder.DropTable(
+                name: "PlayerStats");
+
+            migrationBuilder.DropTable(
+                name: "UserAchievements");
 
             migrationBuilder.DropTable(
                 name: "UserQuests");
@@ -173,6 +315,9 @@ namespace NMTales.Backend.Migrations
 
             migrationBuilder.DropTable(
                 name: "Questions");
+
+            migrationBuilder.DropTable(
+                name: "Achievements");
 
             migrationBuilder.DropTable(
                 name: "Users");

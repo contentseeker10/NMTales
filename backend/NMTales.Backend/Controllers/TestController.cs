@@ -9,6 +9,7 @@ using NMTales.Backend.Models;
 using NMTales.Backend.Services;
 using NMTales.Backend.Services.Test;
 using NMTales.Backend.Repositories;
+using NMTales.Backend.Repositories.PlayerStats;
 
 namespace NMTales.Backend.Controllers;
 
@@ -35,12 +36,12 @@ public class TestController : ControllerBase
 
     private readonly ITestService _testService;
     private readonly IAchievementService _achievementService;
-    private readonly IRepository<PlayerStats> _playerStatsRepository;
+    private readonly IPlayerStatsRepository _playerStatsRepository;
 
     public TestController(
         ITestService testService, 
         IAchievementService achievementService,
-        IRepository<PlayerStats> playerStatsRepository)
+        IPlayerStatsRepository playerStatsRepository)
     {
         _testService = testService;
         _achievementService = achievementService;
@@ -222,8 +223,7 @@ public class TestController : ControllerBase
         if (session.RemainingAttempts <= 0)
         {
             session.IsFailed = true;
-            var statsList = await _playerStatsRepository.GetAllAsync();
-            var stats = statsList.FirstOrDefault(ps => ps.UserId == user.Id);
+            var stats = await _playerStatsRepository.GetByUserIdAsync(user.Id);
             if (stats == null)
             {
                 stats = new PlayerStats { UserId = user.Id };
@@ -301,8 +301,7 @@ public class TestController : ControllerBase
         }
 
         session.IsFailed = true;
-        var statsList = await _playerStatsRepository.GetAllAsync();
-        var stats = statsList.FirstOrDefault(ps => ps.UserId == user.Id);
+        var stats = await _playerStatsRepository.GetByUserIdAsync(user.Id);
         if (stats == null)
         {
             stats = new PlayerStats { UserId = user.Id };

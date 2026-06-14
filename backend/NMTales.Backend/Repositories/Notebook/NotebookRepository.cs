@@ -25,9 +25,7 @@ public class NotebookRepository : Repository<NotebookPage>, INotebookRepository
         if (page == null) return false;
 
         _dbSet.Remove(page);
-        var rowsAffected = await _context.SaveChangesAsync(); 
-    
-        return rowsAffected > 0;
+        return true;
     }
 
     public async Task<int> GetPagesCountByUserIdAsync(int userId)

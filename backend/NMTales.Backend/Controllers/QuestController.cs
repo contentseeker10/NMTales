@@ -14,6 +14,7 @@ using NMTales.Backend.Services.Auth;
 using NMTales.Backend.Services.Player;
 using NMTales.Backend.Services.UserQuest;
 using NMTales.Backend.Repositories;
+using NMTales.Backend.Repositories.PlayerStats;
 
 namespace NMTales.Backend.Controllers;
 
@@ -41,14 +42,14 @@ public class QuestController : ControllerBase
     private readonly IPlayerService _userService;
     private readonly IWebHostEnvironment _env;
     private readonly IAchievementService _achievementService;
-    private readonly IRepository<PlayerStats> _playerStatsRepository;
+    private readonly IPlayerStatsRepository _playerStatsRepository;
 
     public QuestController(
         IUserQuestService questService,
         IPlayerService userService,
         IWebHostEnvironment env,
         IAchievementService achievementService,
-        IRepository<PlayerStats> playerStatsRepository)
+        IPlayerStatsRepository playerStatsRepository)
     {
         _questService = questService;
         _userService = userService;
@@ -218,8 +219,7 @@ public class QuestController : ControllerBase
             user.AddXp(xpReward);
 
             // Increment CompletedQuestsCount in player stats
-            var statsList = await _playerStatsRepository.GetAllAsync();
-            var stats = statsList.FirstOrDefault(ps => ps.UserId == userId);
+            var stats = await _playerStatsRepository.GetByUserIdAsync(userId);
             if (stats == null)
             {
                 stats = new PlayerStats { UserId = userId };

@@ -14,6 +14,7 @@ using NMTales.Backend.Repositories.Notebook;
 using NMTales.Backend.Repositories.Test;
 using NMTales.Backend.Repositories.User;
 using NMTales.Backend.Repositories.UserQuest;
+using NMTales.Backend.Repositories.PlayerStats;
 using NMTales.Backend.Services;
 using NMTales.Backend.Services.Auth;
 using NMTales.Backend.Services.Location;
@@ -77,6 +78,8 @@ namespace NMTales.Backend
 
             builder.Services.AddScoped<ITestRepository, TestRepository>();
             builder.Services.AddScoped<ITestService, TestService>();
+            
+            builder.Services.AddScoped<IPlayerStatsRepository, PlayerStatsRepository>();
             
             var jwtKey = builder.Configuration["Jwt:Key"]
                 ?? throw new InvalidOperationException("Jwt:Key is not configured.");

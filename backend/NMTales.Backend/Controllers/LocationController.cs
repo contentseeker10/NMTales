@@ -6,6 +6,7 @@ using NMTales.Backend.Repositories;
 using NMTales.Backend.Repositories.Location;
 using NMTales.Backend.Services.Location;
 using NMTales.Backend.Services.Player;
+using Microsoft.Extensions.Logging;
 
 namespace NMTales.Backend.Controllers;
 
@@ -18,13 +19,15 @@ public class LocationController : ControllerBase
 	private readonly IPlayerService _playerService;
 	private readonly ILocationService _locationService;
 	private readonly IWebHostEnvironment _env;
+	private readonly ILogger<LocationController> _logger;
 
 	// Внедряем контекст БД и окружение (чтобы узнать путь к папке Packs) через конструктор
-	public LocationController(IPlayerService playerService, ILocationService locationService, IWebHostEnvironment env)
+	public LocationController(IPlayerService playerService, ILocationService locationService, IWebHostEnvironment env, ILogger<LocationController> logger)
 	{
 		_playerService = playerService;
 		_locationService = locationService;
 		_env = env;
+		_logger = logger;
 	}
 
 	[HttpGet("{locationName}/pack")]
@@ -46,11 +49,13 @@ public class LocationController : ControllerBase
 
 		// 3. Ищем запрашиваемую локацию в БД (чтобы проверить требования)
 		var location = await _locationService.GetLocationByNameAsync(locationName);
-			
 		if (location == null)
 		{
 		    return NotFound("Location not configured in database");
 		}
+		
+		_logger.LogInformation("Location check: Id={LocationId}, Name={LocationName}, Description={LocationDescription}, RequiredLevel={RequiredLevel}, Subject={Subject}",
+			location.Id, location.Name, location.Description, location.RequiredLevel, location.Subject);
 		
 		// 4. ПРОВЕРКА ДОСТУПА (Бизнес-логика против читерства)
 		// Проверяем, хватает ли у игрока уровня для входа на эту локацию
