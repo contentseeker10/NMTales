@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using NMTales.Backend.Data;
 using NMTales.Backend.DTO;
 using NMTales.Backend.Models;
+using NMTales.Backend.Services;
 
 namespace NMTales.Backend.Controllers;
 
@@ -14,18 +15,18 @@ namespace NMTales.Backend.Controllers;
 public class NotebookController : ControllerBase
 {
     private const int MaxPagesPerUser = 10;
-    private const string PageLimitMessage = "Досягнуто ліміту сторінок блокнота (макс. 10)";
+    private const string PageLimitMessage = "Reached the maximum number of pages (max. 10)";
 
-    private readonly ApplicationDbContext _context;
+    private readonly INotebookService _notebookService;
     private readonly IValidator<CreateNotebookPageDto> _createValidator;
     private readonly IValidator<UpdateNotebookPageDto> _updateValidator;
 
     public NotebookController(
-        ApplicationDbContext context,
+        INotebookService notebookService,
         IValidator<CreateNotebookPageDto> createValidator,
         IValidator<UpdateNotebookPageDto> updateValidator)
     {
-        _context = context;
+        _notebookService = notebookService;
         _createValidator = createValidator;
         _updateValidator = updateValidator;
     }
@@ -34,12 +35,7 @@ public class NotebookController : ControllerBase
     public async Task<IActionResult> GetAll()
     {
         if (!TryGetUserId(out var userId)) return Unauthorized();
-
-        var pages = await _context.NotebookPages
-            .Where(p => p.UserId == userId)
-            .OrderBy(p => p.CreatedAt)
-            .ToListAsync();
-
+        var pages = await _notebookService.GetAllPagesAsync(userId);
         return Ok(pages.Select(NotebookPageDto.FromModel));
     }
 
@@ -54,7 +50,7 @@ public class NotebookController : ControllerBase
             return BadRequest(validationResult.Errors);
         }
 
-        var pageCount = await _context.NotebookPages.CountAsync(p => p.UserId == userId);
+        var pageCount = await _notebookService.GetPagesCountByUserIdAsync(userId);
         if (pageCount >= MaxPagesPerUser)
         {
             return BadRequest(PageLimitMessage);
@@ -64,13 +60,11 @@ public class NotebookController : ControllerBase
         {
             UserId = userId,
             Title = dto.Title,
-            Content = "Тут будуть потужні записи...",
+            Content = "",
             CreatedAt = DateTime.UtcNow
         };
 
-        _context.NotebookPages.Add(page);
-        await _context.SaveChangesAsync();
-
+        await _notebookService.AddNotebookPageAsync(page);
         return Ok(NotebookPageDto.FromModel(page));
     }
 
@@ -85,18 +79,9 @@ public class NotebookController : ControllerBase
             return BadRequest(validationResult.Errors);
         }
 
-        var page = await _context.NotebookPages
-            .FirstOrDefaultAsync(p => p.Id == id && p.UserId == userId);
-
-        if (page == null)
-        {
+        var pageUpdated = await _notebookService.UpdatePageAsync(id, userId, dto.Title, dto.Content);
+        if (pageUpdated == false)
             return NotFound();
-        }
-
-        page.Title = dto.Title;
-        page.Content = dto.Content;
-
-        await _context.SaveChangesAsync();
 
         return NoContent();
     }
@@ -106,17 +91,10 @@ public class NotebookController : ControllerBase
     {
         if (!TryGetUserId(out var userId)) return Unauthorized();
 
-        var page = await _context.NotebookPages
-            .FirstOrDefaultAsync(p => p.Id == id && p.UserId == userId);
-
-        if (page == null)
-        {
+        var pageDeleted = await _notebookService.DeletePageAsync(id, userId);
+        if (pageDeleted == false)
             return NotFound();
-        }
-
-        _context.NotebookPages.Remove(page);
-        await _context.SaveChangesAsync();
-
+        
         return NoContent();
     }
 

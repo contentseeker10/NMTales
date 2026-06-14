@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using NMTales.Backend.Data;
 using NMTales.Backend.DTO;
 using NMTales.Backend.Models;
 using NMTales.Backend.Services;
+using NMTales.Backend.Services.Auth;
 
 using NMTales.Backend.Filters;
 
@@ -16,14 +18,15 @@ namespace NMTales.Backend.Controllers;
 [AllowDeadPlayer]
 public class AuthController : ControllerBase
 {
-    private readonly ApplicationDbContext _context;
+    //private readonly ApplicationDbContext _context;
+    private readonly IAuthService _authService;
     private readonly JwtService _jwtService;
     private readonly IValidator<RegisterDto> _registerValidator;
     private readonly IValidator<LoginDto> _loginValidator;
 
-    public AuthController(ApplicationDbContext context, JwtService jwtService, IValidator<RegisterDto> registerValidator, IValidator<LoginDto> loginValidator)
+    public AuthController(IAuthService authService, JwtService jwtService, IValidator<RegisterDto> registerValidator, IValidator<LoginDto> loginValidator)
     {
-        _context = context;
+        _authService = authService;
         _jwtService = jwtService;
         _registerValidator = registerValidator;
         _loginValidator = loginValidator;
@@ -33,68 +36,54 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Register(RegisterDto dto)
     {
         var validationResult = await _registerValidator.ValidateAsync(dto);
-
         if (!validationResult.IsValid)
             return BadRequest(AuthValidationErrorResponseDto.FromValidationResult(validationResult));
         
-        var user = new User
-        {
-            Username = dto.Username,
-            Password = BCrypt.Net.BCrypt.HashPassword(dto.Password)
-        };
+        var result = await _authService.RegisterAsync(dto);
 
-        _context.Users.Add(user);
-        await _context.SaveChangesAsync();
-
-        return Ok(new AuthResponseDto
+        if (result == null)
         {
-            Message = "User created",
-            Token = _jwtService.GenerateToken(user),
-            User = UserDto.FromModel(user)
-        });
+            return BadRequest(new { Message = "Username is already taken." });
+        }
+
+        return Ok(result);
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginDto dto)
     {
         var validationResult = await _loginValidator.ValidateAsync(dto);
-        
         if (!validationResult.IsValid)
             return BadRequest(AuthValidationErrorResponseDto.FromValidationResult(validationResult));
         
-        var user = await _context.Users.FirstOrDefaultAsync(x => x.Username == dto.Username);
+        var result = await _authService.LoginAsync(dto);
 
-        if (user is null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.Password))
+        if (result == null)
         {
-            return Unauthorized("Invalid username or password");
+            return Unauthorized(new { Message = "Invalid username or password" });
         }
 
-        return Ok(new AuthResponseDto
-        {
-            Message = "Login successful",
-            Token = _jwtService.GenerateToken(user),
-            User = UserDto.FromModel(user)
-        });
+        return Ok(result);
     }
 
     [Authorize]
     [HttpGet("me")]
     public async Task<IActionResult> Me()
     {
-        var userIdValue = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        var userIdValue = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
         if (!int.TryParse(userIdValue, out var userId))
         {
             return Unauthorized();
         }
 
-        var user = await _context.Users.FindAsync(userId);
+        var userDto = await _authService.GetUserByIdAsync(userId);
 
-        if (user is null)
+        if (userDto == null)
         {
             return NotFound();
         }
 
-        return Ok(UserDto.FromModel(user));
+        return Ok(userDto);
     }
 }

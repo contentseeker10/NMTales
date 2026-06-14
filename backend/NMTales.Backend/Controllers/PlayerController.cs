@@ -1,8 +1,10 @@
+using System.Security.Claims;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NMTales.Backend.Data;
 using NMTales.Backend.DTO;
+using NMTales.Backend.Services.Player;
 
 namespace NMTales.Backend.Controllers;
 
@@ -11,12 +13,12 @@ namespace NMTales.Backend.Controllers;
 [Authorize]
 public class PlayerController : ControllerBase
 {
-    private readonly ApplicationDbContext _context;
+    private readonly IPlayerService _playerService;
     private readonly IValidator<UpdatePlayerLocationDto> _validator;
 
-    public PlayerController(ApplicationDbContext context, IValidator<UpdatePlayerLocationDto> validator)
+    public PlayerController(IPlayerService playerService, IValidator<UpdatePlayerLocationDto> validator)
     {
-        _context = context;
+        _playerService = playerService;
         _validator = validator;
     }
 
@@ -29,23 +31,22 @@ public class PlayerController : ControllerBase
             return BadRequest(validationResult.Errors);
         }
 
-        var userIdValue = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        var userIdValue = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (!int.TryParse(userIdValue, out var userId))
         {
             return Unauthorized();
         }
 
-        var user = await _context.Users.FindAsync(userId);
+        var user = await _playerService.UpdateLocationAsync(
+            userId, 
+            dto.CurrentLocation, 
+            dto.CurrentPositionX, 
+            dto.CurrentPositionY);
+
         if (user == null)
         {
             return NotFound("User not found");
         }
-
-        user.CurrentLocation = dto.CurrentLocation;
-        user.CurrentPositionX = dto.CurrentPositionX;
-        user.CurrentPositionY = dto.CurrentPositionY;
-
-        await _context.SaveChangesAsync();
 
         return Ok(UserDto.FromModel(user));
     }
@@ -53,18 +54,19 @@ public class PlayerController : ControllerBase
     [HttpGet("location")]
     public async Task<IActionResult> GetLocation()
     {
-        var userIdValue = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        var userIdValue = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (!int.TryParse(userIdValue, out var userId))
         {
             return Unauthorized();
         }
 
-        var user = await _context.Users.FindAsync(userId);
+        var user = await _playerService.GetPlayerAsync(userId);
         if (user == null)
         {
             return NotFound("User not found");
         }
 
+        // Using an anonymous object initializer to return just the location data
         return Ok(new
         {
             user.CurrentLocation,

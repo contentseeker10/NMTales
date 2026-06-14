@@ -14,9 +14,19 @@ public class PlayerControllerTests
     private static async Task<HttpClient> CreateAuthenticatedClientAsync(QuestApiFactory factory, string username)
     {
         var client = factory.CreateClient();
+    
+        // Create a guaranteed unique username under 20 characters
+        // Example output: "u_a1b2c3d4e5f6" (14 characters total)
+        var uniqueUsername = $"u_{Guid.NewGuid().ToString("N").Substring(0, 12)}";
+    
         var response = await client.PostAsJsonAsync("/api/auth/register",
-            new { username, password = "Secret123!" });
-        response.EnsureSuccessStatusCode();
+            new { username = uniqueUsername, password = "Secret123!" });
+    
+        if (!response.IsSuccessStatusCode)
+        {
+            var errorContent = await response.Content.ReadAsStringAsync();
+            throw new Exception($"SERVER CRASHED: {errorContent}");
+        }
 
         using var doc = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
         var token = doc.RootElement.GetProperty("token").GetString();
@@ -64,7 +74,7 @@ public class PlayerControllerTests
         // Double check in db
         using var scope = factory.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        var user = db.Users.Single(u => u.Username == "player1");
+        var user = db.Users.Single(u => u.Id == updatedUser.Id);
         Assert.Equal("math", user.CurrentLocation);
         Assert.Equal(12.34, user.CurrentPositionX);
         Assert.Equal(56.78, user.CurrentPositionY);
