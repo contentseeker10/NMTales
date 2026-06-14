@@ -16,6 +16,8 @@ var _is_waiting: bool = false
 #region Node imports
 
 @onready var assistant_name_label: Label = $VBoxContainer/AssistantNameLabel
+@onready var scroll_container: ScrollContainer = $VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer
+@onready var greeting_text: RichTextLabel = $VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/ChatBox/GreetingText
 @onready var line_edit: LineEdit = $VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/LineEdit
 @onready var chat_box: VBoxContainer = $VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/ChatBox
 @onready var send_button: Button = $VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/SendButton
@@ -24,17 +26,16 @@ var _is_waiting: bool = false
 
 
 func _ready() -> void:
-	# Let Enter submit the prompt, not just the Send button.
 	line_edit.text_submitted.connect(_on_line_edit_text_submitted)
 
 
-## Renders a saved conversation (list of { "role": "user"/"model", "content": String }).
 func load_history(messages: Array) -> void:
 	for message: Dictionary in messages:
 		if message.get("role", "") == "user":
 			_add_prompt(message.get("content", ""))
 		else:
 			_append_assistant_text(message.get("content", ""))
+	await _scroll_to_bottom()
 
 
 #region Chatting handler
@@ -56,6 +57,7 @@ func _on_send_button_pressed() -> void:
 
 	_add_prompt(prompt)
 	_add_answer()
+	await _scroll_to_bottom()
 
 	var response := await AssistantManager.send_player_prompt(prompt)
 
@@ -64,7 +66,8 @@ func _on_send_button_pressed() -> void:
 	else:
 		_show_error(response.get("error", "Не вдалося отримати відповідь."))
 		line_edit.text = prompt
-
+	
+	await _scroll_to_bottom()
 	_set_input_enabled(true)
 
 
@@ -79,7 +82,7 @@ func _set_input_enabled(enabled: bool) -> void:
 func _add_prompt(prompt: String) -> void:
 	var player_prompt: RichTextLabel = _player_text_scene.instantiate()
 	player_prompt.text = "[b]" + AuthManager.current_user_info.get("username", "error") + ":[/b]\n" \
-					+ _escape_bbcode(prompt)
+					+ prompt
 	chat_box.add_child(player_prompt)
 	_last_prompt = player_prompt
 
@@ -93,23 +96,23 @@ func _add_answer() -> void:
 
 
 func _load_answer(data: Dictionary) -> void:
-	_last_answer.text = "[b]Асистент:[/b]\n" + _escape_bbcode(data.get("answer", "error"))
+	_last_answer.text = "[b]Асистент:[/b]\n" + data.get("answer", "error")
 
 
-## Appends a finished assistant message (used when restoring saved history).
 func _append_assistant_text(content: String) -> void:
 	var bubble: RichTextLabel = _npc_text_scene.instantiate()
-	bubble.text = "[b]Асистент:[/b]\n" + _escape_bbcode(content)
+	bubble.text = "[b]Асистент:[/b]\n" + content
 	chat_box.add_child(bubble)
 
 
+func _scroll_to_bottom() -> void:
+	await get_tree().process_frame
+	var bar: VScrollBar = scroll_container.get_v_scroll_bar()
+	scroll_container.scroll_vertical = int(bar.max_value)
+
+
 func _show_error(message: String) -> void:
-	_last_answer.text = "[b]Асистент:[/b]\n[i]⚠ " + message + "[/i]"
-
-
-## Stops raw `[` in user/model text from being parsed as BBCode tags.
-func _escape_bbcode(text: String) -> String:
-	return text.replace("[", "[lb]")
+	_last_answer.text = "[b]Асистент:[/b]\n[i]" + message + "[/i]"
 
 #endregion
 

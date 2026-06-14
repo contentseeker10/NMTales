@@ -81,10 +81,10 @@ theme_override_constants/margin_bottom = 4
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="NPCText" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/ChatBox" unique_id=1077512254 instance=ExtResource("2_7lu72")]
+[node name="GreetingText" parent="VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/ChatBox" unique_id=1077512254 instance=ExtResource("2_7lu72")]
 layout_mode = 2
 text = "[b]Асистент:[/b]
-Привіт! Я тут щоб допомогти тобі з вивченням ..."
+Привіт! Я тут щоб допомогти тобі з вивченням "
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer" unique_id=695551755]
 layout_mode = 2
