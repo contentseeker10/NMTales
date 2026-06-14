@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using NMTales.Backend.Filters;
 
 namespace NMTales.Backend.Controllers
 {
@@ -34,6 +35,7 @@ namespace NMTales.Backend.Controllers
         }
 
         [HttpGet]
+        [AllowDeadPlayer]
         public async Task<IActionResult> GetAchievements()
         {
             if (!TryGetUserId(out var userId)) return Unauthorized();

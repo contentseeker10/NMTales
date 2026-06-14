@@ -10,6 +10,10 @@ namespace NMTales.Backend.Models
         public string CurrentLocation { get; set; } = "main";
         public double CurrentPositionX { get; set; } = 0.0;
         public double CurrentPositionY { get; set; } = 0.0;
+        public int CurrentHp { get; set; } = 80;
+        public int MaxHp { get; set; } = 80;
+        public bool IsDead { get; set; } = false;
+        public DateTime? LastAttackTimeUtc { get; set; }
 
         /// <summary>
         /// Award XP and apply any resulting level-ups. The XP required for the next level is

@@ -7,10 +7,13 @@ using NMTales.Backend.DTO;
 using NMTales.Backend.Models;
 using NMTales.Backend.Services;
 
+using NMTales.Backend.Filters;
+
 namespace NMTales.Backend.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[AllowDeadPlayer]
 public class AuthController : ControllerBase
 {
     private readonly ApplicationDbContext _context;

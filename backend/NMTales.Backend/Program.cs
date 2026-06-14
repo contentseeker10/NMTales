@@ -18,7 +18,10 @@ namespace NMTales.Backend
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(options =>
+            {
+                options.Filters.Add<NMTales.Backend.Filters.BlockIfDeadFilter>();
+            });
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseInMemoryDatabase("NMTaleDb"));
             builder.Services.AddScoped<JwtService>();
