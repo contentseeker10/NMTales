@@ -21,9 +21,7 @@ public class NotebookService : INotebookService
 
     public async Task<NotebookPage?> CreatePageAsync(int userId, string title)
     {
-        var allPages = await _notebookPageRepository.GetAllAsync();
-        var userPagesCount = allPages.Count(p => p.UserId == userId);
-        
+        var userPagesCount = await _notebookPageRepository.GetPagesCountByUserIdAsync(userId);
         if (userPagesCount >= MaxPagesPerUser) return null;
 
         var page = new NotebookPage
@@ -44,6 +42,7 @@ public class NotebookService : INotebookService
     {
         var page = await _notebookPageRepository.GetByIdAsync(id);
         if (page == null) return false;
+        if (page.UserId != userId) return false;
         
         page.Title = title;
         page.Content = content;
@@ -59,5 +58,16 @@ public class NotebookService : INotebookService
         bool deleted = await _notebookPageRepository.DeletePageAsync(id, userId);
         await _notebookPageRepository.SaveChangesAsync();
         return deleted;
+    }
+
+    public async Task<int> GetPagesCountByUserIdAsync(int userId)
+    {
+        return await _notebookPageRepository.GetPagesCountByUserIdAsync(userId); 
+    }
+
+    public async Task AddNotebookPageAsync(NotebookPage notebookPage)
+    {
+        await _notebookPageRepository.AddAsync(notebookPage);
+        await _notebookPageRepository.SaveChangesAsync();
     }
 }

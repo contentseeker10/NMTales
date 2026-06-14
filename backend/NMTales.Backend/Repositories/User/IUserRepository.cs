@@ -1,3 +1,5 @@
+using NMTales.Backend.Models;
+
 namespace NMTales.Backend.Repositories.User;
 
 public interface IUserRepository : IRepository<Models.User> 

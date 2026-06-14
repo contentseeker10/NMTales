@@ -52,8 +52,6 @@ public class LocationController : ControllerBase
 		    return NotFound("Location not configured in database");
 		}
 		
-		Console.WriteLine($"{location.Id},  {location.Name}, {location.Description}, {location.RequiredLevel}, {location.Subject}");
-
 		// 4. ПРОВЕРКА ДОСТУПА (Бизнес-логика против читерства)
 		// Проверяем, хватает ли у игрока уровня для входа на эту локацию
 		if (user.Level < location.RequiredLevel)
