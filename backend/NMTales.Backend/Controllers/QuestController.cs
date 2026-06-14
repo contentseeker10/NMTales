@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using NMTales.Backend.Data;
 using NMTales.Backend.DTO;
 using NMTales.Backend.Models;
+using NMTales.Backend.Services;
 using System.Collections.Concurrent;
 using System.IO;
 using System.Text.Json;
@@ -34,11 +35,13 @@ public class QuestController : ControllerBase
 
     private readonly ApplicationDbContext _context;
     private readonly IWebHostEnvironment _env;
+    private readonly IAchievementService _achievementService;
 
-    public QuestController(ApplicationDbContext context, IWebHostEnvironment env)
+    public QuestController(ApplicationDbContext context, IWebHostEnvironment env, IAchievementService achievementService)
     {
         _context = context;
         _env = env;
+        _achievementService = achievementService;
     }
 
     /// <summary>
@@ -207,7 +210,19 @@ public class QuestController : ControllerBase
             var xpReward = ReadInt(jsonNode["rewards"]?["xp"], 0);
             user.AddXp(xpReward);
 
+            // Increment CompletedQuestsCount in player stats
+            var stats = await _context.PlayerStats.FirstOrDefaultAsync(ps => ps.UserId == userId);
+            if (stats == null)
+            {
+                stats = new PlayerStats { UserId = userId };
+                _context.PlayerStats.Add(stats);
+            }
+            stats.CompletedQuestsCount++;
+
             await _context.SaveChangesAsync();
+
+            // Evaluate and unlock achievements (may award more XP and level up user further)
+            await _achievementService.EvaluateAndUnlockAchievementsAsync(userId);
 
             return Ok(new
             {

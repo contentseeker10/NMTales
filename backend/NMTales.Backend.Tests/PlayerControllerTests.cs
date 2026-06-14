@@ -108,7 +108,7 @@ public class PlayerControllerTests
         Assert.Equal(HttpStatusCode.OK, getResponse.StatusCode);
 
         using var doc = JsonDocument.Parse(await getResponse.Content.ReadAsStringAsync());
-        Assert.Equal("test", doc.RootElement.GetProperty("currentLocation").GetString());
+        Assert.Equal("main", doc.RootElement.GetProperty("currentLocation").GetString());
         Assert.Equal(0.0, doc.RootElement.GetProperty("currentPositionX").GetDouble());
         Assert.Equal(0.0, doc.RootElement.GetProperty("currentPositionY").GetDouble());
 

@@ -22,6 +22,7 @@ namespace NMTales.Backend
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseInMemoryDatabase("NMTaleDb"));
             builder.Services.AddScoped<JwtService>();
+            builder.Services.AddScoped<IAchievementService, AchievementService>();
 
             // AI tutor (Gemini). The API key comes from configuration (user-secrets / env var),
             // never from source control. GeminiService is a typed HttpClient.

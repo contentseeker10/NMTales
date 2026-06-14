@@ -6,6 +6,7 @@ using NMTales.Backend.Data;
 using NMTales.Backend.DTO;
 using NMTales.Backend.enums;
 using NMTales.Backend.Models;
+using NMTales.Backend.Services;
 
 namespace NMTales.Backend.Controllers;
 
@@ -31,10 +32,12 @@ public class TestController : ControllerBase
     private static readonly ConcurrentDictionary<int, SemaphoreSlim> UserGates = new();
 
     private readonly ApplicationDbContext _context;
+    private readonly IAchievementService _achievementService;
 
-    public TestController(ApplicationDbContext context)
+    public TestController(ApplicationDbContext context, IAchievementService achievementService)
     {
         _context = context;
+        _achievementService = achievementService;
     }
 
     /// <summary>
@@ -220,7 +223,20 @@ public class TestController : ControllerBase
         if (session.RemainingAttempts <= 0)
         {
             session.IsFailed = true;
+
+            var stats = await _context.PlayerStats.FirstOrDefaultAsync(ps => ps.UserId == user.Id);
+            if (stats == null)
+            {
+                stats = new PlayerStats { UserId = user.Id };
+                _context.PlayerStats.Add(stats);
+            }
+            stats.FailedTestsCount++;
+            stats.HasFailedTest = true;
+
             await _context.SaveChangesAsync();
+
+            await _achievementService.EvaluateAndUnlockAchievementsAsync(user.Id);
+
             return Ok(new { correct = false, completed = false, failed = true });
         }
 
@@ -286,7 +302,20 @@ public class TestController : ControllerBase
         }
 
         session.IsFailed = true;
+
+        var stats = await _context.PlayerStats.FirstOrDefaultAsync(ps => ps.UserId == user.Id);
+        if (stats == null)
+        {
+            stats = new PlayerStats { UserId = user.Id };
+            _context.PlayerStats.Add(stats);
+        }
+        stats.FailedTestsCount++;
+        stats.HasFailedTest = true;
+
         await _context.SaveChangesAsync();
+
+        await _achievementService.EvaluateAndUnlockAchievementsAsync(user.Id);
+
         return Ok(new { correct = false, completed = false, failed = true, slotResults });
     }
 
