@@ -12,9 +12,12 @@ func entry_location(location_name: String) -> void:
 	var scene_path: String = "res://locations/" + location_name.to_lower() + "/" + location_name.to_lower() + ".scn"
 	
 	if ResourceLoader.exists(scene_path):
+		print("Location exists. Loading.")
 		get_tree().change_scene_to_file(scene_path)
 		current_location = location_name
 		return
+	
+	print("Downloading location from server...")
 	
 	if FileAccess.file_exists(local_pack_path):
 		if PackManager.mount_pack(local_pack_path):
@@ -34,18 +37,32 @@ func _try_download_location(location_name: String, target_path: String, scene_pa
 
 
 func update_player_location(location_name: String, player_coords: Vector2) -> void:
+	var player = get_tree().get_first_node_in_group("player") as Player
+	if player and player.is_dead:
+		return
 	var body: Dictionary = {
 		"currentLocation": location_name,
 		"currentPositionX": player_coords.x,
 		"currentPositionY": player_coords.y
 	}
-	NetworkManager.send_post("/api/Player/location", body, AuthManager.token_header)
+	_send_coords(body)
+
+func _send_coords(body: Dictionary) -> void:
+	var http_request := NetworkManager.send_post("/api/Player/location", body, AuthManager.token_header)
+	await http_request.request_completed
+	http_request.queue_free()
 
 
 func spawn_player() -> Player:
 	var player: Player = preload("res://parts/player/player.tscn").instantiate()
 	get_tree().current_scene.add_child(player)
-	player.global_position = _get_spawn_point().global_position
+	var spawn_pt = _get_spawn_point()
+	player.global_position = spawn_pt.global_position
+	
+	# Submit telemetry if spawning at a checkpoint/teleport point
+	if spawn_pt.spawn_point_id != "start":
+		AchievementsManager.submit_telemetry("SpawnPointUnlocked", spawn_pt.spawn_point_id)
+		
 	target_spawn_point_id = "start"
 	return player
 

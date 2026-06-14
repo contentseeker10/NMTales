@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://bpf1g7t2cv63"]
+
+[ext_resource type="Script" uid="uid://ci6pcbd6wii12" path="res://parts/healer_plant/healer_plant.gd" id="1_1w0r4"]
+[ext_resource type="TileSet" uid="uid://hw6c8qs6egiy" path="res://assets/shared/tilesets/plants/plants.tres" id="2_c5j7t"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1w0r4"]
+radius = 88.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_c5j7t"]
+radius = 16.0
+
+[node name="HealerPlant" type="Area2D" unique_id=1553589187]
+collision_mask = 2
+script = ExtResource("1_1w0r4")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=49878648]
+position = Vector2(-8, 9)
+tile_map_data = PackedByteArray(0, 0, 0, 0, 255, 255, 6, 0, 0, 0, 0, 0, 0, 0)
+tile_set = ExtResource("2_c5j7t")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2026271427]
+shape = SubResource("CircleShape2D_1w0r4")
+
+[node name="ClickArea" type="Area2D" parent="." unique_id=554336346]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClickArea" unique_id=602151638]
+shape = SubResource("CircleShape2D_c5j7t")

@@ -1,4 +1,5 @@
 using System.Text;
+using DotNetEnv;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -7,22 +8,79 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NMTales.Backend.Data;
+using NMTales.Backend.Repositories;
+using NMTales.Backend.Repositories.Location;
+using NMTales.Backend.Repositories.Notebook;
+using NMTales.Backend.Repositories.Test;
+using NMTales.Backend.Repositories.User;
+using NMTales.Backend.Repositories.UserQuest;
+using NMTales.Backend.Repositories.PlayerStats;
 using NMTales.Backend.Services;
+using NMTales.Backend.Services.Auth;
+using NMTales.Backend.Services.Location;
+using NMTales.Backend.Services.Player;
+using NMTales.Backend.Services.Test;
+using NMTales.Backend.Services.UserQuest;
 using NMTales.Backend.Validators;
 
 namespace NMTales.Backend
 {
     public class Program
     {
-        public static void Main(string[] args)
+        // 1. Changed void to async Task so we can use await inside Main
+        public static async Task Main(string[] args)
         {
+            Env.Load();
+            
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllers();
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseInMemoryDatabase("NMTaleDb"));
-            builder.Services.AddScoped<JwtService>();
+            builder.Services.AddControllers(options =>
+            {
+                options.Filters.Add<NMTales.Backend.Filters.BlockIfDeadFilter>();
+            });
 
+            builder.Services.AddScoped<JwtService>();
+            builder.Services.AddScoped<IAchievementService, AchievementService>();
+
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseNpgsql(
+                    builder.Configuration.GetConnectionString("DefaultConnection"),
+                    npgsqlOptionsAction: npgsqlOptions =>
+                    {
+                        npgsqlOptions.EnableRetryOnFailure(
+                            maxRetryCount: 3, 
+                            maxRetryDelay: TimeSpan.FromSeconds(5), 
+                            errorCodesToAdd: null); 
+                    }));
+
+            // AI tutor (Gemini). The API key comes from configuration (user-secrets / env var),
+            // never from source control. GeminiService is a typed HttpClient.
+            builder.Services.Configure<GeminiOptions>(
+                builder.Configuration.GetSection(GeminiOptions.SectionName));
+            builder.Services.AddHttpClient<GeminiService>(client =>
+                client.Timeout = TimeSpan.FromSeconds(30));
+
+            builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
+            
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IPlayerService, PlayerService>();
+            
+            builder.Services.AddScoped<INotebookRepository, NotebookRepository>();
+            builder.Services.AddScoped<INotebookService, NotebookService>();
+            
+            builder.Services.AddScoped<ILocationRepository, LocationRepository>();
+            builder.Services.AddScoped<ILocationService, LocationService>();
+
+            builder.Services.AddScoped<IUserQuestRepository, UserQuestRepository>();
+            builder.Services.AddScoped<IUserQuestService, UserQuestService>();
+
+            builder.Services.AddScoped<ITestRepository, TestRepository>();
+            builder.Services.AddScoped<ITestService, TestService>();
+            
+            builder.Services.AddScoped<IPlayerStatsRepository, PlayerStatsRepository>();
+            
             var jwtKey = builder.Configuration["Jwt:Key"]
                 ?? throw new InvalidOperationException("Jwt:Key is not configured.");
             var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
@@ -41,6 +99,8 @@ namespace NMTales.Backend
                         ClockSkew = TimeSpan.Zero
                     };
                 });
+
+            builder.Configuration.AddEnvironmentVariables();
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>
@@ -79,7 +139,7 @@ namespace NMTales.Backend
 
             builder.Services.AddCors(options => {
                 options.AddDefaultPolicy(policy => {
-                    policy.AllowAnyOrigin()    // In production, specify the exact game URL
+                    policy.AllowAnyOrigin()    
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });
@@ -89,16 +149,26 @@ namespace NMTales.Backend
 
             var app = builder.Build();
 
-            // Seed starter content (questions/answers) into the in-memory database on boot.
             using (var scope = app.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                
+                // Only run migrations if connected to PostgreSQL, skip if using In-Memory for tests
+                if (db.Database.IsRelational())
+                {
+                    await db.Database.MigrateAsync(); 
+                }
+                else
+                {
+                    // Test In-Memory DB: Instantly generate tables based on C# models
+                    await db.Database.EnsureCreatedAsync(); 
+                }
+                
                 DbSeeder.Seed(db);
             }
 
             app.UseCors();
 
-            // Serve illustrations (e.g. rendered math formulas) from wwwroot/.
             app.UseStaticFiles();
 
             if (app.Environment.IsDevelopment())

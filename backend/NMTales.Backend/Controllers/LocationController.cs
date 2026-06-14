@@ -2,6 +2,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NMTales.Backend.Data;
+using NMTales.Backend.Repositories;
+using NMTales.Backend.Repositories.Location;
+using NMTales.Backend.Services.Location;
+using NMTales.Backend.Services.Player;
+using Microsoft.Extensions.Logging;
 
 namespace NMTales.Backend.Controllers;
 
@@ -10,14 +15,19 @@ namespace NMTales.Backend.Controllers;
 [Authorize] // Защищаем весь контроллер. Запросы без валидного JWT получат 401 Unauthorized
 public class LocationController : ControllerBase
 {
-	private readonly ApplicationDbContext _context;
+	//private readonly ApplicationDbContext _context;
+	private readonly IPlayerService _playerService;
+	private readonly ILocationService _locationService;
 	private readonly IWebHostEnvironment _env;
+	private readonly ILogger<LocationController> _logger;
 
 	// Внедряем контекст БД и окружение (чтобы узнать путь к папке Packs) через конструктор
-	public LocationController(ApplicationDbContext context, IWebHostEnvironment env)
+	public LocationController(IPlayerService playerService, ILocationService locationService, IWebHostEnvironment env, ILogger<LocationController> logger)
 	{
-		_context = context;
+		_playerService = playerService;
+		_locationService = locationService;
 		_env = env;
+		_logger = logger;
 	}
 
 	[HttpGet("{locationName}/pack")]
@@ -31,27 +41,28 @@ public class LocationController : ControllerBase
 		}
 
 		// 2. Ищем пользователя в БД
-		var user = await _context.Users.FindAsync(userId);
+		var user = await _playerService.GetPlayerAsync(userId);
 		if (user == null)
 		{
 			return NotFound("User not found");
 		}
 
-		// // 3. Ищем запрашиваемую локацию в БД (чтобы проверить требования)
-		// var location = await _context.Locations
-		//     .FirstOrDefaultAsync(l => l.Name.ToLower() == locationName.ToLower());
-			
-		// if (location == null)
-		// {
-		//     return NotFound("Location not configured in database");
-		// }
-
-		// // 4. ПРОВЕРКА ДОСТУПА (Бизнес-логика против читерства)
-		// // Проверяем, хватает ли у игрока уровня для входа на эту локацию
-		// if (user.Level < location.RequiredLevel)
-		// {
-		//     return Forbid("You do not have access to this location. Level too low.");
-		// }
+		// 3. Ищем запрашиваемую локацию в БД (чтобы проверить требования)
+		var location = await _locationService.GetLocationByNameAsync(locationName);
+		if (location == null)
+		{
+		    return NotFound("Location not configured in database");
+		}
+		
+		_logger.LogInformation("Location check: Id={LocationId}, Name={LocationName}, Description={LocationDescription}, RequiredLevel={RequiredLevel}, Subject={Subject}",
+			location.Id, location.Name, location.Description, location.RequiredLevel, location.Subject);
+		
+		// 4. ПРОВЕРКА ДОСТУПА (Бизнес-логика против читерства)
+		// Проверяем, хватает ли у игрока уровня для входа на эту локацию
+		if (user.Level < location.RequiredLevel)
+		{
+		    return Forbid("You do not have access to this location. Level too low.");
+		}
 
 		// 5. Определение пути к файлу на сервере
 		// Собираем абсолютный путь к Packs/имя_локации.pck

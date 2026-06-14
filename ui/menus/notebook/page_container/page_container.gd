@@ -25,8 +25,6 @@ var page_text: String
 
 #endregion
 
-@warning_ignore("unused_signal") signal title_changed(new_title: String)
-
 var index: int
 
 
@@ -47,6 +45,7 @@ func _on_name_edit_text_changed(new_text: String) -> void:
 	if current_id != _name_change_id:
 		return
 	NotebookManager.update_page(page_id, page_name, page_text)
+	EventBus.page_title_changed.emit(index, new_text)
 
 
 func _on_text_edit_text_changed() -> void:

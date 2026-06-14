@@ -138,11 +138,6 @@ func _load_next_question(question_data: Dictionary) -> void:
 
 #region Closing Test
 
-func _unhandled_key_input(event: InputEvent) -> void:
-	if _test_ui and is_instance_valid(_test_ui) and event.is_action_pressed("ui_cancel"):
-		get_viewport().set_input_as_handled()
-		end_test()
-
 func end_test() -> void:
 	if _test_ui and is_instance_valid(_test_ui):
 		_test_ui.queue_free()

@@ -10,6 +10,13 @@ extends CharacterBody2D
 #endregion
 
 var can_attack: bool = true
+var is_dead: bool = false:
+	set(value):
+		is_dead = value
+		if is_dead:
+			velocity = Vector2.ZERO
+			if sprite:
+				sprite.play("idle_down")
 
 @export var speed: float = 150.0
 
@@ -36,12 +43,36 @@ func _on_attack_area_body_entered(body: Node2D) -> void:
 		EventBus.mob_killed.emit("vampire")
 
 
+func update_health_from_server(current_hp: int, is_dead_val: bool) -> void:
+	health_points = current_hp
+	is_dead = is_dead_val
+	if is_dead:
+		EventBus.player_died.emit()
+
+
+func request_attack() -> bool:
+	var request: HTTPRequest = NetworkManager.send_post("/api/combat/attack", {}, AuthManager.token_header)
+	if not request:
+		return false
+	var response: Array = await request.request_completed
+	request.queue_free()
+	
+	return response[1] == 200
+
+
 func _on_revive_button_pressed() -> void:
-	_revive()
-	hud.death_screen.hide()
-	get_tree().paused = false
+	var request: HTTPRequest = NetworkManager.send_post("/api/combat/respawn", {}, AuthManager.token_header)
+	if not request:
+		return
+	var response: Array = await request.request_completed
+	request.queue_free()
+	
+	if response[1] == 200:
+		var response_body: String = response[3].get_string_from_utf8()
+		var data: Dictionary = JSON.parse_string(response_body)
+		if data:
+			is_dead = false
+			global_position = Vector2(data.get("positionX", 0.0), data.get("positionY", 0.0))
+			health_points = data.get("currentHp", 20)
+			hud.death_screen.hide()
 
-
-func _revive() -> void:
-	health_points = 80
-	global_position = Vector2.ZERO

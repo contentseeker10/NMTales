@@ -75,7 +75,16 @@ func _start_attack() -> void:
 		return
 	
 	if _player in _attack_area.get_overlapping_bodies():
-		_player.health_points -= damage
+		var request: HTTPRequest = NetworkManager.send_post("/api/combat/damage", { "amount": damage }, AuthManager.token_header)
+		if request:
+			var response: Array = await request.request_completed
+			request.queue_free()
+			
+			if response[1] == 200:
+				var response_body: String = response[3].get_string_from_utf8()
+				var data: Dictionary = JSON.parse_string(response_body)
+				if data and is_instance_valid(_player):
+					_player.update_health_from_server(data.get("currentHp", 0), data.get("isDead", false))
 	
 	current_state = State.CHASE
 

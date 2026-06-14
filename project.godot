@@ -23,10 +23,12 @@ PackManager="*uid://cujeumm7u4ow"
 EventBus="*uid://dh3ottjk488rh"
 LocationManager="*uid://hbsiv4ob7m1m"
 DialogueManager="*uid://vdh0fb2awxiy"
+AssistantManager="*uid://5pcaa7a52e4b"
 QuestManager="*uid://brmhns4qffobg"
 TestManager="*uid://c4atkmr1ndujn"
 NotebookManager="*uid://c4sjfwuh5dtfo"
 PauseMenu="*uid://cacd54mfk10u2"
+AchievementsManager="*uid://dmvcsxhcwbusa"
 
 [display]
 

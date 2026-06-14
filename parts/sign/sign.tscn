@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://vip4v18e1tow"]
+
+[ext_resource type="TileSet" uid="uid://hw6c8qs6egiy" path="res://assets/shared/tilesets/plants/plants.tres" id="1_lhkpb"]
+[ext_resource type="Script" uid="uid://3gi85ilr88vw" path="res://parts/sign/sign.gd" id="1_t1ih5"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_lhkpb"]
+radius = 100.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_jpyd6"]
+radius = 32.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vc3iq"]
+size = Vector2(16, 20)
+
+[node name="Sign" type="TileMapLayer" unique_id=1756147621]
+y_sort_enabled = true
+tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 6, 0, 3, 0, 0, 0, 0, 0)
+tile_set = ExtResource("1_lhkpb")
+script = ExtResource("1_t1ih5")
+
+[node name="LabelArea" type="Area2D" parent="." unique_id=2028009936]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LabelArea" unique_id=1751051559]
+position = Vector2(8, 8)
+shape = SubResource("CircleShape2D_lhkpb")
+debug_color = Color(0, 0.6, 0.69803923, 0)
+
+[node name="InteractionArea" type="Area2D" parent="." unique_id=270405651]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=2063171472]
+position = Vector2(8, 8)
+shape = SubResource("CircleShape2D_jpyd6")
+
+[node name="ClickArea" type="Area2D" parent="." unique_id=1535842278]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClickArea" unique_id=43499523]
+position = Vector2(8, 7)
+shape = SubResource("RectangleShape2D_vc3iq")
+
+[node name="ActionLabel" type="Label" parent="." unique_id=1248256587]
+visible = false
+z_index = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = -2.5
+offset_top = -14.0
+offset_right = 19.5
+offset_bottom = -4.0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 8
+text = "Інфо"
+horizontal_alignment = 1
+
+[connection signal="body_entered" from="LabelArea" to="." method="_on_label_area_body_entered"]
+[connection signal="body_exited" from="LabelArea" to="." method="_on_label_area_body_exited"]
+[connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]
+[connection signal="body_exited" from="InteractionArea" to="." method="_on_interaction_area_body_exited"]
+[connection signal="input_event" from="ClickArea" to="." method="_on_click_area_input_event"]

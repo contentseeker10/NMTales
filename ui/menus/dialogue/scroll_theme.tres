@@ -1,0 +1,35 @@
+[gd_resource type="Theme" format=3 uid="uid://i1xtwecrye0x"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a6xe4"]
+bg_color = Color(0.16470589, 0.1254902, 0.10980392, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9985873, 0.7825438, 0.5412677, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hjr1u"]
+bg_color = Color(0.16470589, 0.1254902, 0.10980392, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9985873, 0.7825438, 0.5412677, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tcp2r"]
+bg_color = Color(0.16470589, 0.1254902, 0.10980392, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9985873, 0.7825438, 0.5412677, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jfjx0"]
+content_margin_left = 6.0
+bg_color = Color(1, 1, 1, 0)
+
+[resource]
+VScrollBar/styles/grabber = SubResource("StyleBoxFlat_a6xe4")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_hjr1u")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_tcp2r")
+VScrollBar/styles/scroll = SubResource("StyleBoxFlat_jfjx0")

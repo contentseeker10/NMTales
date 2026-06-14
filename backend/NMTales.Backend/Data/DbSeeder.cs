@@ -11,14 +11,18 @@ namespace NMTales.Backend.Data
     {
         public static void Seed(ApplicationDbContext context)
         {
-            if (context.Questions.Any())
+            if (!context.Questions.Any())
             {
-                return;
+                context.Questions.AddRange(MathQuestions());
+                context.Questions.AddRange(UkrainianQuestions());
+                context.SaveChanges();
             }
 
-            context.Questions.AddRange(MathQuestions());
-            context.Questions.AddRange(UkrainianQuestions());
-            context.SaveChanges();
+            if (!context.Achievements.Any())
+            {
+                context.Achievements.AddRange(DefaultAchievements());
+                context.SaveChanges();
+            }
         }
 
         // --- Math altar: topic "Logarithms" -------------------------------------------------
@@ -89,6 +93,49 @@ namespace NMTales.Backend.Data
                 Answers = options
                     .Select(o => new Answer { Text = o.Text, CorrectSlotIndex = o.Slot })
                     .ToList()
+            };
+        }
+
+        private static IEnumerable<Achievement> DefaultAchievements()
+        {
+            yield return new Achievement
+            {
+                Code = "talk_all_assistants",
+                Title = "Ерудит",
+                Description = "Поговорити з усіма трьома асистентами (Математика, Мова, Історія)",
+                XpReward = 150
+            };
+
+            yield return new Achievement
+            {
+                Code = "complete_all_quests",
+                Title = "Герой NMTales",
+                Description = "Виконати всі квести в грі",
+                XpReward = 300
+            };
+
+            yield return new Achievement
+            {
+                Code = "kill_100_vampires",
+                Title = "Винищувач вампірів",
+                Description = "Перемогти 100 вампірів",
+                XpReward = 250
+            };
+
+            yield return new Achievement
+            {
+                Code = "unlock_all_spawns",
+                Title = "Дослідник",
+                Description = "Відкрити всі точки спавну вампірів",
+                XpReward = 200
+            };
+
+            yield return new Achievement
+            {
+                Code = "flawless_run",
+                Title = "Безсмертний вчений",
+                Description = "Пройти гру без помилок у тестах та смертей",
+                XpReward = 500
             };
         }
     }

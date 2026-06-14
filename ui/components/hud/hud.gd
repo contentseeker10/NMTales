@@ -85,5 +85,4 @@ func _unhandled_key_input(event: InputEvent) -> void:
 
 
 func _on_player_died() -> void:
-	get_tree().paused = true
 	death_screen.show()
