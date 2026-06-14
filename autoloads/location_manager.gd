@@ -37,6 +37,9 @@ func _try_download_location(location_name: String, target_path: String, scene_pa
 
 
 func update_player_location(location_name: String, player_coords: Vector2) -> void:
+	var player = get_tree().get_first_node_in_group("player") as Player
+	if player and player.is_dead:
+		return
 	var body: Dictionary = {
 		"currentLocation": location_name,
 		"currentPositionX": player_coords.x,

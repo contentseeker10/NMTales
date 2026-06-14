@@ -32,6 +32,9 @@ func _ready() -> void:
 		current_state.enter()
 
 func _unhandled_input(event: InputEvent) -> void:
+	var player = owner as Player
+	if player and player.is_dead:
+		return
 	if current_state:
 		current_state.handle_input(event)
 
@@ -40,6 +43,10 @@ func _process(delta: float) -> void:
 		current_state.update(delta)
 
 func _physics_process(delta: float) -> void:
+	var player = owner as Player
+	if player and player.is_dead:
+		player.velocity = Vector2.ZERO
+		return
 	if current_state:
 		current_state.physics_update(delta)
 

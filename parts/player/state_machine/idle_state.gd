@@ -9,7 +9,11 @@ func exit() -> void:
 
 func handle_input(event: InputEvent) -> void:
 	if event.is_action_pressed("attack") and player.can_attack:
-		state_machine.transition_to("attacking")
+		player.can_attack = false
+		var success = await player.request_attack()
+		player.can_attack = true
+		if success:
+			state_machine.transition_to("attacking")
 
 func update(_delta: float) -> void:
 	pass
