@@ -7,7 +7,11 @@ func _unhandled_key_input(event: InputEvent) -> void:
 
 func _on_continue_button_pressed() -> void:
 	_toggle_pause()
-	
+
+
+func _on_achievements_button_pressed() -> void:
+	pass # Replace with function body.
+
 
 func _on_exit_button_pressed() -> void:
 	_toggle_pause()

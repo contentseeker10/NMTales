@@ -39,7 +39,11 @@ text = "Пауза"
 layout_mode = 2
 text = "Продовжити"
 
-[node name="ExitButton" parent="BackgroundPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(971939153, 2063207470) index="1" unique_id=1528696269 instance=ExtResource("2_fob5h")]
+[node name="AchievementsButton" parent="BackgroundPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(971939153, 2063207470) index="1" unique_id=2014312172 instance=ExtResource("2_fob5h")]
+layout_mode = 2
+text = "Досягнення"
+
+[node name="ExitButton" parent="BackgroundPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer" parent_id_path=PackedInt32Array(971939153, 2063207470) index="2" unique_id=1528696269 instance=ExtResource("2_fob5h")]
 layout_mode = 2
 size_flags_horizontal = 1
 text = "Вийти"
@@ -63,6 +67,7 @@ expand_mode = 1
 stretch_mode = 4
 
 [connection signal="pressed" from="BackgroundPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/ContinueButton" to="." method="_on_continue_button_pressed"]
+[connection signal="pressed" from="BackgroundPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/AchievementsButton" to="." method="_on_achievements_button_pressed"]
 [connection signal="pressed" from="BackgroundPanel/MarginContainer/MarginContainer/VBoxContainer/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
 
 [editable path="BackgroundPanel"]

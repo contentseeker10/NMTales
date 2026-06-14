@@ -6,7 +6,7 @@ var player: Player
 var _timer: Timer
 
 func _ready() -> void:
-	EventBus.location_entered.emit("test")
+	EventBus.location_entered.emit("main")
 	
 	LocationManager.init_start_spawn()
 	player = LocationManager.spawn_player()

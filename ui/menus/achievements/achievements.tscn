@@ -1,0 +1,67 @@
+[gd_scene format=3 uid="uid://bhoy3baee50be"]
+
+[ext_resource type="Script" uid="uid://t5naj7x4kg0e" path="res://ui/menus/achievements/achievements.gd" id="1_771im"]
+[ext_resource type="PackedScene" uid="uid://cwuqpwk2j3equ" path="res://ui/components/achievement_plate/achivement_plate.tscn" id="2_p8h0d"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_771im"]
+bg_color = Color(0.16470589, 0.1254902, 0.10980392, 1)
+
+[node name="Achievements" type="CanvasLayer" unique_id=1015489028]
+script = ExtResource("1_771im")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=952990423]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.39215687)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1372551705]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -265.0
+offset_top = -130.0
+offset_right = 265.0
+offset_bottom = 130.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=601719590]
+layout_mode = 2
+text = "Твої Досягнення"
+horizontal_alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer" unique_id=556467819]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_771im")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/PanelContainer" unique_id=1106300606]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer" unique_id=1103355478]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer" unique_id=1891829822]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="AchivementPlate" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/GridContainer" unique_id=849364480 instance=ExtResource("2_p8h0d")]
+layout_mode = 2
+unlocked = true
+
+[node name="AchivementPlate2" parent="VBoxContainer/PanelContainer/ScrollContainer/MarginContainer/GridContainer" unique_id=1820044861 instance=ExtResource("2_p8h0d")]
+layout_mode = 2
