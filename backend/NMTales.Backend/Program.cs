@@ -23,6 +23,13 @@ namespace NMTales.Backend
                 options.UseInMemoryDatabase("NMTaleDb"));
             builder.Services.AddScoped<JwtService>();
 
+            // AI tutor (Gemini). The API key comes from configuration (user-secrets / env var),
+            // never from source control. GeminiService is a typed HttpClient.
+            builder.Services.Configure<GeminiOptions>(
+                builder.Configuration.GetSection(GeminiOptions.SectionName));
+            builder.Services.AddHttpClient<GeminiService>(client =>
+                client.Timeout = TimeSpan.FromSeconds(30));
+
             var jwtKey = builder.Configuration["Jwt:Key"]
                 ?? throw new InvalidOperationException("Jwt:Key is not configured.");
             var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));

@@ -9,6 +9,8 @@ var _npc_text_scene: PackedScene = preload("res://ui/menus/dialogue/answers/npc_
 var _last_prompt: RichTextLabel
 var _last_answer: RichTextLabel
 
+var _is_waiting: bool = false
+
 #endregion
 
 #region Node imports
@@ -16,34 +18,68 @@ var _last_answer: RichTextLabel
 @onready var assistant_name_label: Label = $VBoxContainer/AssistantNameLabel
 @onready var line_edit: LineEdit = $VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/LineEdit
 @onready var chat_box: VBoxContainer = $VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/MarginContainer/ChatBox
+@onready var send_button: Button = $VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/SendButton
 
 #endregion
 
 
+func _ready() -> void:
+	# Let Enter submit the prompt, not just the Send button.
+	line_edit.text_submitted.connect(_on_line_edit_text_submitted)
+
+
+## Renders a saved conversation (list of { "role": "user"/"model", "content": String }).
+func load_history(messages: Array) -> void:
+	for message: Dictionary in messages:
+		if message.get("role", "") == "user":
+			_add_prompt(message.get("content", ""))
+		else:
+			_append_assistant_text(message.get("content", ""))
+
+
 #region Chatting handler
 
+func _on_line_edit_text_submitted(_new_text: String) -> void:
+	_on_send_button_pressed()
+
+
 func _on_send_button_pressed() -> void:
-	var prompt := line_edit.text
+	if _is_waiting:
+		return
+
+	var prompt := line_edit.text.strip_edges()
+	if prompt.is_empty():
+		return
+
 	line_edit.clear()
-	
+	_set_input_enabled(false)
+
 	_add_prompt(prompt)
 	_add_answer()
-	
+
 	var response := await AssistantManager.send_player_prompt(prompt)
-	
-	if response.is_empty():
-		_last_answer.queue_free()
-		_last_prompt.text = "Помилка відправлення запиту"
+
+	if response.has("answer"):
+		_load_answer(response)
+	else:
+		_show_error(response.get("error", "Не вдалося отримати відповідь."))
 		line_edit.text = prompt
-		return
-	
-	_load_answer(response)
+
+	_set_input_enabled(true)
+
+
+func _set_input_enabled(enabled: bool) -> void:
+	_is_waiting = not enabled
+	line_edit.editable = enabled
+	send_button.disabled = not enabled
+	if enabled:
+		line_edit.grab_focus()
 
 
 func _add_prompt(prompt: String) -> void:
 	var player_prompt: RichTextLabel = _player_text_scene.instantiate()
 	player_prompt.text = "[b]" + AuthManager.current_user_info.get("username", "error") + ":[/b]\n" \
-					+ prompt
+					+ _escape_bbcode(prompt)
 	chat_box.add_child(player_prompt)
 	_last_prompt = player_prompt
 
@@ -55,10 +91,25 @@ func _add_answer() -> void:
 	chat_box.add_child(assistant_answer)
 	_last_answer = assistant_answer
 
+
 func _load_answer(data: Dictionary) -> void:
-	_last_answer.text = "[b]Асистент:[/b]\n"
-	# TODO: Loading LLM response (ensure API correctness)
-	_last_answer.text += data.get("answer", "error")
+	_last_answer.text = "[b]Асистент:[/b]\n" + _escape_bbcode(data.get("answer", "error"))
+
+
+## Appends a finished assistant message (used when restoring saved history).
+func _append_assistant_text(content: String) -> void:
+	var bubble: RichTextLabel = _npc_text_scene.instantiate()
+	bubble.text = "[b]Асистент:[/b]\n" + _escape_bbcode(content)
+	chat_box.add_child(bubble)
+
+
+func _show_error(message: String) -> void:
+	_last_answer.text = "[b]Асистент:[/b]\n[i]⚠ " + message + "[/i]"
+
+
+## Stops raw `[` in user/model text from being parsed as BBCode tags.
+func _escape_bbcode(text: String) -> String:
+	return text.replace("[", "[lb]")
 
 #endregion
 

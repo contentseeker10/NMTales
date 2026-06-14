@@ -16,6 +16,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<UserQuest> UserQuests { get; set; }
     public DbSet<UserTestSession> UserTestSessions { get; set; }
     public DbSet<NotebookPage> NotebookPages { get; set; }
+    public DbSet<AssistantMessage> AssistantMessages { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
