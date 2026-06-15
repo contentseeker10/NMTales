@@ -1,0 +1,16 @@
+{
+  "id": "quest_lang_3",
+  "giver": "npc_quest_lang",
+  "repeatable": false,
+  "title": "Мова - сила",
+  "description": "Розв'яжіть третє випробування з української мови (Фонетика).",
+  "rewards": {
+    "xp": 500
+  },
+  "objective": {
+    "type": "complete_quiz",
+    "target": "Lang_3",
+    "required_amount": 1,
+    "current_amount": 0
+  }
+}

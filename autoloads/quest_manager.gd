@@ -39,9 +39,22 @@ func sync_quests() -> void:
 		completed_quest_ids = JSON.parse_string(response_body)
 
 
+func get_actual_quest_id(npc_id: String, sequential_id: String) -> String:
+	if npc_id == "npc_guide_main":
+		return "quest_wood"
+	elif npc_id == "npc_quest_math":
+		return sequential_id.replace("quest_", "quest_math_")
+	elif npc_id == "npc_quest_lang":
+		return sequential_id.replace("quest_", "quest_lang_")
+	elif npc_id == "npc_warning":
+		return "quest_hstr_1"
+	return sequential_id
+
+
 func is_quest_completed(npc_id: String, quest_id: String) -> bool:
-	var composite_key: String = npc_id + ":" + quest_id
-	return completed_quest_ids.has(composite_key)
+	var actual_id = get_actual_quest_id(npc_id, quest_id)
+	var composite_key: String = npc_id + ":" + actual_id
+	return completed_quest_ids.has(composite_key) or completed_quest_ids.has(npc_id + ":" + quest_id)
 
 
 func accept_quest(npc_id: String, quest_id: String) -> void:
@@ -69,6 +82,9 @@ func _on_dialogue_action_triggered(npc: NPC, action: Dictionary) -> void:
 			accept_quest(npc.npc_id, quest_id)
 		"complete_quest":
 			_complete_active_quest()
+		"complete_quiz":
+			var quiz_id: String = action.get("quiz_id")
+			EventBus.quiz_completed.emit(quiz_id)
 
 
 func _complete_active_quest() -> void:

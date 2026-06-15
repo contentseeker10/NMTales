@@ -1,0 +1,16 @@
+{
+  "id": "quest_math_2",
+  "giver": "npc_quest_math",
+  "repeatable": false,
+  "title": "Математика всюди",
+  "description": "Розв'яжіть друге математичне випробування (Рівняння).",
+  "rewards": {
+    "xp": 200
+  },
+  "objective": {
+    "type": "complete_quiz",
+    "target": "Math_2",
+    "required_amount": 1,
+    "current_amount": 0
+  }
+}

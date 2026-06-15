@@ -3,8 +3,9 @@ extends Node2D
 
 @onready var _action_icon: Label = $ActionIcon
 
-@export var test_type: String = "Type"
-@export var test_topic: String = "Topic"
+@export var test_type: String
+@export var test_topic: String
+@export var required_quest_id: String
 
 var is_available: bool = false
 
@@ -41,4 +42,5 @@ func _on_click_area_input_event(_viewport: Node, event: InputEvent, _shape_idx: 
 	if is_available and not TestManager.is_test_active:
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT \
 			and event.is_pressed():
-				TestManager.start_test(test_type, test_topic)
+				if QuestManager.active_quest and required_quest_id == QuestManager.active_quest.id:
+					TestManager.start_test(test_type, test_topic)

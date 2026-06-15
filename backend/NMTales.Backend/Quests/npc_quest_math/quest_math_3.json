@@ -1,0 +1,16 @@
+{
+  "id": "quest_math_3",
+  "giver": "npc_quest_math",
+  "repeatable": false,
+  "title": "Параметр 'а'",
+  "description": "Розв'яжіть третє математичне випробування (Функції).",
+  "rewards": {
+    "xp": 500
+  },
+  "objective": {
+    "type": "complete_quiz",
+    "target": "Math_3",
+    "required_amount": 1,
+    "current_amount": 0
+  }
+}

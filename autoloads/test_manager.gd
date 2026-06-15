@@ -17,6 +17,7 @@ var _word_regex := RegEx.new()
 var current_session_id: int = 0
 var current_question_index: int = 0
 var current_question_data: Dictionary = {}
+var current_topic: String = ""
 
 #endregion
 
@@ -44,6 +45,7 @@ func start_test(test_type: String, test_topic: String) -> void:
 	if is_test_active:
 		return
 	is_test_active = true
+	current_topic = test_topic
 	_set_player_active(false)
 	_init_test_ui(test_type, test_topic)
 	await _request_test_session(test_type, test_topic)
@@ -120,6 +122,8 @@ func submit_answer(answer_id: int, slots: Array[Dictionary] = []) -> void:
 		
 		if is_completed or is_failed:
 			session_finished.emit(not is_failed)
+			if is_completed and not is_failed:
+				EventBus.quiz_completed.emit(current_topic)
 		else:
 			if is_correct:
 				_load_next_question(body.get("nextQuestion", {}))

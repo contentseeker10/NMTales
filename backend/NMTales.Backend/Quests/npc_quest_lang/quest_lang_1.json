@@ -1,0 +1,16 @@
+{
+  "id": "quest_lang_1",
+  "giver": "npc_quest_lang",
+  "repeatable": false,
+  "title": "Таємниця стародавніх сувоїв",
+  "description": "Розв'яжіть перше випробування з української мови (Синтаксис).",
+  "rewards": {
+    "xp": 100
+  },
+  "objective": {
+    "type": "complete_quiz",
+    "target": "Lang_1",
+    "required_amount": 1,
+    "current_amount": 0
+  }
+}

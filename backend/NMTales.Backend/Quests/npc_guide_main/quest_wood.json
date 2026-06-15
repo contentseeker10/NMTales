@@ -1,0 +1,16 @@
+{
+  "id": "quest_wood",
+  "giver": "npc_guide_main",
+  "repeatable": false,
+  "title": "Відшукати Велике Древо Знань",
+  "description": "Знайдіть Велике Древо Знань у центрі фортеці.",
+  "rewards": {
+    "xp": 100
+  },
+  "objective": {
+    "type": "enter_location",
+    "target": "BigTree",
+    "required_amount": 1,
+    "current_amount": 0
+  }
+}

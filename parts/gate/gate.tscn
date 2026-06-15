@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://cj1orfoemr8yp"]
+
+[ext_resource type="TileSet" uid="uid://32y7n4vwblvv" path="res://assets/shared/tilesets/props/props.tres" id="1_2pj6h"]
+[ext_resource type="Script" uid="uid://d26t5y176msp2" path="res://parts/gate/gate.gd" id="1_5v0yr"]
+
+[node name="Gate" type="TileMapLayer" unique_id=593585643]
+y_sort_enabled = true
+tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 3, 0, 0, 0)
+tile_set = ExtResource("1_2pj6h")
+script = ExtResource("1_5v0yr")

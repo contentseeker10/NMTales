@@ -32,9 +32,16 @@ var health_points: int:
 
 
 func _ready() -> void:
-	health_points = 80
 	hud.visible = true;
 	hud.death_screen.revive_button.pressed.connect(_on_revive_button_pressed)
+	
+	var initial_hp = int(AuthManager.current_user_info.get("currentHp", 80))
+	var initial_dead = bool(AuthManager.current_user_info.get("isDead", false))
+	
+	is_dead = initial_dead
+	health_points = initial_hp
+	if is_dead:
+		EventBus.player_died.emit()
 
 
 func _on_attack_area_body_entered(body: Node2D) -> void:

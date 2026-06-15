@@ -1,0 +1,16 @@
+{
+  "id": "quest_math_1",
+  "giver": "npc_quest_math",
+  "repeatable": false,
+  "title": "Таємниця стародавніх скрижалей",
+  "description": "Розв'яжіть перше математичне випробування (Логарифми).",
+  "rewards": {
+    "xp": 100
+  },
+  "objective": {
+    "type": "complete_quiz",
+    "target": "Math_1",
+    "required_amount": 1,
+    "current_amount": 0
+  }
+}
