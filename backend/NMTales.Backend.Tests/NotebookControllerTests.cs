@@ -9,8 +9,14 @@ using Xunit;
 
 namespace NMTales.Backend.Tests;
 
+/// <summary>
+/// Integration tests for the NotebookController, validating CRUD operations, boundary constraints, validation rules, and multi-user isolation behavior.
+/// </summary>
 public class NotebookControllerTests
 {
+    /// <summary>
+    /// Helper method to register a uniquely named user and return an HttpClient configured with their Bearer authentication token.
+    /// </summary>
     private static async Task<HttpClient> CreateAuthenticatedClientAsync(QuestApiFactory factory, string username)
     {
         var client = factory.CreateClient();
@@ -34,6 +40,9 @@ public class NotebookControllerTests
         return client;
     }
 
+    /// <summary>
+    /// Verifies that an unauthenticated request to retrieve notebook pages returns a 401 Unauthorized status.
+    /// </summary>
     [Fact]
     public async Task GetAllWithoutTokenReturnsUnauthorized()
     {
@@ -45,6 +54,9 @@ public class NotebookControllerTests
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
 
+    /// <summary>
+    /// Verifies that a newly registered user with no pages receives an empty collection from the notebook endpoint.
+    /// </summary>
     [Fact]
     public async Task GetAllWithNoPagesReturnsEmptyList()
     {
@@ -60,6 +72,9 @@ public class NotebookControllerTests
         Assert.Empty(pages);
     }
 
+    /// <summary>
+    /// Verifies that a valid page creation request succeeds and initializes the page with default empty content.
+    /// </summary>
     [Fact]
     public async Task CreateWithValidTitleReturnsPageWithDefaultContent()
     {
@@ -77,6 +92,9 @@ public class NotebookControllerTests
         Assert.Equal("", page.Content);
     }
 
+    /// <summary>
+    /// Verifies that attempting to create an eleventh page fails, enforcing the strict maximum limit constraint of 10 pages per user.
+    /// </summary>
     [Fact]
     public async Task CreateEleventhPageReturnsBadRequestWithLimitMessage()
     {
@@ -96,6 +114,9 @@ public class NotebookControllerTests
             await limitResponse.Content.ReadAsStringAsync());
     }
 
+    /// <summary>
+    /// Verifies that a page creation request fails with a bad request status when an empty title is provided.
+    /// </summary>
     [Fact]
     public async Task CreateWithEmptyTitleReturnsBadRequest()
     {
@@ -107,6 +128,9 @@ public class NotebookControllerTests
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
+    /// <summary>
+    /// Verifies that a page creation request fails with a bad request status when the title length exceeds the 20-character limitation.
+    /// </summary>
     [Fact]
     public async Task CreateWithTitleOver20CharsReturnsBadRequest()
     {
@@ -119,6 +143,9 @@ public class NotebookControllerTests
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
+    /// <summary>
+    /// Verifies that a user can successfully update their own notebook page's title and content, and that modifications are properly persisted.
+    /// </summary>
     [Fact]
     public async Task UpdateOwnPageReturnsNoContentAndPersistsChanges()
     {
@@ -144,6 +171,9 @@ public class NotebookControllerTests
         Assert.Equal("Note content here", page.Content);
     }
 
+    /// <summary>
+    /// Verifies that a user cannot modify another user's notebook page, ensuring data isolation across accounts by returning a 404 NotFound status.
+    /// </summary>
     [Fact]
     public async Task UpdateAnotherUsersPageReturnsNotFound()
     {
@@ -164,6 +194,9 @@ public class NotebookControllerTests
         Assert.Equal(HttpStatusCode.NotFound, updateResponse.StatusCode);
     }
 
+    /// <summary>
+    /// Verifies that updating a page with content exceeding the 10,000-character limitation results in a validation error.
+    /// </summary>
     [Fact]
     public async Task UpdateWithContentOver10000CharsReturnsBadRequest()
     {
@@ -183,6 +216,9 @@ public class NotebookControllerTests
         Assert.Equal(HttpStatusCode.BadRequest, updateResponse.StatusCode);
     }
 
+    /// <summary>
+    /// Verifies that a user can successfully delete their own notebook page, removing it completely from the database.
+    /// </summary>
     [Fact]
     public async Task DeleteOwnPageReturnsNoContent()
     {
@@ -202,6 +238,9 @@ public class NotebookControllerTests
         Assert.False(db.NotebookPages.Any(p => p.Id == created.Id));
     }
 
+    /// <summary>
+    /// Verifies that a user cannot delete another user's notebook page, ensuring account data boundaries are maintained.
+    /// </summary>
     [Fact]
     public async Task DeleteAnotherUsersPageReturnsNotFound()
     {

@@ -16,6 +16,9 @@ using NMTales.Backend.Filters;
 
 namespace NMTales.Backend.Controllers
 {
+    /// <summary>
+    /// API Controller responsible for tracking and managing user achievements and game statistics.
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
@@ -25,8 +28,12 @@ namespace NMTales.Backend.Controllers
         private readonly IAchievementService _achievementService;
         private readonly IWebHostEnvironment _env;
 
+        // Tracks locks per user to prevent race conditions during concurrent event submissions
         private static readonly ConcurrentDictionary<int, SemaphoreSlim> UserGates = new();
 
+        /// <summary>
+        /// Initializes the controller with necessary database contexts and services.
+        /// </summary>
         public AchievementController(ApplicationDbContext context, IAchievementService achievementService, IWebHostEnvironment env)
         {
             _context = context;
@@ -34,12 +41,17 @@ namespace NMTales.Backend.Controllers
             _env = env;
         }
 
+        /// <summary>
+        /// Retrieves the current user's achievement progress and unlock status.
+        /// </summary>
+        /// <returns>A list of achievements including current progress metrics and timestamps.</returns>
         [HttpGet]
         [AllowDeadPlayer]
         public async Task<IActionResult> GetAchievements()
         {
             if (!TryGetUserId(out var userId)) return Unauthorized();
 
+            // Fetch or initialize player stats for the current user
             var stats = await _context.PlayerStats.FirstOrDefaultAsync(ps => ps.UserId == userId);
             if (stats == null)
             {
@@ -48,6 +60,7 @@ namespace NMTales.Backend.Controllers
                 await _context.SaveChangesAsync();
             }
 
+            // Map out what the user has already unlocked
             var userAchievements = await _context.UserAchievements
                 .Where(ua => ua.UserId == userId)
                 .ToDictionaryAsync(ua => ua.AchievementId);
@@ -57,6 +70,7 @@ namespace NMTales.Backend.Controllers
             var totalQuests = GetTotalQuestsCount();
             var requiredSpawnPoints = new HashSet<string> { "spawn_north", "spawn_forest" };
 
+            // Calculate progress dynamically for each achievement
             var result = achievements.Select(a =>
             {
                 var isUnlocked = userAchievements.TryGetValue(a.Id, out var userAch);
@@ -92,7 +106,7 @@ namespace NMTales.Backend.Controllers
                     case "flawless_run":
                         if (stats.HasFailedTest || stats.HasDied)
                         {
-                            currentProgress = 0;
+                            currentProgress = 0; // Reset progress if the flawless condition is broken
                         }
                         else
                         {
@@ -124,6 +138,13 @@ namespace NMTales.Backend.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Processes a telemetry event (like a kill or death) and evaluates if any new achievements were unlocked.
+        /// </summary>
+        /// <remarks>
+        /// Requests are processed sequentially per user to maintain data integrity.
+        /// </remarks>
+        /// <returns>A list of newly unlocked achievements, if any.</returns>
         [HttpPost("event")]
         public async Task<IActionResult> SubmitEvent([FromBody] SubmitTelemetryEventDto dto)
         {
@@ -134,6 +155,7 @@ namespace NMTales.Backend.Controllers
 
             if (!TryGetUserId(out var userId)) return Unauthorized();
 
+            // Lock execution for this specific user to handle concurrent requests safely
             var gate = GateFor(userId);
             await gate.WaitAsync();
             try
@@ -150,6 +172,7 @@ namespace NMTales.Backend.Controllers
 
                 bool updated = false;
 
+                // Update the corresponding stat based on the event type
                 switch (eventType)
                 {
                     case "VampireKill":
@@ -180,6 +203,7 @@ namespace NMTales.Backend.Controllers
                         if (!string.IsNullOrEmpty(eventDetail))
                         {
                             var subject = eventDetail;
+                            // Normalize "Ukrainian" to "Language" for achievement tracking
                             if (subject.Equals("Ukrainian", StringComparison.OrdinalIgnoreCase))
                             {
                                 subject = "Language";
@@ -201,7 +225,7 @@ namespace NMTales.Backend.Controllers
                     await _context.SaveChangesAsync();
                 }
 
-                // Run evaluation engine
+                // Run evaluation engine to see if these new stats trigger any unlocks
                 var newlyUnlocked = await _achievementService.EvaluateAndUnlockAchievementsAsync(userId);
 
                 var response = newlyUnlocked.Select(a => new
@@ -215,23 +239,33 @@ namespace NMTales.Backend.Controllers
             }
             finally
             {
-                gate.Release();
+                gate.Release(); // Always release the lock
             }
         }
 
+        /// <summary>
+        /// Extracts the user ID from the current authentication claims.
+        /// </summary>
         private bool TryGetUserId(out int userId)
         {
             var userIdValue = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
             return int.TryParse(userIdValue, out userId);
         }
 
+        /// <summary>
+        /// Gets or creates a semaphore lock specifically for the given user ID.
+        /// </summary>
         private static SemaphoreSlim GateFor(int userId) =>
             UserGates.GetOrAdd(userId, _ => new SemaphoreSlim(1, 1));
 
+        /// <summary>
+        /// Dynamically calculates the total number of quests by reading physical JSON files.
+        /// </summary>
         private int GetTotalQuestsCount()
         {
             try
             {
+                // Traverse the Quests folder to count valid quest files
                 var questsPath = Path.Combine(_env.ContentRootPath, "Quests");
                 if (Directory.Exists(questsPath))
                 {
@@ -240,7 +274,7 @@ namespace NMTales.Backend.Controllers
             }
             catch
             {
-                // Fallback
+                // Fallback to a hardcoded default if file access fails
             }
             return 3;
         }

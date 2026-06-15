@@ -10,17 +10,29 @@ using Microsoft.AspNetCore.Hosting;
 
 namespace NMTales.Backend.Services
 {
+    /// <summary>
+    /// Service responsible for evaluating player statistics and unlocking achievements.
+    /// </summary>
     public class AchievementService : IAchievementService
     {
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _env;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AchievementService"/>.
+        /// </summary>
         public AchievementService(ApplicationDbContext context, IWebHostEnvironment env)
         {
             _context = context;
             _env = env;
         }
 
+        /// <summary>
+        /// Evaluates the current stats of a specific user against all locked achievements
+        /// and grants any that have met their conditions, including XP rewards.
+        /// </summary>
+        /// <param name="userId">The unique identifier of the user to evaluate.</param>
+        /// <returns>A list of newly unlocked achievements.</returns>
         public async Task<List<Achievement>> EvaluateAndUnlockAchievementsAsync(int userId)
         {
             // Load player stats or initialize if not exists
@@ -36,7 +48,7 @@ namespace NMTales.Backend.Services
             var user = await _context.Users.FindAsync(userId);
             if (user == null) return new List<Achievement>();
 
-            // Load all achievements currently unlocked by the user
+            // Optimize by pre-loading only the IDs of already unlocked achievements
             var unlockedAchievementIds = (await _context.UserAchievements
                 .Where(ua => ua.UserId == userId)
                 .Select(ua => ua.AchievementId)
@@ -53,6 +65,7 @@ namespace NMTales.Backend.Services
             // All seeded spawn point IDs
             var requiredSpawnPoints = new HashSet<string> { "spawn_north", "spawn_forest" };
 
+            // Evaluate each locked achievement against the current player stats
             foreach (var achievement in allAchievements)
             {
                 // Skip if already unlocked
@@ -84,6 +97,7 @@ namespace NMTales.Backend.Services
                         break;
 
                     case "flawless_run":
+                        // Flawless run requires game completion (all quests) with zero deaths or failed tests
                         bool completedAll = stats.CompletedQuestsCount >= totalQuests && totalQuests > 0;
                         shouldUnlock = completedAll && !stats.HasFailedTest && !stats.HasDied;
                         break;
@@ -100,7 +114,7 @@ namespace NMTales.Backend.Services
                     };
                     _context.UserAchievements.Add(userAch);
 
-                    // Add XP reward to the user
+                    // Apply the built-in XP reward to the user profile
                     user.AddXp(achievement.XpReward);
 
                     newlyUnlocked.Add(achievement);
@@ -115,8 +129,15 @@ namespace NMTales.Backend.Services
             return newlyUnlocked;
         }
 
+        /// <summary>
+        /// Dynamically calculates the total number of quests available in the game.
+        /// </summary>
+        /// <remarks>
+        /// Includes a fallback mechanism for testing environments where physical files might not be present.
+        /// </remarks>
         private int GetTotalQuestsCount()
         {
+            // Detect if the service is running within an xUnit test runner to avoid file IO issues
             if (AppDomain.CurrentDomain.GetAssemblies().Any(a => a.FullName != null && a.FullName.Contains("xunit")))
             {
                 return 3;
@@ -124,6 +145,7 @@ namespace NMTales.Backend.Services
 
             try
             {
+                // Count physical JSON quest definitions in the content directory
                 var questsPath = Path.Combine(_env.ContentRootPath, "Quests");
                 if (Directory.Exists(questsPath))
                 {
