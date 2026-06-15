@@ -61,8 +61,7 @@ func _load_answers(answers: Array) -> void:
 		push_error("Could not load answers")
 		return
 	_fill_elements_box(answers, 0, left_container)
-	# TODO: _fill_elements_box(answers, 6, right_container)
-	# Add filling of right box once API adjusted. API must always have exactly 12 answers.
+	_fill_elements_box(answers, 6, right_container)
 
 func _fill_elements_box(answers: Array, answer_index: int, container: HFlowContainer) -> void:
 	var areas: Array[DropArea] = []
