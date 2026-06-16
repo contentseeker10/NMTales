@@ -40,7 +40,7 @@ func _load_dialogue(npc: NPC) -> void:
 
 func _get_dialogue_id(npc: NPC) -> String:
 	if npc.npc_id == "npc_warning":
-		if int(AuthManager.current_user_info.get("level", 0)) < 10:
+		if int(AuthManager.current_user_info.get("level", 0)) < 5:
 			return "npc_warning/casual"
 		elif QuestManager.is_quest_completed(npc.npc_id, "quest_1"):
 			return "npc_warning/casual_completed"
@@ -97,6 +97,7 @@ func advance_dialogue() -> void:
 	var node: Dictionary = current_dialogue_data.get(current_node_id, {})
 	var answer: String = node.get("text", "error")
 	dialogue.add_npc_answer(answer)
+	AudioManager.play_sfx(preload("res://assets/shared/audio/ui/npc_responded.wav"), 0.05, "SFX")
 	var choices: Array = node.get("choices", [])
 	dialogue.show_choices(choices)
 

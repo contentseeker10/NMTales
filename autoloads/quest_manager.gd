@@ -71,6 +71,7 @@ func accept_quest(npc_id: String, quest_id: String) -> void:
 			var quest_data: Dictionary = JSON.parse_string(response_body)
 			active_quest = Quest.new(quest_data)
 			quest_updated.emit(active_quest)
+			AudioManager.play_sfx(preload("res://assets/shared/audio/ui/quest_accepted.wav"), 0.0, "SFX")
 		else:
 			push_error("Error accepting quest. Status: ", response[1])
 
@@ -97,6 +98,7 @@ func _complete_active_quest() -> void:
 		if get_completed_quests[1] == 200:
 			var response_data: String = get_completed_quests[3].get_string_from_utf8()
 			completed_quest_ids = JSON.parse_string(response_data)
+	AudioManager.play_sfx(preload("res://assets/shared/audio/ui/quest_completed.wav"), 0.0, "SFX")
 	quest_completed.emit(active_quest)
 	active_quest = null
 

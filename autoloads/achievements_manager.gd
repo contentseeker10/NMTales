@@ -110,6 +110,7 @@ func _handle_new_unlocks(new_unlocks: Array) -> void:
 		var xpReward = ach.get("xpReward", 0)
 		var notif: Notification = NOTIFICATION_SCENE.instantiate()
 		target_parent.add_child(notif)
+		AudioManager.play_sfx(preload("res://assets/shared/audio/ui/achievement_unlocked.wav"), 0.0, "SFX")
 		await notif.show_notification("Досягнення отримано: " + title + "! (+" + str(int(xpReward)) + " XP)")
 		notif.queue_free()
 		

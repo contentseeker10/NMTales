@@ -20,6 +20,7 @@ extends Control
 func _ready() -> void:
 	AuthManager.register_attempted.connect(_on_register_attempted)
 	AuthManager.login_attempted.connect(_on_login_attempted)
+	AudioManager.play_music(preload("res://assets/shared/audio/music/1. Moonspire.wav"))
 
 
 func _process(_delta: float) -> void:
@@ -49,6 +50,7 @@ func _on_register_attempted(success: bool, message: String) -> void:
 		login_panel.show()
 		notification.show_notification(message)
 	else:
+		AudioManager.play_sfx(preload("res://assets/shared/audio/ui/main_menu_notification.wav"), 0.0, "SFX")
 		notification.show_notification(message)
 
 
@@ -58,4 +60,6 @@ func _on_try_login_button_pressed() -> void:
 	AuthManager.login(username, password)
 
 func _on_login_attempted(_success: bool, message: String) -> void:
+	if not _success:
+		AudioManager.play_sfx(preload("res://assets/shared/audio/ui/main_menu_notification.wav"), 0.0, "SFX")
 	notification.show_notification(message)

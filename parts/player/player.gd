@@ -12,11 +12,17 @@ extends CharacterBody2D
 var can_attack: bool = true
 var is_dead: bool = false:
 	set(value):
+		var was_dead = is_dead
 		is_dead = value
 		if is_dead:
 			velocity = Vector2.ZERO
 			if sprite:
 				sprite.play("idle_down")
+			if not was_dead and is_node_ready():
+				AudioManager.play_sfx(preload("res://assets/shared/audio/ui/played_died.wav"), 0.0, "SFX")
+		elif was_dead:
+			if is_node_ready():
+				AudioManager.play_sfx(preload("res://assets/shared/audio/ui/player_revived.wav"), 0.0, "SFX")
 
 @export var speed: float = 150.0
 

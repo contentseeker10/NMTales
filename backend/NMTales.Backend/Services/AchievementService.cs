@@ -140,7 +140,7 @@ namespace NMTales.Backend.Services
             // Detect if the service is running within an xUnit test runner to avoid file IO issues
             if (AppDomain.CurrentDomain.GetAssemblies().Any(a => a.FullName != null && a.FullName.Contains("xunit")))
             {
-                return 3;
+                return 8;
             }
 
             try
@@ -156,7 +156,7 @@ namespace NMTales.Backend.Services
             {
                 // Fallback
             }
-            return 3;
+            return 8;
         }
     }
 }

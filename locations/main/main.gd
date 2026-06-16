@@ -11,6 +11,7 @@ func _ready() -> void:
 	LocationManager.init_start_spawn()
 	player = LocationManager.spawn_player()
 	
+	AudioManager.play_music(preload("res://assets/shared/audio/music/2. Winds of Valor.wav"))
 	_process_player_location()
 
 

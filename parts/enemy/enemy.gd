@@ -18,6 +18,16 @@ var current_state: State = State.CHASE
 @export var speed: int = 150
 @export_range(0.0, 80.0, 5.0) var damage: int = 10
 
+const GROWLS: Array[AudioStream] = [
+	preload("res://assets/shared/audio/enemy/Warg_Growl.wav"),
+	preload("res://assets/shared/audio/enemy/Warg_Growl2.wav")
+]
+
+const DEATH_SOUNDS: Array[AudioStream] = [
+	preload("res://assets/shared/audio/enemy/Warg_Talk.wav"),
+	preload("res://assets/shared/audio/enemy/Warg_Talk2.wav")
+]
+
 
 func _ready() -> void:
 	_path_timer.timeout.connect(_on_path_timer_timeout)
@@ -66,6 +76,10 @@ func _start_attack() -> void:
 	current_state = State.ATTACK
 	velocity = Vector2.ZERO
 	
+	if not Engine.is_editor_hint():
+		var sfx = GROWLS[randi() % GROWLS.size()]
+		AudioManager.play_sfx_2d(sfx, global_position, 0.1, "SFX")
+	
 	var dir_to_player := _player.global_position - global_position
 	sprite.play("attack_" + _get_direction_name(dir_to_player))
 	
@@ -91,6 +105,10 @@ func _start_attack() -> void:
 
 func set_dead() -> void:
 	current_state = State.DEAD
+	
+	if not Engine.is_editor_hint():
+		var sfx = DEATH_SOUNDS[randi() % DEATH_SOUNDS.size()]
+		AudioManager.play_sfx_2d(sfx, global_position, 0.1, "SFX")
 	
 	collision_layer = 0
 	collision_mask = 0

@@ -1,6 +1,9 @@
 class_name AttackingState
 extends PlayerState
 
+const SWORD_ATTACK_1: AudioStream = preload("res://assets/shared/audio/player/Sword Attack 1.wav")
+const SWORD_ATTACK_2: AudioStream = preload("res://assets/shared/audio/player/Sword Attack 2.wav")
+
 func enter() -> void:
 	player.velocity = Vector2.ZERO
 	
@@ -22,10 +25,12 @@ func _toggle_attack_area(state: bool) -> void:
 
 func _play_animations() -> void:
 	player.sprite.play("attack_1_" + state_machine.get_direction_name())
+	AudioManager.play_sfx_2d(SWORD_ATTACK_1, player.global_position, 0.08, "SFX")
 	await player.sprite.animation_finished
+	
 	player.sprite.play("attack_2_" + state_machine.get_direction_name())
+	AudioManager.play_sfx_2d(SWORD_ATTACK_2, player.global_position, 0.08, "SFX")
 	await player.sprite.animation_finished
-
 
 func exit() -> void:
 	_toggle_attack_area(false)

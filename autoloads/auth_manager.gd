@@ -32,6 +32,7 @@ func login(username: String, password: String) -> void:
 		#QuestManager.clear_state()
 		await QuestManager.sync_quests()
 		
+		AudioManager.play_sfx(preload("res://assets/shared/audio/ui/login_successful.wav"), 0.0, "SFX")
 		login_attempted.emit(true, "Login successful")
 		
 		LocationManager.entry_location(current_user_info.get("currentLocation", "error"))
@@ -60,6 +61,7 @@ func register(username: String, password: String) -> void:
 	var _response_body: String = response[3].get_string_from_utf8()
 	
 	if result_code == 200:
+		AudioManager.play_sfx(preload("res://assets/shared/audio/ui/registration_successful.wav"), 0.0, "SFX")
 		register_attempted.emit(true, "Registration successful")
 	else:
 		register_attempted.emit(false, "Registration failed")
