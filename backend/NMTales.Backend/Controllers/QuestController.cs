@@ -231,14 +231,20 @@ public class QuestController : ControllerBase
             await _questService.SaveChangesAsync();
 
             // Evaluate and unlock achievements (may award more XP and level up user further)
-            await _achievementService.EvaluateAndUnlockAchievementsAsync(userId);
+            var newUnlocks = await _achievementService.EvaluateAndUnlockAchievementsAsync(userId);
 
             return Ok(new
             {
                 message = "Quest completed successfully.",
                 xpEarned = xpReward,
                 newLevel = user.Level,
-                newXp = user.XP
+                newXp = user.XP,
+                newUnlocks = newUnlocks.Select(a => new
+                {
+                    code = a.Code,
+                    title = a.Title,
+                    xpReward = a.XpReward
+                }).ToList()
             });
         }
         finally

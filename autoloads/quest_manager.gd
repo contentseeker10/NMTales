@@ -108,8 +108,20 @@ func _on_dialogue_action_triggered(npc: NPC, action: Dictionary) -> void:
 func _complete_active_quest() -> void:
 	var request: HTTPRequest = NetworkManager.send_post("/api/Quest/complete", {}, AuthManager.token_header)
 	if request:
-		var _response: Array = await request.request_completed
+		var response_res: Array = await request.request_completed
 		request.queue_free()
+		
+		# Show achievements unlocked upon quest completion
+		if response_res[1] == 200:
+			var body_str: String = response_res[3].get_string_from_utf8()
+			var body_data = JSON.parse_string(body_str)
+			if body_data is Dictionary and body_data.has("newUnlocks"):
+				var new_unlocks = body_data["newUnlocks"]
+				if new_unlocks is Array and not new_unlocks.is_empty():
+					# AchievementsManager is loaded as autoload 'AchievementsManager'
+					if has_node("/root/AchievementsManager"):
+						get_node("/root/AchievementsManager")._handle_new_unlocks(new_unlocks)
+		
 		var get_completed_quests: Array = await \
 		NetworkManager.send_get("/api/Quest/completed", AuthManager.token_header)
 		if get_completed_quests[1] == 200:
