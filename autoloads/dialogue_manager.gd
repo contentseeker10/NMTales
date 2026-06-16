@@ -39,17 +39,24 @@ func _load_dialogue(npc: NPC) -> void:
 		current_dialogue_data = {}
 
 func _get_dialogue_id(npc: NPC) -> String:
-	if npc.npc_id == "npc_warning":
+	var npc_id: String = npc.npc_id
+	if npc_id == "npc_elder_book":
+		npc_id = "npc_history_book"
+
+	if npc_id == "npc_warning":
 		if int(AuthManager.current_user_info.get("level", 0)) < 5:
 			return "npc_warning/casual"
-		elif QuestManager.is_quest_completed(npc.npc_id, "quest_1"):
+		elif QuestManager.is_quest_completed(npc_id, "quest_1"):
 			return "npc_warning/casual_completed"
-	elif npc.npc_id == "npc_history_book":
+	elif npc_id == "npc_history_book":
 		if QuestManager.is_quest_completed("npc_warning", "quest_1"):
 			return "npc_history_book/casual"
+		if QuestManager.active_quest and QuestManager.active_quest.id == "quest_hstr_1" and QuestManager.active_quest.is_objective_done():
+			return "npc_history_book/casual"
+		return "npc_history_book/quests/quest_1_offer"
 		
 	if QuestManager.active_quest:
-		if npc.npc_id == QuestManager.active_quest.giver:
+		if npc_id == QuestManager.active_quest.giver:
 			if QuestManager.active_quest.is_objective_done():
 				return "quest_complete"
 			else:
@@ -57,35 +64,35 @@ func _get_dialogue_id(npc: NPC) -> String:
 		else:
 			var quest_index: int = 1
 			var has_quest = false
-			while true:
+			while quest_index < 10:
 				var quest_id = "quest_" + str(quest_index)
-				if QuestManager.is_quest_completed(npc.npc_id, quest_id):
+				if QuestManager.is_quest_completed(npc_id, quest_id):
 					quest_index += 1
 					continue
 				var quest_file_path = "res://assets/shared/dialogues/" \
-									+ npc.npc_id + "/quests/" + quest_id + "_offer.json"
+									+ npc_id + "/quests/" + quest_id + "_offer.json"
 				if FileAccess.file_exists(quest_file_path):
 					has_quest = true
 				break
 			if has_quest:
 				return "busy"
 			else:
-				return npc.npc_id + "/casual"
+				return npc_id + "/casual"
 	else:
 		var quest_index: int = 1
-		while true:
+		while quest_index < 10:
 			var quest_id = "quest_" + str(quest_index)
-			if QuestManager.is_quest_completed(npc.npc_id, quest_id):
+			if QuestManager.is_quest_completed(npc_id, quest_id):
 				quest_index += 1
 				continue
 			var quest_file_path = "res://assets/shared/dialogues/" \
-								+ npc.npc_id + "/quests/" + quest_id + "_offer.json"
+								+ npc_id + "/quests/" + quest_id + "_offer.json"
 			if FileAccess.file_exists(quest_file_path):
-				return npc.npc_id + "/quests/" + quest_id + "_offer"
+				return npc_id + "/quests/" + quest_id + "_offer"
 			else:
 				push_error("File not found: " + quest_file_path)
 				break
-		return npc.npc_id + "/casual"
+		return npc_id + "/casual"
 
 
 func advance_dialogue() -> void:

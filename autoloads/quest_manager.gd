@@ -40,13 +40,13 @@ func sync_quests() -> void:
 
 
 func get_actual_quest_id(npc_id: String, sequential_id: String) -> String:
-	if npc_id == "npc_guide_main":
+	if npc_id == "npc_guide_main" and sequential_id == "quest_1":
 		return "quest_wood"
 	elif npc_id == "npc_quest_math":
 		return sequential_id.replace("quest_", "quest_math_")
 	elif npc_id == "npc_quest_lang":
 		return sequential_id.replace("quest_", "quest_lang_")
-	elif npc_id == "npc_warning":
+	elif npc_id == "npc_warning" and sequential_id == "quest_1":
 		return "quest_hstr_1"
 	return sequential_id
 

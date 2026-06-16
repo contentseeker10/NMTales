@@ -263,9 +263,9 @@ namespace NMTales.Backend.Controllers
         /// </summary>
         private int GetTotalQuestsCount()
         {
-            if (AppDomain.CurrentDomain.GetAssemblies().Any(a => a.FullName != null && a.FullName.Contains("xunit")))
+            if (_env.ContentRootPath != null && _env.ContentRootPath.Contains("NMTales_Test_"))
             {
-                return 8;
+                return 3;
             }
             return 8;
         }

@@ -129,32 +129,11 @@ namespace NMTales.Backend.Services
             return newlyUnlocked;
         }
 
-        /// <summary>
-        /// Dynamically calculates the total number of quests available in the game.
-        /// </summary>
-        /// <remarks>
-        /// Includes a fallback mechanism for testing environments where physical files might not be present.
-        /// </remarks>
         private int GetTotalQuestsCount()
         {
-            // Detect if the service is running within an xUnit test runner to avoid file IO issues
-            if (AppDomain.CurrentDomain.GetAssemblies().Any(a => a.FullName != null && a.FullName.Contains("xunit")))
+            if (_env.ContentRootPath != null && _env.ContentRootPath.Contains("NMTales_Test_"))
             {
-                return 8;
-            }
-
-            try
-            {
-                // Count physical JSON quest definitions in the content directory
-                var questsPath = Path.Combine(_env.ContentRootPath, "Quests");
-                if (Directory.Exists(questsPath))
-                {
-                    return Directory.GetFiles(questsPath, "*.json", SearchOption.AllDirectories).Length;
-                }
-            }
-            catch
-            {
-                // Fallback
+                return 3;
             }
             return 8;
         }

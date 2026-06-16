@@ -44,7 +44,7 @@ func _check_available_quests() -> bool:
 		return false
 	
 	var quest_index: int = 1
-	while true:
+	while quest_index < 10:
 		var quest_id = "quest_" + str(quest_index)
 		
 		if QuestManager.is_quest_completed(npc_id, quest_id):
