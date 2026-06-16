@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bhoy3baee50be"]
 
 [ext_resource type="Script" uid="uid://t5naj7x4kg0e" path="res://ui/menus/achievements/achievements.gd" id="1_771im"]
+[ext_resource type="Theme" uid="uid://i1xtwecrye0x" path="res://ui/menus/dialogue/scroll_theme.tres" id="2_i6o53"]
 [ext_resource type="PackedScene" uid="uid://cwuqpwk2j3equ" path="res://ui/components/achievement_plate/achivement_plate.tscn" id="2_p8h0d"]
 [ext_resource type="PackedScene" uid="uid://b6v7toodritgx" path="res://ui/components/button/button.tscn" id="3_feasd"]
 
@@ -44,6 +45,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_771im")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/PanelContainer" unique_id=1106300606]
 layout_mode = 2
+theme = ExtResource("2_i6o53")
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer/ScrollContainer" unique_id=1103355478]
 layout_mode = 2
@@ -79,4 +81,3 @@ offset_top = -154.0
 offset_right = 265.0
 offset_bottom = -130.0
 text = "X"
-
