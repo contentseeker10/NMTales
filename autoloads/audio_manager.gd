@@ -15,35 +15,46 @@ var _active_music_player_idx: int = -1
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	
+	print("[AudioManager] Initializing...")
 	# 1. Initialize two music players for smooth BGM crossfading
 	for i in range(2):
 		var player = AudioStreamPlayer.new()
 		player.bus = "Music"
 		add_child(player)
 		_music_players.append(player)
+		print("[AudioManager] Created music player %d on bus %s" % [i, player.bus])
 		
 	# 2. Wire up global UI node additions for auto-button sounds if enabled
 	if auto_ui_sounds:
 		get_tree().node_added.connect(_on_node_added)
+		print("[AudioManager] Auto UI sounds enabled, node_added connected")
 
 
 ## Plays background music with smooth crossfading.
 ## Passing a null stream will fade out the current music and stop it.
 func play_music(stream: AudioStream, fade_duration: float = 1.0) -> void:
+	print("[AudioManager] play_music called with stream: %s, fade_duration: %.2f" % [str(stream), fade_duration])
 	if stream is AudioStreamWAV:
 		stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
+		if stream.loop_end <= 0:
+			stream.loop_end = int(stream.get_length() * stream.mix_rate)
+		print("[AudioManager] Stream is AudioStreamWAV, loop_mode set to: %d, loop_end set to: %d" % [stream.loop_mode, stream.loop_end])
 
 	var current_player: AudioStreamPlayer = null
 	if _active_music_player_idx != -1:
 		current_player = _music_players[_active_music_player_idx]
+		print("[AudioManager] Current active player index: %d, playing: %s, volume_db: %.2f" % [_active_music_player_idx, str(current_player.playing), current_player.volume_db])
 		
 	if stream == null:
+		print("[AudioManager] Stream is null, stopping music")
 		stop_music(fade_duration)
 		return
 		
 	if current_player and current_player.stream == stream:
+		print("[AudioManager] Current player already has this stream. Playing status: %s" % str(current_player.playing))
 		if not current_player.playing:
 			current_player.play()
+			print("[AudioManager] Started playing existing stream")
 		return
 		
 	var next_player_idx: int = 1 if _active_music_player_idx == 0 else 0
@@ -51,6 +62,7 @@ func play_music(stream: AudioStream, fade_duration: float = 1.0) -> void:
 	
 	next_player.stream = stream
 	next_player.volume_db = -80.0
+	print("[AudioManager] Playing next stream on player %d, bus: %s" % [next_player_idx, next_player.bus])
 	next_player.play()
 	
 	var tween = create_tween().set_parallel(true)
