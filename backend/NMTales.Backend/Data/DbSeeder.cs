@@ -193,9 +193,9 @@ namespace NMTales.Backend.Data
 
             yield return new Achievement
             {
-                Code = "kill_100_vampires",
+                Code = "kill_50_vampires",
                 Title = "Vampire Slayer",
-                Description = "Defeat 100 vampires",
+                Description = "Defeat 50 vampires",
                 XpReward = 250
             };
 

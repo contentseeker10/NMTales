@@ -89,7 +89,7 @@ public class NotebookControllerTests
         Assert.NotNull(page);
         Assert.True(page.Id > 0);
         Assert.Equal("Нова сторінка", page.Title);
-        Assert.Equal("", page.Content);
+        Assert.Equal("Sample", page.Content);
     }
 
     /// <summary>

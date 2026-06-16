@@ -92,9 +92,9 @@ namespace NMTales.Backend.Controllers
                         targetProgress = totalQuests;
                         break;
 
-                    case "kill_100_vampires":
+                    case "kill_50_vampires":
                         currentProgress = stats.VampireKills;
-                        targetProgress = 100;
+                        targetProgress = 50;
                         break;
 
                     case "unlock_all_spawns":

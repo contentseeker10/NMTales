@@ -210,7 +210,7 @@ namespace NMTales.Backend.Tests
             var client = await CreateAuthenticatedClientAsync(factory, "user_kills");
             var userId = GetUserId(factory, "user_kills");
 
-            // Seed user with 99 kills to test the final trigger boundary
+            // Seed user with 49 kills to test the final trigger boundary
             Mutate(factory, db =>
             {
                 var stats = db.PlayerStats.FirstOrDefault(s => s.UserId == userId);
@@ -219,13 +219,13 @@ namespace NMTales.Backend.Tests
                     stats = new PlayerStats { UserId = userId };
                     db.PlayerStats.Add(stats);
                 }
-                stats.VampireKills = 99;
+                stats.VampireKills = 49;
             });
 
             var res = await client.PostAsJsonAsync("/api/achievement/event", new { eventType = "VampireKill", eventDetail = "" });
             var newlyUnlocked = await res.Content.ReadFromJsonAsync<List<JsonElement>>();
             Assert.Single(newlyUnlocked);
-            Assert.Equal("kill_100_vampires", newlyUnlocked[0].GetProperty("code").GetString());
+            Assert.Equal("kill_50_vampires", newlyUnlocked[0].GetProperty("code").GetString());
 
             using var scope = factory.Services.CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();

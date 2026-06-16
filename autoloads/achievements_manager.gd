@@ -15,9 +15,9 @@ const TRANSLATIONS: Dictionary = {
 		"title": "Герой NMTales",
 		"description": "Виконати всі квести в грі"
 	},
-	"kill_100_vampires": {
+	"kill_50_vampires": {
 		"title": "Винищувач вампірів",
-		"description": "Перемогти 100 вампірів"
+		"description": "Перемогти 50 вампірів"
 	},
 	"unlock_all_spawns": {
 		"title": "Дослідник",

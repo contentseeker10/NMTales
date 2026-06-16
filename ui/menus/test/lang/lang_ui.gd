@@ -82,8 +82,10 @@ func _load_answers(answers: Array) -> void:
 	if answers.is_empty():
 		push_error("Could not load answers")
 		return
-	_fill_elements_box(answers, 0, left_container)
-	_fill_elements_box(answers, 6, right_container)
+	var shuffled_answers := answers.duplicate()
+	shuffled_answers.shuffle()
+	_fill_elements_box(shuffled_answers, 0, left_container)
+	_fill_elements_box(shuffled_answers, 6, right_container)
 
 ## Instantiates draggable buttons for answers and places them inside designated drop areas.
 ##

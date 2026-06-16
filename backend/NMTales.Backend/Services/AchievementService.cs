@@ -87,8 +87,8 @@ namespace NMTales.Backend.Services
                         shouldUnlock = stats.CompletedQuestsCount >= totalQuests && totalQuests > 0;
                         break;
 
-                    case "kill_100_vampires":
-                        shouldUnlock = stats.VampireKills >= 100;
+                    case "kill_50_vampires":
+                        shouldUnlock = stats.VampireKills >= 50;
                         break;
 
                     case "unlock_all_spawns":

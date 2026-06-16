@@ -70,4 +70,3 @@ func toggle() -> void:
 		set_cell(Vector2i.ZERO, 1, Vector2i(0, 5))
 	else:
 		set_cell(Vector2i.ZERO, 1, Vector2i(0, 3))
-
