@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dtjugcrb62byx"
+path="res://.godot/imported/7. Mystic Grove.wav-16d5b82af248a625d7a59f3fe24a53a3.sample"
+
+[deps]
+
+source_file="res://assets/shared/audio/music/7. Mystic Grove.wav"
+dest_files=["res://.godot/imported/7. Mystic Grove.wav-16d5b82af248a625d7a59f3fe24a53a3.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

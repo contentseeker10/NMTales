@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://l5t77h1uddlc"
+path="res://.godot/imported/9. Sorrow’s Edge.wav-ca57b72f1e59226a6e38b23977d9ff72.sample"
+
+[deps]
+
+source_file="res://assets/shared/audio/music/9. Sorrow’s Edge.wav"
+dest_files=["res://.godot/imported/9. Sorrow’s Edge.wav-ca57b72f1e59226a6e38b23977d9ff72.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

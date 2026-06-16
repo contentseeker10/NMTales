@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://di5r065trpno5"
+path="res://.godot/imported/Sword Attack 2.wav-d547f4c8b0342260ec88a34fd2931a7d.sample"
+
+[deps]
+
+source_file="res://assets/shared/audio/player/Sword Attack 2.wav"
+dest_files=["res://.godot/imported/Sword Attack 2.wav-d547f4c8b0342260ec88a34fd2931a7d.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2
