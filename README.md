@@ -115,3 +115,41 @@
    ```
 3. Схема БД у контейнері оновиться автоматично при наступному старті сервера.
 
+---
+
+## 📸 Внутрішньоігрові скриншоти (In-game Screenshots)
+
+Нижче наведено скриншоти ігрового процесу, інтерфейсу тестування та взаємодії з ШІ-тьюторами:
+
+| Головне меню (Main Menu) | Початок гри (Start) |
+| :---: | :---: |
+| ![Main Menu](screenshots/main_menu.jpg) | ![Start](screenshots/start.jpg) |
+
+| Спілкування з ШІ-помічником (Assistant Chat) | Перший діалог з NPC (First Dialogue) |
+| :---: | :---: |
+| ![Assistant Chat](screenshots/assistant.jpg) | ![First Dialogue](screenshots/first_dialogue.jpg) |
+
+| Прийняття квесту (Quest Accepted) | Бій з вампірами (Combat with Vampires) |
+| :---: | :---: |
+| ![Quest Accepted](screenshots/quest_accepted.jpg) | ![Vampires](screenshots/vampires.jpg) |
+
+| Математичний тест (Math Test) | Математичний розбір (Math Trial) |
+| :---: | :---: |
+| ![Math Test](screenshots/math_test.jpg) | ![Math Trial](screenshots/math_trial.jpg) |
+
+| Тест з укр. мови (Ukrainian Language Test) | Тестовий розбір з укр. мови (Language Trial) |
+| :---: | :---: |
+| ![Ukr Lang Test](screenshots/urk_lang_test.jpg) | ![Ukr Lang Trial](screenshots/ukr_lang_trial.jpg) |
+
+| Іспит з історії (History Quiz) | Історичний розбір (History Trial) |
+| :---: | :---: |
+| ![History Quiz](screenshots/history_quiz.jpg) | ![History Trial](screenshots/history_trial.jpg) |
+
+| Меню досягнень (Achievements) | Екран паузи (Pause Menu) |
+| :---: | :---: |
+| ![Achievements](screenshots/achievements.jpg) | ![Pause](screenshots/pause.jpg) |
+
+| Екран смерті (Death Screen) | Провалений тест (Test Failed) |
+| :---: | :---: |
+| ![Death Screen](screenshots/death_screen.jpg) | ![Test Failed](screenshots/test_failed.jpg) |
+
