@@ -80,7 +80,7 @@ func _check_available_quests() -> bool:
 func _on_quest_available_area_body_entered(_body: Node2D) -> void:
 	if quest_giver:
 		action_icon.global_position.y -= 10
-		action_icon.text = npc_id + "\nМаю квест!"
+		action_icon.text = npc_name + "\nМаю квест!"
 	action_icon.show()
 
 

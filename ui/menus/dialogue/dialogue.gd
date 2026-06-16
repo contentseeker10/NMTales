@@ -66,4 +66,3 @@ func clear_choices_ui() -> void:
 		button.hide()
 		for connection in button.pressed.get_connections():
 			button.pressed.disconnect(connection.callable)
-
