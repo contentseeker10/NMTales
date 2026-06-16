@@ -10,10 +10,12 @@ radius = 88.0
 radius = 16.0
 
 [node name="HealerPlant" type="Area2D" unique_id=1553589187]
+y_sort_enabled = true
 collision_mask = 2
 script = ExtResource("1_1w0r4")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=49878648]
+y_sort_enabled = true
 position = Vector2(-8, 9)
 tile_map_data = PackedByteArray(0, 0, 0, 0, 255, 255, 6, 0, 0, 0, 0, 0, 0, 0)
 tile_set = ExtResource("2_c5j7t")

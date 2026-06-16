@@ -1,3 +1,5 @@
+## Manages educational test sessions, interfacing with the backend server, 
+## loading questions, validating user answers, and handling the test UI.
 extends Node
 
 #region Maintenance variables
@@ -14,23 +16,32 @@ var _word_regex := RegEx.new()
 
 #region Backend specific variables
 
+## The ID of the currently active test session.
 var current_session_id: int = 0
+## The 0-based index of the current question within the test.
 var current_question_index: int = 0
+## The raw data dictionary of the current question.
 var current_question_data: Dictionary = {}
+## The name of the current test topic.
 var current_topic: String = ""
 
 #endregion
 
 #region Signals
 
+## Emitted when a test session has successfully started.
 signal session_started()
+## Emitted when a new question is loaded into the session.
 signal question_loaded(question_data: Dictionary, current_index: int)
+## Emitted when an answer is evaluated by the backend.
 signal answer_checked(is_correct: bool, is_completed: bool, is_failed: bool, 
 					remaining_attempts: int, slot_results: Array)
+## Emitted when the test session finishes, indicating success or failure.
 signal session_finished(success: bool)
 
 #endregion
 
+## True if a test session is currently running.
 var is_test_active := false
 
 
@@ -41,6 +52,7 @@ func _ready() -> void:
 
 #region Starting Test-session
 
+## Starts a new test session of the given type and topic.
 func start_test(test_type: String, test_topic: String) -> void:
 	if is_test_active:
 		return
@@ -51,6 +63,7 @@ func start_test(test_type: String, test_topic: String) -> void:
 	await _request_test_session(test_type, test_topic)
 	#get_tree().paused = true
 
+## Instantiates and initializes the UI corresponding to the test type.
 func _init_test_ui(test_type: String, test_topic: String) -> void:
 	var ui: TestUI
 	ui = _math_ui_scene.instantiate() if test_type == "Math" else _lang_ui_scene.instantiate()
@@ -58,6 +71,7 @@ func _init_test_ui(test_type: String, test_topic: String) -> void:
 	ui.test_topic_label.text = test_topic
 	_test_ui = ui
 
+## Requests a new test session from the backend API.
 func _request_test_session(test_type: String, test_topic: String) -> void:
 	var req_body: Dictionary = { "subject": test_type, "topic": test_topic }
 	var request: HTTPRequest = NetworkManager.send_post("/api/Test/start", req_body, AuthManager.token_header)
@@ -82,6 +96,8 @@ func _request_test_session(test_type: String, test_topic: String) -> void:
 	question_loaded.emit(current_question_data, current_question_index)
 
 
+## Parses a text string with potential placeholder tokens (e.g. "[1]") and
+## returns an Array containing integers for placeholders and Strings for other words.
 func parse_text(text: String) -> Array:
 	var parsed: Array
 	var matches := _word_regex.search_all(text)
@@ -99,6 +115,7 @@ func parse_text(text: String) -> Array:
 
 #region Submitting answers to Questions
 
+## Submits the user's answer/choices to the backend for checking.
 func submit_answer(answer_id: int, slots: Array[Dictionary] = []) -> void:
 	var req_body: Dictionary = { "sessionId": current_session_id, "answerId": answer_id, "slots": slots }
 	var request: HTTPRequest = NetworkManager.send_post("/api/Test/submit", req_body, AuthManager.token_header)
@@ -133,6 +150,7 @@ func submit_answer(answer_id: int, slots: Array[Dictionary] = []) -> void:
 				" ", response[3].get_string_from_utf8())
 		return
 
+## Updates the current question data and increments the index.
 func _load_next_question(question_data: Dictionary) -> void:
 	current_question_data = question_data
 	current_question_index += 1
@@ -142,6 +160,7 @@ func _load_next_question(question_data: Dictionary) -> void:
 
 #region Closing Test
 
+## Closes the test UI and re-enables the player.
 func end_test() -> void:
 	if _test_ui and is_instance_valid(_test_ui):
 		_test_ui.queue_free()
@@ -152,6 +171,7 @@ func end_test() -> void:
 #endregion
 
 
+## Enables or disables the Player node process mode in the current scene.
 func _set_player_active(active: bool) -> void:
 	var player: Player = get_tree().current_scene.get_node_or_null("Player")
 	if player:
@@ -159,3 +179,4 @@ func _set_player_active(active: bool) -> void:
 			player.process_mode = Node.PROCESS_MODE_INHERIT
 		else:
 			player.process_mode = Node.PROCESS_MODE_DISABLED
+

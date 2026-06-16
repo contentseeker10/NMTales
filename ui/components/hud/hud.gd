@@ -1,3 +1,7 @@
+## Heads-Up Display (HUD) controller that manages UI elements visible to the player during gameplay.
+##
+## This class displays user information, quest objectives, level progression, and handles
+## notebook toggle/key inputs as well as the death screen when the player dies.
 class_name HUD
 extends CanvasLayer
 
@@ -14,6 +18,8 @@ extends CanvasLayer
 #endregion
 
 
+## Called when the node enters the scene tree.
+## Connects signals from managers and initializes user and quest UI elements.
 func _ready() -> void:
 	_load_user_data()
 	
@@ -28,6 +34,7 @@ func _ready() -> void:
 	
 	EventBus.player_died.connect(_on_player_died)
 
+## Loads the current user's name and triggers level progression UI update.
 func _load_user_data() -> void:
 	username_label.text = AuthManager.current_user_info.get("username", "Player")
 	_update_level_progression()
@@ -35,6 +42,7 @@ func _load_user_data() -> void:
 
 #region Quest info update
 
+## Updates the current objective title and details when a quest has changed.
 func _on_quest_updated(quest: Quest) -> void:
 	current_objective_title.text = quest.title
 	current_objective_description.text = quest.description \
@@ -42,10 +50,12 @@ func _on_quest_updated(quest: Quest) -> void:
 									+ "/" + str(quest.required_amount) + ")"
 
 
+## Updates the UI text to guide the player back to the quest giver when objective is completed.
 func _on_objective_completed(quest: Quest) -> void:
 	current_objective_description.text = "Завдання виконано.\nПоговоріть з " + quest.giver
 
 
+## Clears active quest UI and updates level/experience when a quest is fully completed.
 func _on_quest_completed(_quest: Quest) -> void:
 	current_objective_title.text = "Пусто."
 	current_objective_description.text = ""
@@ -56,11 +66,13 @@ func _on_quest_completed(_quest: Quest) -> void:
 
 #region Level/Experience update
 
+## Updates level progression if the session completes successfully.
 func _on_session_finished(success: bool) -> void:
 	if success:
 		_update_level_progression()
 
 
+## Fetches updated user information and updates level/XP progression bar values.
 func _update_level_progression() -> void:
 	await AuthManager.update_user_info()
 	level_label.text = "lvl " + str(int(AuthManager.current_user_info.get("level", 0)))
@@ -72,10 +84,12 @@ func _update_level_progression() -> void:
 
 #region Notebook handler
 
+## Pauses the game and shows the Notebook screen when the notebook button is pressed.
 func _on_notebook_button_pressed() -> void:
 	get_tree().paused = true
 	notebook.show()
 
+## Processes unhandled input events to close the notebook and resume the game upon pressing cancel.
 func _unhandled_key_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		notebook.hide()
@@ -84,5 +98,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 #endregion
 
 
+## Displays the death screen when the player dies.
 func _on_player_died() -> void:
 	death_screen.show()
+

@@ -2,6 +2,7 @@
 
 [ext_resource type="FontFile" uid="uid://byj182ba31yax" path="res://assets/shared/fonts/Pixeloid/PixeloidSansBold-1jpBg.ttf" id="1_1anlv"]
 [ext_resource type="Script" uid="uid://b8cchwpsc3hgs" path="res://parts/sign/sign_ui.gd" id="1_lrp13"]
+[ext_resource type="Theme" uid="uid://i1xtwecrye0x" path="res://ui/menus/dialogue/scroll_theme.tres" id="2_7vyvy"]
 [ext_resource type="PackedScene" uid="uid://b6v7toodritgx" path="res://ui/components/button/button.tscn" id="3_hpodr"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3gfnd"]
@@ -44,12 +45,15 @@ custom_minimum_size = Vector2(400, 200)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_3gfnd")
 
-[node name="PanelContainer" type="PanelContainer" parent="CenterContainer/PanelContainer" unique_id=1420002460]
+[node name="PanelContainer" type="ScrollContainer" parent="CenterContainer/PanelContainer" unique_id=532176091]
 layout_mode = 2
+theme = ExtResource("2_7vyvy")
 theme_override_styles/panel = SubResource("StyleBoxFlat_1anlv")
 
 [node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer/PanelContainer" unique_id=741417308]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10

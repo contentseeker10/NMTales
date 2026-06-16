@@ -28,7 +28,7 @@ public class NotebookService : INotebookService
         {
             UserId = userId,
             Title = title,
-            Content = "",
+            Content = "Sample",
             CreatedAt = DateTime.UtcNow
         };
 

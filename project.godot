@@ -29,6 +29,7 @@ TestManager="*uid://c4atkmr1ndujn"
 NotebookManager="*uid://c4sjfwuh5dtfo"
 PauseMenu="*uid://cacd54mfk10u2"
 AchievementsManager="*uid://dmvcsxhcwbusa"
+AudioManager="*res://autoloads/audio_manager.gd"
 
 [display]
 

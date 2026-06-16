@@ -1,6 +1,12 @@
+## Manages notebook pages by interacting with the backend API.
+##
+## This manager handles loading, creating, updating, and deleting
+## notebook pages using the NetworkManager and AuthManager autoloads.
 extends Node
 
 
+## Loads all notebook pages for the authenticated user.
+## Returns an [Array] of notebook page dictionaries, or an empty [Array] on failure.
 func load_pages() -> Array:
 	var resp_body: Array = await NetworkManager.send_get("/api/Notebook", AuthManager.token_header)
 	
@@ -12,6 +18,8 @@ func load_pages() -> Array:
 		return []
 
 
+## Creates a new notebook page with the specified title.
+## Returns a [Dictionary] containing the created page's details, or an empty [Dictionary] on failure.
 func create_page(title: String) -> Dictionary:
 	var request = NetworkManager.send_post("/api/Notebook", { "title": title }, AuthManager.token_header)
 	
@@ -26,6 +34,7 @@ func create_page(title: String) -> Dictionary:
 		return {}
 
 
+## Updates the notebook page specified by [param id] with the new [param title] and [param content].
 func update_page(id: int, title: String, content: String) -> void:
 	var body: Dictionary = {
 		"title": title,
@@ -36,7 +45,9 @@ func update_page(id: int, title: String, content: String) -> void:
 		push_error("Error updating page. Status: " + str(resp_body[1]) + resp_body[3].get_string_from_utf8())
 
 
+## Deletes the notebook page specified by [param id].
 func delete_page(id: int) -> void:
 	var resp_body: Array = await NetworkManager.send_delete("/api/Notebook/" + str(id), AuthManager.token_header)
 	if resp_body[1] != 200 and resp_body[1] != 204:
 		push_error("Error deleting page. Status: " + str(resp_body[1]) + resp_body[3].get_string_from_utf8())
+

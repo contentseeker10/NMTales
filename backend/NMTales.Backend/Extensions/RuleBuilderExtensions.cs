@@ -4,12 +4,14 @@ namespace NMTales.Backend.Extensions;
 
 public static class RuleBuilderExtensions
 {
+    // Rule for validating the password
     public static void Password<T>(this IRuleBuilder<T, string> ruleBuilder, int minLength = 6)
     {
         ruleBuilder
             .MinimumLength(minLength).WithMessage($"Password must be at least {minLength} characters long.");
     }
 
+    // Rule for validating the username
     public static void Username<T>(this IRuleBuilder<T, string> ruleBuilder, int minLength = 3)
     {
         ruleBuilder

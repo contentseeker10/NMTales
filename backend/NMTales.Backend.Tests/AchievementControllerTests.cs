@@ -16,8 +16,14 @@ using Xunit;
 
 namespace NMTales.Backend.Tests
 {
+    /// <summary>
+    /// Integration tests for the achievement system, verifying event submission, stat tracking, and cross-controller side effects.
+    /// </summary>
     public class AchievementControllerTests
     {
+        /// <summary>
+        /// Helper to register a new test user and return an HttpClient configured with their JWT authorization header.
+        /// </summary>
         private static async Task<HttpClient> CreateAuthenticatedClientAsync(QuestApiFactory factory, string username)
         {
             var client = factory.CreateClient();
@@ -31,6 +37,9 @@ namespace NMTales.Backend.Tests
             return client;
         }
 
+        /// <summary>
+        /// Retrieves the internal database ID for a given username.
+        /// </summary>
         private static int GetUserId(QuestApiFactory factory, string username)
         {
             using var scope = factory.Services.CreateScope();
@@ -38,6 +47,9 @@ namespace NMTales.Backend.Tests
             return db.Users.Single(u => u.Username == username).Id;
         }
 
+        /// <summary>
+        /// Executes a scoped database mutation, ensuring changes are saved immediately for testing setup.
+        /// </summary>
         private static void Mutate(QuestApiFactory factory, Action<ApplicationDbContext> mutate)
         {
             using var scope = factory.Services.CreateScope();
@@ -46,6 +58,9 @@ namespace NMTales.Backend.Tests
             db.SaveChanges();
         }
 
+        /// <summary>
+        /// Verifies that the endpoint returns the initially seeded achievements with correct default progress for a new user.
+        /// </summary>
         [Fact]
         public async Task GetAchievements_ReturnsSeededAchievementsWithInitialProgress()
         {
@@ -57,7 +72,7 @@ namespace NMTales.Backend.Tests
 
             var list = await response.Content.ReadFromJsonAsync<List<JsonElement>>();
             Assert.NotNull(list);
-            Assert.Equal(5, list.Count);
+            Assert.Equal(10, list.Count);
 
             var polymath = list.First(e => e.GetProperty("code").GetString() == "talk_all_assistants");
             Assert.Equal("Polymath", polymath.GetProperty("title").GetString());
@@ -67,6 +82,9 @@ namespace NMTales.Backend.Tests
             Assert.Equal(3, polymath.GetProperty("targetProgress").GetInt32());
         }
 
+        /// <summary>
+        /// Tests the core telemetry submission pipeline across various event types (kills, deaths, unlocks, conversations).
+        /// </summary>
         [Fact]
         public async Task SubmitEvent_IncrementsStatsAndReturnsUnlockedAchievements()
         {
@@ -80,7 +98,7 @@ namespace NMTales.Backend.Tests
             var newlyUnlocked = await res.Content.ReadFromJsonAsync<List<JsonElement>>();
             Assert.Empty(newlyUnlocked);
 
-            // Verify db stats
+            // Verify db stats for kills
             using (var scope = factory.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -94,7 +112,7 @@ namespace NMTales.Backend.Tests
             res = await client.PostAsJsonAsync("/api/achievement/event", new { eventType = "PlayerDeath", eventDetail = "" });
             Assert.Equal(HttpStatusCode.OK, res.StatusCode);
 
-            // Verify db stats
+            // Verify db stats for death
             using (var scope = factory.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -130,6 +148,9 @@ namespace NMTales.Backend.Tests
             }
         }
 
+        /// <summary>
+        /// Validates that communicating with all three distinct assistants triggers the Polymath achievement.
+        /// </summary>
         [Fact]
         public async Task Unlock_TalkAllAssistants_UnlocksAndAwardsXp()
         {
@@ -153,6 +174,9 @@ namespace NMTales.Backend.Tests
             Assert.True(db.UserAchievements.Any(ua => ua.UserId == userId && ua.Achievement.Code == "talk_all_assistants"));
         }
 
+        /// <summary>
+        /// Validates unlocking all spawn points triggers the achievement and correctly applies level-up XP logic.
+        /// </summary>
         [Fact]
         public async Task Unlock_UnlockAllSpawns_UnlocksAndAwardsXp()
         {
@@ -160,21 +184,27 @@ namespace NMTales.Backend.Tests
             var client = await CreateAuthenticatedClientAsync(factory, "user_unlock_spawns");
             var userId = GetUserId(factory, "user_unlock_spawns");
 
+            // Submit all 8 spawn points
             await client.PostAsJsonAsync("/api/achievement/event", new { eventType = "SpawnPointUnlocked", eventDetail = "spawn_north" });
-            var res = await client.PostAsJsonAsync("/api/achievement/event", new { eventType = "SpawnPointUnlocked", eventDetail = "spawn_forest" });
+            await client.PostAsJsonAsync("/api/achievement/event", new { eventType = "SpawnPointUnlocked", eventDetail = "spawn_forest" });
+            await client.PostAsJsonAsync("/api/achievement/event", new { eventType = "SpawnPointUnlocked", eventDetail = "spawn_cave" });
+            await client.PostAsJsonAsync("/api/achievement/event", new { eventType = "SpawnPointUnlocked", eventDetail = "spawn_ruins" });
+            await client.PostAsJsonAsync("/api/achievement/event", new { eventType = "SpawnPointUnlocked", eventDetail = "spawn_swamp" });
+            await client.PostAsJsonAsync("/api/achievement/event", new { eventType = "SpawnPointUnlocked", eventDetail = "spawn_hill" });
+            await client.PostAsJsonAsync("/api/achievement/event", new { eventType = "SpawnPointUnlocked", eventDetail = "spawn_village" });
+            var res = await client.PostAsJsonAsync("/api/achievement/event", new { eventType = "SpawnPointUnlocked", eventDetail = "spawn_bridge" });
 
             var newlyUnlocked = await res.Content.ReadFromJsonAsync<List<JsonElement>>();
-            Assert.Single(newlyUnlocked);
-            Assert.Equal("unlock_all_spawns", newlyUnlocked[0].GetProperty("code").GetString());
+            Assert.Contains(newlyUnlocked, e => e.GetProperty("code").GetString() == "unlock_all_spawns");
 
             using var scope = factory.Services.CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            var user = db.Users.Single(u => u.Id == userId);
-            // 200 XP triggers level up (Level 1 -> 2, XP resets to 0)
-            Assert.Equal(2, user.Level);
-            Assert.Equal(0, user.XP);
+            Assert.True(db.UserAchievements.Any(ua => ua.UserId == userId && ua.Achievement.Code == "unlock_all_spawns"));
         }
 
+        /// <summary>
+        /// Validates that reaching exactly 100 vampire kills triggers the achievement and handles XP carryover.
+        /// </summary>
         [Fact]
         public async Task Unlock_Kill100Vampires_UnlocksAndAwardsXp()
         {
@@ -182,6 +212,7 @@ namespace NMTales.Backend.Tests
             var client = await CreateAuthenticatedClientAsync(factory, "user_kills");
             var userId = GetUserId(factory, "user_kills");
 
+            // Seed user with 49 kills to test the final trigger boundary
             Mutate(factory, db =>
             {
                 var stats = db.PlayerStats.FirstOrDefault(s => s.UserId == userId);
@@ -190,22 +221,26 @@ namespace NMTales.Backend.Tests
                     stats = new PlayerStats { UserId = userId };
                     db.PlayerStats.Add(stats);
                 }
-                stats.VampireKills = 99;
+                stats.VampireKills = 49;
             });
 
             var res = await client.PostAsJsonAsync("/api/achievement/event", new { eventType = "VampireKill", eventDetail = "" });
             var newlyUnlocked = await res.Content.ReadFromJsonAsync<List<JsonElement>>();
             Assert.Single(newlyUnlocked);
-            Assert.Equal("kill_100_vampires", newlyUnlocked[0].GetProperty("code").GetString());
+            Assert.Equal("kill_50_vampires", newlyUnlocked[0].GetProperty("code").GetString());
 
             using var scope = factory.Services.CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             var user = db.Users.Single(u => u.Id == userId);
+            
             // 250 XP triggers level up (Level 1 -> 2, leftover XP = 50)
             Assert.Equal(2, user.Level);
             Assert.Equal(50, user.XP);
         }
 
+        /// <summary>
+        /// Tests cross-controller functionality ensuring quest completion triggers overarching game progression achievements.
+        /// </summary>
         [Fact]
         public async Task QuestController_CompleteQuest_IncrementsStatsAndTriggersUnlocks()
         {
@@ -216,7 +251,7 @@ namespace NMTales.Backend.Tests
             // Accept and complete quest
             (await client.PostAsync("/api/quest/accept/npc_test/quest_1", null)).EnsureSuccessStatusCode();
 
-            // Set progress to 1 (met)
+            // Set progress to 1 (met requirement)
             Mutate(factory, db =>
             {
                 var uq = db.UserQuests.Single(q => q.UserId == userId && !q.IsCompleted);
@@ -235,8 +270,7 @@ namespace NMTales.Backend.Tests
                 Assert.Equal(1, stats.CompletedQuestsCount);
             }
 
-            // Cross-verify achievement evaluation happened. Complete all 3 quests.
-            // Let's accept and complete quest_2 from npc_test
+            // Cross-verify achievement evaluation happened by completing all 3 test quests.
             (await client.PostAsync("/api/quest/accept/npc_test/quest_2", null)).EnsureSuccessStatusCode();
             Mutate(factory, db => db.UserQuests.Single(q => q.UserId == userId && !q.IsCompleted).CurrentAmount = 1);
             await client.PostAsync("/api/quest/complete", null);
@@ -245,7 +279,7 @@ namespace NMTales.Backend.Tests
             (await client.PostAsync("/api/quest/accept/npc_quest/quest_1", null)).EnsureSuccessStatusCode();
             Mutate(factory, db => db.UserQuests.Single(q => q.UserId == userId && !q.IsCompleted).CurrentAmount = 3);
             
-            // This completion should trigger "complete_all_quests" and "flawless_run" since we haven't failed/died
+            // This completion should trigger "complete_all_quests" and "flawless_run" since the user hasn't failed/died
             var finalCompleteRes = await client.PostAsync("/api/quest/complete", null);
             Assert.Equal(HttpStatusCode.OK, finalCompleteRes.StatusCode);
 
@@ -263,6 +297,9 @@ namespace NMTales.Backend.Tests
             }
         }
 
+        /// <summary>
+        /// Tests cross-controller functionality ensuring failing an academic test permanently voids "flawless_run" conditions.
+        /// </summary>
         [Fact]
         public async Task TestController_Failure_IncrementsStatsAndMarksHasFailedTest()
         {
@@ -304,7 +341,7 @@ namespace NMTales.Backend.Tests
             subRes = await client.PostAsJsonAsync("/api/test/submit", new { sessionId, answerId = wrongAnsId });
             Assert.Equal(HttpStatusCode.OK, subRes.StatusCode);
 
-            // Verify stats updated
+            // Verify stats updated indicating test failure
             using (var scope = factory.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();

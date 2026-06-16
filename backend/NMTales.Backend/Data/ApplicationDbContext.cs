@@ -3,8 +3,18 @@ using NMTales.Backend.Models;
 
 namespace NMTales.Backend.Data;
 
+/// <summary>
+/// The primary Entity Framework Core database context for the application.
+/// </summary>
+/// <remarks>
+/// Acts as the bridge between the application's domain models and the underlying relational database,
+/// managing entity tracking, queries, and save operations.
+/// </remarks>
 public class ApplicationDbContext : DbContext
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ApplicationDbContext"/> with the specified options.
+    /// </summary>
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
@@ -22,7 +32,10 @@ public class ApplicationDbContext : DbContext
     public DbSet<PlayerStats> PlayerStats { get; set; }
     public DbSet<Location> Locations { get; set; }
 
-
+    /// <summary>
+    /// Configures the database schema, including unique constraints and entity relationship mapping.
+    /// </summary>
+    /// <param name="modelBuilder">The builder used to construct the model for this context.</param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Enforce unique usernames

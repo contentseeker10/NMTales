@@ -1,7 +1,11 @@
+## Manages game achievements, tracks user progression through telemetry events,
+## and handles displaying unlock notifications to the player.
 extends Node
 
+## Scene used to instantiate achievement unlock notifications on the HUD.
 const NOTIFICATION_SCENE: PackedScene = preload("res://ui/components/notification/notification.tscn")
 
+## Localized/translated titles and descriptions for predefined achievements.
 const TRANSLATIONS: Dictionary = {
 	"talk_all_assistants": {
 		"title": "Ерудит",
@@ -11,29 +15,54 @@ const TRANSLATIONS: Dictionary = {
 		"title": "Герой NMTales",
 		"description": "Виконати всі квести в грі"
 	},
-	"kill_100_vampires": {
+	"kill_50_vampires": {
 		"title": "Винищувач вампірів",
-		"description": "Перемогти 100 вампірів"
+		"description": "Перемогти 50 вампірів"
 	},
 	"unlock_all_spawns": {
 		"title": "Дослідник",
-		"description": "Відкрити всі точки спавну вампірів"
+		"description": "Відкрити всі 8 точок спавну вампірів"
 	},
 	"flawless_run": {
 		"title": "Безсмертний вчений",
 		"description": "Пройти гру без помилок у тестах та смертей"
+	},
+	"complete_math_quests": {
+		"title": "Інтеграл знань",
+		"description": "Пройти всі квести Мерзляка"
+	},
+	"complete_lang_quests": {
+		"title": "Мова це сила",
+		"description": "Пройти всі квести Авраменко"
+	},
+	"complete_warning_quest": {
+		"title": "Кращий за Мединського",
+		"description": "Пройти квест Вартового"
+	},
+	"reach_level_2": {
+		"title": "Підготовка",
+		"description": "Досягти 2-го рівня"
+	},
+	"reach_level_5": {
+		"title": "НМТ на 200?",
+		"description": "Досягти 5-го рівня"
 	}
 }
 
+
+## Returns the translated title for the given achievement code. Falls back to default_title if not found.
 func get_translated_title(code: String, default_title: String) -> String:
 	if TRANSLATIONS.has(code):
 		return TRANSLATIONS[code]["title"]
 	return default_title
 
+
+## Returns the translated description for the given achievement code. Falls back to default_desc if not found.
 func get_translated_description(code: String, default_desc: String) -> String:
 	if TRANSLATIONS.has(code):
 		return TRANSLATIONS[code]["description"]
 	return default_desc
+
 
 func _ready() -> void:
 	EventBus.mob_killed.connect(_on_mob_killed)
@@ -49,6 +78,7 @@ func _on_player_died() -> void:
 	submit_telemetry("PlayerDeath", "")
 
 
+## Fetches all achievements from the server backend. Returns an Array of achievements.
 func fetch_achievements() -> Array:
 	var response: Array = await NetworkManager.send_get("/api/achievement", AuthManager.token_header)
 	var status: int = response[1]
@@ -64,6 +94,8 @@ func fetch_achievements() -> Array:
 	return []
 
 
+## Submits a telemetry event (e.g., mob killed, player death) to the server.
+## If the event triggers any new achievement unlocks, it handles displaying them.
 func submit_telemetry(event_type: String, event_detail: String) -> void:
 	var body: Dictionary = {
 		"eventType": event_type,
@@ -89,6 +121,7 @@ func submit_telemetry(event_type: String, event_detail: String) -> void:
 		await _handle_new_unlocks(new_unlocks)
 
 
+## Handles displaying unlock notifications for newly unlocked achievements and updates HUD level progression.
 func _handle_new_unlocks(new_unlocks: Array) -> void:
 	var target_parent: Node = null
 	if get_tree().current_scene:
@@ -110,6 +143,7 @@ func _handle_new_unlocks(new_unlocks: Array) -> void:
 		var xpReward = ach.get("xpReward", 0)
 		var notif: Notification = NOTIFICATION_SCENE.instantiate()
 		target_parent.add_child(notif)
+		AudioManager.play_sfx(preload("res://assets/shared/audio/ui/achievement_unlocked.wav"), 0.0, "SFX")
 		await notif.show_notification("Досягнення отримано: " + title + "! (+" + str(int(xpReward)) + " XP)")
 		notif.queue_free()
 		
