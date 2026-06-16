@@ -62,8 +62,19 @@ namespace NMTales.Backend.Services
             // Determine total number of quests
             var totalQuests = GetTotalQuestsCount();
 
-            // All seeded spawn point IDs
-            var requiredSpawnPoints = new HashSet<string> { "spawn_north", "spawn_forest" };
+            // All seeded spawn point IDs (8 total)
+            var requiredSpawnPoints = new HashSet<string>
+            {
+                "spawn_north", "spawn_forest", "spawn_cave", "spawn_ruins",
+                "spawn_swamp", "spawn_hill", "spawn_village", "spawn_bridge"
+            };
+
+            // Pre-load per-NPC quest completion counts for NPC-based achievements
+            var npcQuestCounts = await _context.UserQuests
+                .Where(uq => uq.UserId == userId && uq.IsCompleted)
+                .GroupBy(uq => uq.NpcId)
+                .Select(g => new { NpcId = g.Key, Count = g.Count() })
+                .ToDictionaryAsync(x => x.NpcId, x => x.Count);
 
             // Evaluate each locked achievement against the current player stats
             foreach (var achievement in allAchievements)
@@ -100,6 +111,29 @@ namespace NMTales.Backend.Services
                         // Flawless run requires game completion (all quests) with zero deaths or failed tests
                         bool completedAll = stats.CompletedQuestsCount >= totalQuests && totalQuests > 0;
                         shouldUnlock = completedAll && !stats.HasFailedTest && !stats.HasDied;
+                        break;
+
+                    case "complete_math_quests":
+                        npcQuestCounts.TryGetValue("npc_quest_math", out var mathCount);
+                        shouldUnlock = mathCount >= 3;
+                        break;
+
+                    case "complete_lang_quests":
+                        npcQuestCounts.TryGetValue("npc_quest_lang", out var langCount);
+                        shouldUnlock = langCount >= 3;
+                        break;
+
+                    case "complete_warning_quest":
+                        npcQuestCounts.TryGetValue("npc_warning", out var warningCount);
+                        shouldUnlock = warningCount >= 1;
+                        break;
+
+                    case "reach_level_2":
+                        shouldUnlock = user.Level >= 2;
+                        break;
+
+                    case "reach_level_5":
+                        shouldUnlock = user.Level >= 5;
                         break;
                 }
 

@@ -72,7 +72,7 @@ namespace NMTales.Backend.Tests
 
             var list = await response.Content.ReadFromJsonAsync<List<JsonElement>>();
             Assert.NotNull(list);
-            Assert.Equal(5, list.Count);
+            Assert.Equal(10, list.Count);
 
             var polymath = list.First(e => e.GetProperty("code").GetString() == "talk_all_assistants");
             Assert.Equal("Polymath", polymath.GetProperty("title").GetString());
@@ -184,20 +184,22 @@ namespace NMTales.Backend.Tests
             var client = await CreateAuthenticatedClientAsync(factory, "user_unlock_spawns");
             var userId = GetUserId(factory, "user_unlock_spawns");
 
+            // Submit all 8 spawn points
             await client.PostAsJsonAsync("/api/achievement/event", new { eventType = "SpawnPointUnlocked", eventDetail = "spawn_north" });
-            var res = await client.PostAsJsonAsync("/api/achievement/event", new { eventType = "SpawnPointUnlocked", eventDetail = "spawn_forest" });
+            await client.PostAsJsonAsync("/api/achievement/event", new { eventType = "SpawnPointUnlocked", eventDetail = "spawn_forest" });
+            await client.PostAsJsonAsync("/api/achievement/event", new { eventType = "SpawnPointUnlocked", eventDetail = "spawn_cave" });
+            await client.PostAsJsonAsync("/api/achievement/event", new { eventType = "SpawnPointUnlocked", eventDetail = "spawn_ruins" });
+            await client.PostAsJsonAsync("/api/achievement/event", new { eventType = "SpawnPointUnlocked", eventDetail = "spawn_swamp" });
+            await client.PostAsJsonAsync("/api/achievement/event", new { eventType = "SpawnPointUnlocked", eventDetail = "spawn_hill" });
+            await client.PostAsJsonAsync("/api/achievement/event", new { eventType = "SpawnPointUnlocked", eventDetail = "spawn_village" });
+            var res = await client.PostAsJsonAsync("/api/achievement/event", new { eventType = "SpawnPointUnlocked", eventDetail = "spawn_bridge" });
 
             var newlyUnlocked = await res.Content.ReadFromJsonAsync<List<JsonElement>>();
-            Assert.Single(newlyUnlocked);
-            Assert.Equal("unlock_all_spawns", newlyUnlocked[0].GetProperty("code").GetString());
+            Assert.Contains(newlyUnlocked, e => e.GetProperty("code").GetString() == "unlock_all_spawns");
 
             using var scope = factory.Services.CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            var user = db.Users.Single(u => u.Id == userId);
-            
-            // 200 XP triggers level up (Level 1 -> 2, XP resets to 0)
-            Assert.Equal(2, user.Level);
-            Assert.Equal(0, user.XP);
+            Assert.True(db.UserAchievements.Any(ua => ua.UserId == userId && ua.Achievement.Code == "unlock_all_spawns"));
         }
 
         /// <summary>

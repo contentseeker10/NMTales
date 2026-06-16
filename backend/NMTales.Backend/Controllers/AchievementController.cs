@@ -68,7 +68,22 @@ namespace NMTales.Backend.Controllers
             var achievements = await _context.Achievements.ToListAsync();
 
             var totalQuests = GetTotalQuestsCount();
-            var requiredSpawnPoints = new HashSet<string> { "spawn_north", "spawn_forest" };
+            var requiredSpawnPoints = new HashSet<string>
+            {
+                "spawn_north", "spawn_forest", "spawn_cave", "spawn_ruins",
+                "spawn_swamp", "spawn_hill", "spawn_village", "spawn_bridge"
+            };
+
+            // Fetch user level for level-based achievements
+            var user = await _context.Users.FindAsync(userId);
+            var userLevel = user?.Level ?? 1;
+
+            // Fetch per-NPC completed quest counts
+            var npcQuestCounts = await _context.UserQuests
+                .Where(uq => uq.UserId == userId && uq.IsCompleted)
+                .GroupBy(uq => uq.NpcId)
+                .Select(g => new { NpcId = g.Key, Count = g.Count() })
+                .ToDictionaryAsync(x => x.NpcId, x => x.Count);
 
             // Calculate progress dynamically for each achievement
             var result = achievements.Select(a =>
@@ -113,6 +128,34 @@ namespace NMTales.Backend.Controllers
                             currentProgress = stats.CompletedQuestsCount;
                         }
                         targetProgress = totalQuests;
+                        break;
+
+                    case "complete_math_quests":
+                        npcQuestCounts.TryGetValue("npc_quest_math", out var mathProg);
+                        currentProgress = mathProg;
+                        targetProgress = 3;
+                        break;
+
+                    case "complete_lang_quests":
+                        npcQuestCounts.TryGetValue("npc_quest_lang", out var langProg);
+                        currentProgress = langProg;
+                        targetProgress = 3;
+                        break;
+
+                    case "complete_warning_quest":
+                        npcQuestCounts.TryGetValue("npc_warning", out var warningProg);
+                        currentProgress = warningProg;
+                        targetProgress = 1;
+                        break;
+
+                    case "reach_level_2":
+                        currentProgress = Math.Min(userLevel, 2);
+                        targetProgress = 2;
+                        break;
+
+                    case "reach_level_5":
+                        currentProgress = Math.Min(userLevel, 5);
+                        targetProgress = 5;
                         break;
                 }
 

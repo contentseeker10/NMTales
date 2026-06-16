@@ -215,7 +215,7 @@ public class QuestControllerTests
         var complete = await client.PostAsync("/api/quest/complete", null);
         using var doc = JsonDocument.Parse(await complete.Content.ReadAsStringAsync());
         Assert.Equal(2, doc.RootElement.GetProperty("newLevel").GetInt32());
-        Assert.Equal(50, doc.RootElement.GetProperty("newXp").GetInt32());
+        Assert.Equal(100, doc.RootElement.GetProperty("newXp").GetInt32()); // 50 leftover + 50 from reach_level_2 achievement
     }
 
     [Fact]
@@ -236,7 +236,7 @@ public class QuestControllerTests
         var complete = await client.PostAsync("/api/quest/complete", null);
         using var doc = JsonDocument.Parse(await complete.Content.ReadAsStringAsync());
         Assert.Equal(3, doc.RootElement.GetProperty("newLevel").GetInt32());
-        Assert.Equal(50, doc.RootElement.GetProperty("newXp").GetInt32());
+        Assert.Equal(100, doc.RootElement.GetProperty("newXp").GetInt32()); // 50 leftover + 50 from reach_level_2 achievement
     }
 
     [Fact]

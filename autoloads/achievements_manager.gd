@@ -21,11 +21,31 @@ const TRANSLATIONS: Dictionary = {
 	},
 	"unlock_all_spawns": {
 		"title": "Дослідник",
-		"description": "Відкрити всі точки спавну вампірів"
+		"description": "Відкрити всі 8 точок спавну вампірів"
 	},
 	"flawless_run": {
 		"title": "Безсмертний вчений",
 		"description": "Пройти гру без помилок у тестах та смертей"
+	},
+	"complete_math_quests": {
+		"title": "Інтеграл знань",
+		"description": "Пройти всі квести Мерзляка"
+	},
+	"complete_lang_quests": {
+		"title": "Мова це сила",
+		"description": "Пройти всі квести Авраменко"
+	},
+	"complete_warning_quest": {
+		"title": "Кращий за Мединського",
+		"description": "Пройти квест Вартового"
+	},
+	"reach_level_2": {
+		"title": "Підготовка",
+		"description": "Досягти 2-го рівня"
+	},
+	"reach_level_5": {
+		"title": "НМТ на 200?",
+		"description": "Досягти 5-го рівня"
 	}
 }
 

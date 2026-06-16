@@ -203,7 +203,7 @@ namespace NMTales.Backend.Data
             {
                 Code = "unlock_all_spawns",
                 Title = "Explorer",
-                Description = "Discover all vampire spawn points",
+                Description = "Discover all 8 vampire spawn points",
                 XpReward = 200
             };
 
@@ -213,6 +213,46 @@ namespace NMTales.Backend.Data
                 Title = "Immortal Scientist",
                 Description = "Complete the game without failing any tests or dying",
                 XpReward = 500
+            };
+
+            yield return new Achievement
+            {
+                Code = "complete_math_quests",
+                Title = "Integral of Knowledge",
+                Description = "Complete all quests from Merzlyak (npc_quest_math)",
+                XpReward = 200
+            };
+
+            yield return new Achievement
+            {
+                Code = "complete_lang_quests",
+                Title = "Language is Power",
+                Description = "Complete all quests from Avramenko (npc_quest_lang)",
+                XpReward = 200
+            };
+
+            yield return new Achievement
+            {
+                Code = "complete_warning_quest",
+                Title = "Better than Medinsky",
+                Description = "Complete the Guardian's quest (npc_warning)",
+                XpReward = 150
+            };
+
+            yield return new Achievement
+            {
+                Code = "reach_level_2",
+                Title = "Preparation",
+                Description = "Reach level 2",
+                XpReward = 50
+            };
+
+            yield return new Achievement
+            {
+                Code = "reach_level_5",
+                Title = "NMT 200?",
+                Description = "Reach level 5",
+                XpReward = 200
             };
         }
     }
