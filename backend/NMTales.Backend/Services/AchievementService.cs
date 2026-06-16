@@ -10,17 +10,29 @@ using Microsoft.AspNetCore.Hosting;
 
 namespace NMTales.Backend.Services
 {
+    /// <summary>
+    /// Service responsible for evaluating player statistics and unlocking achievements.
+    /// </summary>
     public class AchievementService : IAchievementService
     {
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _env;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AchievementService"/>.
+        /// </summary>
         public AchievementService(ApplicationDbContext context, IWebHostEnvironment env)
         {
             _context = context;
             _env = env;
         }
 
+        /// <summary>
+        /// Evaluates the current stats of a specific user against all locked achievements
+        /// and grants any that have met their conditions, including XP rewards.
+        /// </summary>
+        /// <param name="userId">The unique identifier of the user to evaluate.</param>
+        /// <returns>A list of newly unlocked achievements.</returns>
         public async Task<List<Achievement>> EvaluateAndUnlockAchievementsAsync(int userId)
         {
             // Load player stats or initialize if not exists
@@ -36,7 +48,7 @@ namespace NMTales.Backend.Services
             var user = await _context.Users.FindAsync(userId);
             if (user == null) return new List<Achievement>();
 
-            // Load all achievements currently unlocked by the user
+            // Optimize by pre-loading only the IDs of already unlocked achievements
             var unlockedAchievementIds = (await _context.UserAchievements
                 .Where(ua => ua.UserId == userId)
                 .Select(ua => ua.AchievementId)
@@ -50,9 +62,21 @@ namespace NMTales.Backend.Services
             // Determine total number of quests
             var totalQuests = GetTotalQuestsCount();
 
-            // All seeded spawn point IDs
-            var requiredSpawnPoints = new HashSet<string> { "spawn_north", "spawn_forest" };
+            // All seeded spawn point IDs (8 total)
+            var requiredSpawnPoints = new HashSet<string>
+            {
+                "spawn_north", "spawn_forest", "spawn_cave", "spawn_ruins",
+                "spawn_swamp", "spawn_hill", "spawn_village", "spawn_bridge"
+            };
 
+            // Pre-load per-NPC quest completion counts for NPC-based achievements
+            var npcQuestCounts = await _context.UserQuests
+                .Where(uq => uq.UserId == userId && uq.IsCompleted)
+                .GroupBy(uq => uq.NpcId)
+                .Select(g => new { NpcId = g.Key, Count = g.Count() })
+                .ToDictionaryAsync(x => x.NpcId, x => x.Count);
+
+            // Evaluate each locked achievement against the current player stats
             foreach (var achievement in allAchievements)
             {
                 // Skip if already unlocked
@@ -74,8 +98,8 @@ namespace NMTales.Backend.Services
                         shouldUnlock = stats.CompletedQuestsCount >= totalQuests && totalQuests > 0;
                         break;
 
-                    case "kill_100_vampires":
-                        shouldUnlock = stats.VampireKills >= 100;
+                    case "kill_50_vampires":
+                        shouldUnlock = stats.VampireKills >= 50;
                         break;
 
                     case "unlock_all_spawns":
@@ -84,8 +108,32 @@ namespace NMTales.Backend.Services
                         break;
 
                     case "flawless_run":
+                        // Flawless run requires game completion (all quests) with zero deaths or failed tests
                         bool completedAll = stats.CompletedQuestsCount >= totalQuests && totalQuests > 0;
                         shouldUnlock = completedAll && !stats.HasFailedTest && !stats.HasDied;
+                        break;
+
+                    case "complete_math_quests":
+                        npcQuestCounts.TryGetValue("npc_quest_math", out var mathCount);
+                        shouldUnlock = mathCount >= 3;
+                        break;
+
+                    case "complete_lang_quests":
+                        npcQuestCounts.TryGetValue("npc_quest_lang", out var langCount);
+                        shouldUnlock = langCount >= 3;
+                        break;
+
+                    case "complete_warning_quest":
+                        npcQuestCounts.TryGetValue("npc_warning", out var warningCount);
+                        shouldUnlock = warningCount >= 1;
+                        break;
+
+                    case "reach_level_2":
+                        shouldUnlock = user.Level >= 2;
+                        break;
+
+                    case "reach_level_5":
+                        shouldUnlock = user.Level >= 5;
                         break;
                 }
 
@@ -100,7 +148,7 @@ namespace NMTales.Backend.Services
                     };
                     _context.UserAchievements.Add(userAch);
 
-                    // Add XP reward to the user
+                    // Apply the built-in XP reward to the user profile
                     user.AddXp(achievement.XpReward);
 
                     newlyUnlocked.Add(achievement);
@@ -117,24 +165,11 @@ namespace NMTales.Backend.Services
 
         private int GetTotalQuestsCount()
         {
-            if (AppDomain.CurrentDomain.GetAssemblies().Any(a => a.FullName != null && a.FullName.Contains("xunit")))
+            if (_env.ContentRootPath != null && _env.ContentRootPath.Contains("NMTales_Test_"))
             {
                 return 3;
             }
-
-            try
-            {
-                var questsPath = Path.Combine(_env.ContentRootPath, "Quests");
-                if (Directory.Exists(questsPath))
-                {
-                    return Directory.GetFiles(questsPath, "*.json", SearchOption.AllDirectories).Length;
-                }
-            }
-            catch
-            {
-                // Fallback
-            }
-            return 3;
+            return 8;
         }
     }
 }

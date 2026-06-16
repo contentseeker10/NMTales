@@ -5,6 +5,6 @@
 
 [node name="Gate" type="TileMapLayer" unique_id=593585643]
 y_sort_enabled = true
-tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 3, 0, 0, 0)
+position = Vector2(16, 0)
 tile_set = ExtResource("1_2pj6h")
 script = ExtResource("1_5v0yr")

@@ -1,5 +1,10 @@
+## NetworkManager
+##
+## Manages HTTP requests (GET, POST, PUT, DELETE) and asset downloads.
+## Uses a constant BASE_URL to construct request targets.
 extends Node
 
+## The base URL of the remote API server.
 const BASE_URL: String = "http://localhost:5142"
 
 
@@ -7,6 +12,9 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
 
+## Sends an asynchronous POST request to the specified path with a JSON body.
+## Unlike other requests, this returns the [HTTPRequest] node itself immediately without awaiting completion.
+## Returns `null` if the request fails to initiate.
 func send_post(path: String, body: Dictionary, headers: PackedStringArray = []) -> HTTPRequest:
 	var http_request: HTTPRequest = HTTPRequest.new()
 	add_child(http_request)
@@ -31,6 +39,9 @@ func send_post(path: String, body: Dictionary, headers: PackedStringArray = []) 
 	return http_request
 
 
+## Sends a PUT request to the specified url with a JSON body.
+## Awaits and returns the request completion response as an [Array] in the format:
+## [code][result, response_code, headers, body][/code].
 func send_put(url: String, body: Dictionary, headers: PackedStringArray = []) -> Array:
 	var http_request: HTTPRequest = HTTPRequest.new()
 	add_child(http_request)
@@ -51,6 +62,9 @@ func send_put(url: String, body: Dictionary, headers: PackedStringArray = []) ->
 	return response
 
 
+## Sends a DELETE request to the specified url.
+## Awaits and returns the request completion response as an [Array] in the format:
+## [code][result, response_code, headers, body][/code].
 func send_delete(url: String, headers: PackedStringArray = []) -> Array:
 	var http_request: HTTPRequest = HTTPRequest.new()
 	add_child(http_request)
@@ -70,6 +84,11 @@ func send_delete(url: String, headers: PackedStringArray = []) -> Array:
 	return response
 
 
+## Sends a GET request to the specified url.
+## If [param downloading] is true, the requested file will be saved to [param target_path],
+## creating any required parent directories automatically.
+## Awaits and returns the request completion response as an [Array] in the format:
+## [code][result, response_code, headers, body][/code].
 func send_get(url: String, headers: PackedStringArray = [], \
 			downloading: bool = false, target_path: String = "") -> Array:
 	var http_request: HTTPRequest = HTTPRequest.new()
@@ -98,6 +117,9 @@ func send_get(url: String, headers: PackedStringArray = [], \
 	return response
 
 
+## Downloads a specific resource pack from the server.
+## Uses the [AuthManager]'s authorization headers and saves the file to [param target_path].
+## Returns [code]true[/code] if the download was successful (HTTP 200), otherwise removes the downloaded file and returns [code]false[/code].
 func download_pack(pack_type: PackManager.PackType, pack_name: String, target_path: String) -> bool:
 	var url: String = "/api/" + PackManager.get_pack_type(pack_type) + "/" + pack_name + "/pack"
 	
@@ -111,6 +133,8 @@ func download_pack(pack_type: PackManager.PackType, pack_name: String, target_pa
 		return false
 
 
+## Downloads an image from the specified URL and saves it to the local user directory.
+## Returns [code]true[/code] if the download was successful (HTTP 200), otherwise removes the partial file and returns [code]false[/code].
 func download_image(image_url: String) -> bool:
 	var target_path: String = "user://assets/downloaded" + image_url
 	
@@ -122,3 +146,4 @@ func download_image(image_url: String) -> bool:
 	else:
 		DirAccess.remove_absolute(target_path)
 		return false
+

@@ -13,8 +13,14 @@ using Xunit;
 
 namespace NMTales.Backend.Tests
 {
+    /// <summary>
+    /// Integration tests for the player combat system, covering attacks, damage processing, healing, death states, and action restrictions.
+    /// </summary>
     public class PlayerCombatControllerTests
     {
+        /// <summary>
+        /// Helper method to register a uniquely named user and return an HttpClient configured with their Bearer authentication token.
+        /// </summary>
         private static async Task<HttpClient> CreateAuthenticatedClientAsync(QuestApiFactory factory, string username)
         {
             var client = factory.CreateClient();
@@ -28,6 +34,9 @@ namespace NMTales.Backend.Tests
             return client;
         }
 
+        /// <summary>
+        /// Verifies that unauthenticated requests to the attack endpoint are rejected.
+        /// </summary>
         [Fact]
         public async Task Attack_WithoutToken_ReturnsUnauthorized()
         {
@@ -38,6 +47,9 @@ namespace NMTales.Backend.Tests
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }
 
+        /// <summary>
+        /// Verifies that a valid attack registers successfully and updates the player's last attack timestamp.
+        /// </summary>
         [Fact]
         public async Task Attack_FirstTime_SucceedsAndSetsTimestamp()
         {
@@ -50,6 +62,7 @@ namespace NMTales.Backend.Tests
             using var doc = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
             Assert.True(doc.RootElement.GetProperty("success").GetBoolean());
 
+            // Confirm the database timestamp was updated within a reasonable recent window
             using var scope = factory.Services.CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             var user = db.Users.Single(u => u.Username == "attacker1");
@@ -57,15 +70,20 @@ namespace NMTales.Backend.Tests
             Assert.True((DateTime.UtcNow - user.LastAttackTimeUtc.Value).TotalSeconds < 5);
         }
 
+        /// <summary>
+        /// Verifies that attempting to attack consecutively too quickly triggers the server-side cooldown restriction.
+        /// </summary>
         [Fact]
         public async Task Attack_OnCooldown_ReturnsBadRequest()
         {
             using var factory = new QuestApiFactory();
             var client = await CreateAuthenticatedClientAsync(factory, "attacker2");
 
+            // First attack should succeed
             var response1 = await client.PostAsync("/api/combat/attack", null);
             Assert.Equal(HttpStatusCode.OK, response1.StatusCode);
 
+            // Immediate second attack should be blocked by cooldown
             var response2 = await client.PostAsync("/api/combat/attack", null);
             Assert.Equal(HttpStatusCode.BadRequest, response2.StatusCode);
 
@@ -73,12 +91,16 @@ namespace NMTales.Backend.Tests
             Assert.Equal("Attack is on cooldown.", doc.RootElement.GetProperty("error").GetString());
         }
 
+        /// <summary>
+        /// Verifies that incoming damage reduces health, and fatal damage correctly transitions the player to a dead state while updating stats.
+        /// </summary>
         [Fact]
         public async Task RegisterDamage_ReducesHpAndHandlesDeathAndStats()
         {
             using var factory = new QuestApiFactory();
             var client = await CreateAuthenticatedClientAsync(factory, "target1");
 
+            // Apply non-fatal damage
             var response1 = await client.PostAsJsonAsync("/api/combat/damage", new { amount = 30 });
             Assert.Equal(HttpStatusCode.OK, response1.StatusCode);
 
@@ -94,6 +116,7 @@ namespace NMTales.Backend.Tests
                 Assert.False(user.IsDead);
             }
 
+            // Apply fatal damage
             var response2 = await client.PostAsJsonAsync("/api/combat/damage", new { amount = 60 });
             Assert.Equal(HttpStatusCode.OK, response2.StatusCode);
 
@@ -101,6 +124,7 @@ namespace NMTales.Backend.Tests
             Assert.Equal(0, doc2.RootElement.GetProperty("currentHp").GetInt32());
             Assert.True(doc2.RootElement.GetProperty("isDead").GetBoolean());
 
+            // Confirm death state and stat tracking persistence
             using (var scope = factory.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -114,6 +138,9 @@ namespace NMTales.Backend.Tests
             }
         }
 
+        /// <summary>
+        /// Verifies that healing items only apply when the player is within the physical distance threshold.
+        /// </summary>
         [Fact]
         public async Task Heal_VerifiesDistanceAndRestoresHealth()
         {
@@ -123,6 +150,7 @@ namespace NMTales.Backend.Tests
             var damageResponse = await client.PostAsJsonAsync("/api/combat/damage", new { amount = 30 });
             Assert.Equal(HttpStatusCode.OK, damageResponse.StatusCode);
 
+            // Force player coordinates in DB to set up the distance test
             using (var scope = factory.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -132,6 +160,7 @@ namespace NMTales.Backend.Tests
                 await db.SaveChangesAsync();
             }
 
+            // Attempt healing from outside the allowed radius
             var farResponse = await client.PostAsJsonAsync("/api/combat/heal", new
             {
                 plantId = "mushroom_forest_1",
@@ -142,6 +171,7 @@ namespace NMTales.Backend.Tests
             var farErr = await farResponse.Content.ReadAsStringAsync();
             Assert.Contains("Too far from the healing item.", farErr);
 
+            // Attempt healing from within the allowed radius
             var closeResponse = await client.PostAsJsonAsync("/api/combat/heal", new
             {
                 plantId = "mushroom_forest_1",
@@ -161,6 +191,9 @@ namespace NMTales.Backend.Tests
             }
         }
 
+        /// <summary>
+        /// Verifies that respawning properly resets a dead player's health, status, and coordinates.
+        /// </summary>
         [Fact]
         public async Task Respawn_RestoresHpAndClearsDeadState()
         {
@@ -188,15 +221,20 @@ namespace NMTales.Backend.Tests
             Assert.Equal(0.0, user.CurrentPositionY);
         }
 
+        /// <summary>
+        /// Verifies that the global action filter successfully blocks unauthorized actions (like location updates) while the player is in a dead state.
+        /// </summary>
         [Fact]
         public async Task GuardrailFilter_BlocksNonCombatActionsWhenDead()
         {
             using var factory = new QuestApiFactory();
             var client = await CreateAuthenticatedClientAsync(factory, "deadplayer1");
 
+            // Kill the player
             var damageResponse = await client.PostAsJsonAsync("/api/combat/damage", new { amount = 100 });
             Assert.Equal(HttpStatusCode.OK, damageResponse.StatusCode);
 
+            // Attempt an action not marked with AllowDeadPlayerAttribute
             var moveResponse = await client.PostAsJsonAsync("/api/player/location", new
             {
                 currentLocation = "swamp",
@@ -208,9 +246,11 @@ namespace NMTales.Backend.Tests
             using var moveDoc = JsonDocument.Parse(await moveResponse.Content.ReadAsStringAsync());
             Assert.Equal("Player is dead. Please respawn.", moveDoc.RootElement.GetProperty("error").GetString());
 
+            // Respawn
             var respawnResponse = await client.PostAsync("/api/combat/respawn", null);
             Assert.Equal(HttpStatusCode.OK, respawnResponse.StatusCode);
 
+            // Confirm action is permitted again once alive
             var moveResponse2 = await client.PostAsJsonAsync("/api/player/location", new
             {
                 currentLocation = "swamp",

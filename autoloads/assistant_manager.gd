@@ -1,11 +1,19 @@
+## Manages dialogue and communication with AI assistants (LLM endpoint).
+##
+## This autoload handles initiating, restoring, and processing dialogue sessions
+## with specialized AI assistant NPCs (e.g., Math, Language, History), interfacing
+## with the game's backend API.
 extends Node
 
 #region Private vars
 
+## The backend endpoint path for the LLM assistant service.
 const _ENDPOINT: String = "/api/LLM"
 
+## Preloaded scene for the assistant chat user interface.
 var _assistant_chat_scene: PackedScene = preload("res://ui/menus/dialogue/assistant_chat/assistant_chat.tscn")
 
+## The currently active assistant subject/type (e.g., "Math").
 var _active_subject: String = ""
 
 #endregion
@@ -13,6 +21,8 @@ var _active_subject: String = ""
 
 #region Starting chat
 
+## Pauses the game, submits telemetry, and initializes the assistant chat UI.
+## Also retrieves and restores any past conversation history.
 func start_chat(assistant_type: String, npc_name: String) -> void:
 	get_tree().paused = true
 	_active_subject = assistant_type
@@ -22,6 +32,8 @@ func start_chat(assistant_type: String, npc_name: String) -> void:
 	await _restore_conversation(ui)
 
 
+## Instantiates the assistant chat interface, adds it to the active scene,
+## and configures its labels and greeting text.
 func _init_ui(npc_name: String) -> AssistantChat:
 	var ui: AssistantChat = _assistant_chat_scene.instantiate()
 	get_tree().current_scene.add_child(ui)
@@ -30,6 +42,8 @@ func _init_ui(npc_name: String) -> AssistantChat:
 	return ui
 
 
+## Fetches the existing conversation history for the active subject from the server
+## and populates the chat UI with the loaded messages.
 func _restore_conversation(ui: AssistantChat) -> void:
 	var url: String = _ENDPOINT + "/" + _active_subject
 	var response: Array = await NetworkManager.send_get(url, AuthManager.token_header)
@@ -50,6 +64,8 @@ func _restore_conversation(ui: AssistantChat) -> void:
 
 #region Processing prompt/response
 
+## Sends a text prompt to the LLM backend for the active subject.
+## Returns a dictionary containing the backend's response message or error details.
 func send_player_prompt(prompt: String) -> Dictionary:
 	var clean: String = prompt.strip_edges()
 	if clean.is_empty():
@@ -78,6 +94,7 @@ func send_player_prompt(prompt: String) -> Dictionary:
 
 #region Ending chat
 
+## Ends the active chat session, unpauses the game, and clears the active subject state.
 func end_chat() -> void:
 	get_tree().paused = false
 	_active_subject = ""

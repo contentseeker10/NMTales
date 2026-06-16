@@ -1,7 +1,13 @@
+## UI container representing the Achievements menu.
+## Displays the player's achievements inside a grid by dynamically fetching
+## and instantiating achievement components.
 class_name AchievementsUI
 extends CanvasLayer
 
 
+## Initializes the Achievements UI. Sets the process mode to always process,
+## connects input handlers for background/exit button clicks, clears design-time placeholders,
+## and fetches and instantiates achievement list items.
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	
@@ -34,16 +40,22 @@ func _ready() -> void:
 		plate.unlocked = ach.get("isUnlocked", false)
 
 
+## Callback triggered by GUI input on the background overlay ColorRect.
+## Closes the achievements menu if a left click is detected.
 func _on_color_rect_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		_close_menu()
 
 
+## Callback triggered by unhandled key input. Closes the menu if the
+## cancel action (e.g. Escape key) is pressed.
 func _unhandled_key_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		_close_menu()
 		get_viewport().set_input_as_handled()
 
 
+## Closes and frees the achievements menu interface.
 func _close_menu() -> void:
 	queue_free()
+

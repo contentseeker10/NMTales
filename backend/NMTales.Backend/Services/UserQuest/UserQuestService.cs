@@ -17,7 +17,7 @@ public class UserQuestService : IUserQuestService
 
         var summaries = await query
             .Select(uq => $"{uq.NpcId}:{uq.QuestId}").
-            ToListAsync(); // <-- The database is hit right here.
+            ToListAsync(); 
 
         return summaries;
         
