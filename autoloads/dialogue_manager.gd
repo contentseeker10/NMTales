@@ -1,18 +1,28 @@
+## Manages dialogue flow, NPC interaction, loading of dialogue JSON files, and selection of choices.
+## This autoload script handles instantiating dialogue UI, loading JSON dialogue data,
+## advancing conversation state, triggering quest/dialogue actions, and resuming gameplay.
 extends Node
 
+## The packed scene of the dialogue UI overlay.
 var dialogue_scene: PackedScene = preload("res://ui/menus/dialogue/dialogue.tscn")
+## The instantiated Dialogue controller node.
 var dialogue: Dialogue
 
+## Dictionary holding the loaded dialogue structure parsed from a JSON file.
 var current_dialogue_data: Dictionary = {}
+## The ID of the currently active dialogue node in the tree.
 var current_node_id: String = "start"
 
 
+## Closes the dialogue if the cancel action (ESC/UI cancel) is pressed.
 func _unhandled_key_input(event: InputEvent) -> void:
 	if dialogue and is_instance_valid(dialogue) and event.is_action_pressed("ui_cancel"):
 		get_viewport().set_input_as_handled()
 		end_dialogue()
 
 
+## Starts a new dialogue sequence with the specified [NPC].
+## Emits the npc_talked event, pauses the game, instantiates the UI, and loads dialogue files.
 func start_dialogue(npc: NPC) -> void:
 	EventBus.npc_talked.emit(npc.npc_id)
 	get_tree().paused = true
@@ -21,12 +31,14 @@ func start_dialogue(npc: NPC) -> void:
 	current_node_id = "start"
 	advance_dialogue()
 
+## Instantiates the dialogue scene, configures its NPC context, and adds it to the current scene.
 func _add_dialogue_scene(npc: NPC) -> void:
 	dialogue = dialogue_scene.instantiate()
 	dialogue.npc = npc
 	dialogue.npc_sprite_frames = npc.sprite.sprite_frames
 	get_tree().current_scene.add_child(dialogue)
 
+## Loads dialogue JSON data from the shared assets directory matching the calculated dialogue ID.
 func _load_dialogue(npc: NPC) -> void:
 	var path: String = "res://assets/shared/dialogues/" + _get_dialogue_id(npc) + ".json"
 	if FileAccess.file_exists(path):
@@ -38,6 +50,7 @@ func _load_dialogue(npc: NPC) -> void:
 		push_error("Dialogue file was not found: " + path)
 		current_dialogue_data = {}
 
+## Determines the correct dialogue JSON filename based on NPC identity, quest completion status, and active quest states.
 func _get_dialogue_id(npc: NPC) -> String:
 	var npc_id: String = npc.npc_id
 	if npc_id == "npc_elder_book":
@@ -95,6 +108,7 @@ func _get_dialogue_id(npc: NPC) -> String:
 		return npc_id + "/casual"
 
 
+## Advances the conversation to the current dialogue node, displaying NPC speech and choice options.
 func advance_dialogue() -> void:
 	if not current_dialogue_data.has(current_node_id):
 		push_error("Dialog node was not found: " + current_node_id)
@@ -109,6 +123,8 @@ func advance_dialogue() -> void:
 	dialogue.show_choices(choices)
 
 
+## Handles the player selecting a dialogue choice. Emits triggers if the choice has an associated action,
+## and either advances dialogue to the next node or ends it.
 func select_choice(choice_data: Dictionary) -> void:
 	dialogue.add_player_answer(choice_data.get("text", "error"))
 	
@@ -125,6 +141,7 @@ func select_choice(choice_data: Dictionary) -> void:
 		advance_dialogue()
 
 
+## Closes the active dialogue, cleans up the dialogue UI instance, resets state variables, and unpauses the game tree.
 func end_dialogue() -> void:
 	current_dialogue_data = {}
 	current_node_id = "start"

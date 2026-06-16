@@ -1,11 +1,21 @@
+## A finite state machine that manages and coordinates different player states.
+##
+## It registers all child [PlayerState] nodes, sets their references to the player (owner)
+## and this state machine, and handles transitioning between states, routing inputs,
+## processing, and physics updates to the currently active state.
 class_name PlayerStateMachine
 extends Node
 
+## The initial state the player starts in when the state machine runs.
 @export var initial_state: PlayerState
 
+## The currently active player state.
 var current_state: PlayerState
+
+## A dictionary storing all registered states, mapping their lowercase names to the state nodes.
 var states: Dictionary = {}
 
+## Dictionary mapping Vector2 directions to their string representation.
 const DIR_NAMES: Dictionary = {
 	Vector2.UP: "up",
 	Vector2.DOWN: "down",
@@ -13,8 +23,11 @@ const DIR_NAMES: Dictionary = {
 	Vector2.RIGHT: "right"
 }
 
+## The player's current facing direction.
 var direction: Vector2 = Vector2.DOWN
 
+## Returns the string representation of the current [member direction].
+## Defaults to "down" if the direction is not found in [constant DIR_NAMES].
 func get_direction_name() -> String:
 	return DIR_NAMES.get(direction, "down")
 
@@ -50,6 +63,8 @@ func _physics_process(delta: float) -> void:
 	if current_state:
 		current_state.physics_update(delta)
 
+## Transitions the state machine from the current state to the state matching [param new_state_name].
+## Does nothing if the requested state does not exist in the [member states] dictionary.
 func transition_to(new_state_name: String) -> void:
 	var target_state: PlayerState = states.get(new_state_name.to_lower())
 	if not target_state:
